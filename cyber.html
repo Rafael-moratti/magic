@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livro Jogo Interativo</title>
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --secondary-color: #03dac6;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #bb86fc;
+            --danger-color: #cf6679;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            overflow: hidden;
+            touch-action: manipulation;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+        }
+        
+        /* ===== TELA INICIAL ===== */
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background-color);
+            z-index: 100;
+        }
+        
+        .title-container {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--accent-color);
+            animation: pulse 2s infinite;
+        }
+        
+        .game-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+        
+        .start-button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .start-button:hover, .start-button:active {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        /* Elementos de animação de fundo */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.4;
+            animation: float 15s infinite linear;
+        }
+        
+        /* ===== TELA DE PRÓLOGO ===== */
+        #prologue-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background-color);
+            z-index: 90;
+        }
+        
+        .prologue-container {
+            width: 90%;
+            max-width: 800px;
+            height: 80%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .prologue-text {
+            width: 100%;
+            position: absolute;
+            text-align: center;
+            padding: 0 20px;
+            transform: translateY(100%);
+            animation: scrollUp var(--scroll-duration, 60s) linear forwards;
+            line-height: 1.6;
+        }
+        
+        .skip-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 91;
+        }
+        
+        /* ===== TELAS DE HISTÓRIA ===== */
+        .story-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: var(--background-color);
+            z-index: 80;
+        }
+        
+        .story-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            touch-action: pan-y;
+        }
+        
+        .story-text {
+            width: 90%;
+            max-width: 700px;
+            position: absolute;
+            padding: 20px;
+            transform: translateY(100%);
+            animation: scrollUp var(--story-scroll-duration, 30s) linear forwards;
+            animation-delay: 5s; /* Atraso de 5 segundos conforme solicitado */
+            line-height: 1.6;
+            font-size: 1.1rem;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .story-text h2 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .choices-container {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: var(--surface-color);
+            border-top: 2px solid var(--primary-color);
+        }
+        
+        .choice-button {
+            padding: 15px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        
+        .choice-button:hover, .choice-button:active {
+            background-color: var(--accent-color);
+            color: var(--background-color);
+        }
+        
+        /* ===== TELA DE COMBATE ===== */
+        #combat-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            background-color: var(--background-color);
+            z-index: 70;
+        }
+        
+        .combat-header {
+            padding: 15px;
+            text-align: center;
+            background-color: var(--surface-color);
+            border-bottom: 2px solid var(--danger-color);
+        }
+        
+        .combat-title {
+            color: var(--danger-color);
+            margin-bottom: 5px;
+        }
+        
+        .combat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .combatants {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .character {
+            width: 45%;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: var(--surface-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            border: 2px solid var(--accent-color);
+            overflow: hidden;
+        }
+        
+        .enemy-avatar {
+            border-color: var(--danger-color);
+        }
+        
+        .character-name {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .health-bar {
+            width: 100%;
+            height: 15px;
+            background-color: var(--surface-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            width: 100%;
+            background-color: var(--accent-color);
+            transition: width 0.5s ease;
+        }
+        
+        .enemy-health {
+            background-color: var(--danger-color);
+        }
+        
+        .vs-indicator {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 0 10px;
+        }
+        
+        .combat-log {
+            flex: 1;
+            min-height: 120px;
+            background-color: var(--surface-color);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .combat-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .combat-button {
+            padding: 15px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .combat-button:hover, .combat-button:active {
+            background-color: var(--accent-color);
+            color: var(--background-color);
+        }
+        
+        .special-button {
+            border-color: var(--primary-color);
+        }
+        
+        .special-button:hover, .special-button:active {
+            background-color: var(--primary-color);
+        }
+        
+        .item-button {
+            border-color: var(--secondary-color);
+        }
+        
+        .item-button:hover, .item-button:active {
+            background-color: var(--secondary-color);
+        }
+        
+        /* ===== TELA DE RESULTADO ===== */
+        #result-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 95;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .result-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .win-title {
+            color: var(--accent-color);
+        }
+        
+        .lose-title {
+            color: var(--danger-color);
+        }
+        
+        .result-button {
+            padding: 15px 30px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .result-button:hover, .result-button:active {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        /* ===== UTILITÁRIOS ===== */
+        .paused {
+            animation-play-state: paused;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .visible {
+            display: flex !important;
+        }
+        
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(10vw, 20vh) rotate(90deg);
+            }
+            50% {
+                transform: translate(20vw, -10vh) rotate(180deg);
+            }
+            75% {
+                transform: translate(-5vw, 15vh) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        
+        @keyframes scrollUp {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+        
+        /* ===== RESPONSIVIDADE ===== */
+        @media screen and (max-width: 768px) {
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .game-subtitle {
+                font-size: 1rem;
+            }
+            
+            .story-text {
+                font-size: 1rem;
+                width: 95%;
+            }
+            
+            .combatants {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .character {
+                width: 80%;
+            }
+            
+            .vs-indicator {
+                margin: 10px 0;
+            }
+            
+            .combat-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .game-title {
+                font-size: 1.8rem;
+            }
+            
+            .choices-container {
+                padding: 10px;
+            }
+            
+            .choice-button {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .character-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela Inicial -->
+    <div id="start-screen" class="visible">
+        <div class="floating-elements" id="floating-elements"></div>
+        
+        <div class="title-container">
+            <h1 class="game-title">LIVRO JOGO INTERATIVO</h1>
+            <p class="game-subtitle">Uma aventura onde suas escolhas importam</p>
+        </div>
+        
+        <button class="start-button" id="start-button">COMEÇAR AVENTURA</button>
+    </div>
+    
+    <!-- Tela de Prólogo -->
+    <div id="prologue-screen">
+        <div class="prologue-container">
+            <div class="prologue-text" id="prologue-text">
+                <h2>PRÓLOGO</h2>
+                <br><br>
+                <p>Em um mundo onde a realidade se mistura com o impossível, você está prestes a embarcar em uma jornada única.</p>
+                <br>
+                <p>Esta é uma terra de escolhas, onde cada decisão traça um caminho diferente para o seu destino.</p>
+                <br>
+                <p>Seja prudente, seja corajoso, mas acima de tudo, seja fiel aos seus instintos.</p>
+                <br>
+                <p>Agora, respire fundo e prepare-se para iniciar sua aventura...</p>
+                <br><br>
+                <p>O destino aguarda suas escolhas...</p>
+                <br><br><br>
+                <p>A história começa agora...</p>
+                <br><br><br><br><br>
+            </div>
+        </div>
+        <button class="skip-button" id="skip-prologue">Pular</button>
+    </div>
+    
+    <!-- Telas de História (serão criadas dinamicamente) -->
+    <div id="story-template" class="story-screen">
+        <div class="story-container" id="story-container">
+            <div class="story-text" id="story-text-template">
+                <!-- Conteúdo da história será inserido aqui -->
+            </div>
+        </div>
+        <div class="choices-container" id="choices-container-template">
+            <!-- Botões de escolha serão inseridos aqui -->
+        </div>
+    </div>
+    
+    <!-- Tela de Combate -->
+    <div id="combat-screen">
+        <div class="combat-header">
+            <h2 class="combat-title">COMBATE!</h2>
+            <p id="combat-subtitle">Prepare-se para lutar!</p>
+        </div>
+        
+        <div class="combat-area">
+            <div class="combatants">
+                <div class="character">
+                    <div class="character-avatar" id="player-avatar">🧙</div>
+                    <h3 class="character-name" id="player-name">Você</h3>
+                    <div class="health-bar">
+                        <div class="health-fill" id="player-health"></div>
+                    </div>
+                </div>
+                
+                <div class="vs-indicator">VS</div>
+                
+                <div class="character">
+                    <div class="character-avatar enemy-avatar" id="enemy-avatar">👹</div>
+                    <h3 class="character-name" id="enemy-name">Inimigo</h3>
+                    <div class="health-bar">
+                        <div class="health-fill enemy-health" id="enemy-health"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="combat-log" id="combat-log">
+                <p>O combate está começando! Prepare-se para lutar!</p>
+            </div>
+            
+            <div class="combat-actions">
+                <button class="combat-button" id="attack-button">Atacar</button>
+                <button class="combat-button" id="defend-button">Defender</button>
+                <button class="combat-button special-button" id="special-button">Ataque Especial</button>
+                <button class="combat-button item-button" id="item-button">Usar Item</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tela de Resultado (Vitória/Derrota) -->
+    <div id="result-screen">
+        <h2 class="result-title" id="result-title">Resultado</h2>
+        <p class="result-text" id="result-text">Texto do resultado aqui</p>
+        <div>
+            <button class="result-button" id="continue-button">Continuar</button>
+            <button class="result-button" id="restart-button">Reiniciar</button>
+        </div>
+    </div>
+    
+    <script>
+        // ===== DADOS DA HISTÓRIA =====
+        // Aqui é onde definimos todas as páginas da história, com texto e escolhas
+        const storyData = {
+            // Primeira página da história
+            "start": {
+                title: "O Início da Jornada",
+                text: `Você acorda em um quarto estranho, os raios de sol entrando pela janela empoeirada. Este não é seu quarto habitual.
+
+Na parede à sua frente, há um mapa com vários pontos marcados em vermelho. Ao lado da cama, uma mesa com três objetos: uma chave antiga, um livro com símbolos estranhos e uma lanterna que parece funcional.
+
+Você tenta se lembrar como chegou aqui, mas sua mente está completamente em branco. A única certeza é que precisa descobrir onde está e como voltar para casa.
+
+Ao olhar pela janela, você vê uma floresta densa e, ao longe, o que parece ser uma torre.
+
+O que você faz agora?`,
+                choices: [
+                    { text: "Pegar a chave e tentar sair do quarto", nextPage: "hall" },
+                    { text: "Examinar o livro com símbolos estranhos", nextPage: "book" },
+                    { text: "Pegar a lanterna e olhar embaixo da cama", nextPage: "under_bed" }
+                ]
+            },
+            
+            "hall": {
+                title: "O Corredor Misterioso",
+                text: `Você pega a chave e se dirige à porta. Ela range ao abrir, revelando um longo corredor com várias outras portas.
+
+O corredor é iluminado por tochas que lançam sombras inquietantes nas paredes de pedra. No chão, um tapete vermelho leva até o final do corredor, onde há uma porta maior que as outras.
+
+Enquanto caminha pelo corredor, você ouve sussurros vindo de trás das portas. Algumas palavras são inteligíveis: "...escolhido..." e "...destino..." parecem se repetir.
+
+No meio do corredor, uma das portas está entreaberta.`,
+                choices: [
+                    { text: "Verificar a porta entreaberta", nextPage: "strange_room" },
+                    { text: "Continuar até a porta grande no final do corredor", nextPage: "grand_door" },
+                    { text: "Voltar ao quarto para pegar os outros objetos", nextPage: "start" }
+                ]
+            },
+            
+            "book": {
+                title: "O Livro Misterioso",
+                text: `Você pega o livro e o examina. Sua capa é feita de um material que parece couro, mas tem uma textura estranha, quase viva ao toque.
+
+Ao abri-lo, você descobre que não consegue entender a maioria dos símbolos, mas algumas imagens são claras: uma torre, uma árvore gigante e o que parece ser um ritual com pessoas em círculo.
+
+Em uma das páginas, há um mapa que se assemelha ao terreno que você viu pela janela. A torre está marcada com um X vermelho.
+
+De repente, os símbolos começam a brilhar levemente, e você percebe que algumas letras estão se tornando legíveis, como se o livro estivesse se adaptando a você.
+
+"Aquele que lê estas palavras foi escolhido para restaurar o equilíbrio. A torre guarda o segredo, mas apenas o digno poderá entrar."`,
+                choices: [
+                    { text: "Levar o livro e tentar sair do quarto", nextPage: "hall_with_book" },
+                    { text: "Procurar mais informações no livro sobre a torre", nextPage: "tower_info" },
+                    { text: "Colocar o livro de volta e examinar a lanterna", nextPage: "lantern" }
+                ]
+            },
+            
+            "under_bed": {
+                title: "Segredo Sob a Cama",
+                text: `Você pega a lanterna e se ajoelha para olhar embaixo da cama. Ao ligar a lanterna, seu feixe de luz revela uma pequena porta no chão.
+
+É uma escotilha de madeira com um puxador de metal. Não parece estar trancada.
+
+Ao redor da escotilha, há símbolos entalhados no chão de madeira, semelhantes aos do livro sobre a mesa.
+
+Você também nota algumas pegadas empoeiradas que vão da cama até a parede do outro lado do quarto.`,
+                choices: [
+                    { text: "Abrir a escotilha e ver onde leva", nextPage: "trapdoor" },
+                    { text: "Seguir as pegadas empoeiradas", nextPage: "secret_wall" },
+                    { text: "Voltar e examinar os outros objetos", nextPage: "start" }
+                ]
+            },
+            
+            "strange_room": {
+                title: "A Sala Estranha",
+                text: `Você empurra suavemente a porta entreaberta, que range ao se abrir completamente.
+
+A sala é circular e menor que o quarto onde você acordou. No centro, há uma mesa redonda com um tabuleiro que parece um jogo de xadrez, mas com peças estranhas e posições que desafiam a lógica.
+
+Nas paredes, tapeçarias antigas retratam batalhas entre criaturas que você nunca viu antes. Uma das tapeçarias mostra a mesma torre que você viu pela janela.
+
+Um homem idoso está sentado do outro lado do tabuleiro. Ele levanta os olhos, como se estivesse esperando por você.
+
+"Ah, finalmente você chegou. Estive esperando. Quer jogar uma partida? Ou talvez prefira algumas respostas primeiro?"`,
+                choices: [
+                    { text: "Aceitar jogar o jogo estranho", nextPage: "combat", enemy: "Mestre do Jogo", difficulty: "medium" },
+                    { text: "Pedir respostas ao homem idoso", nextPage: "old_man_answers" },
+                    { text: "Sair discretamente e continuar pelo corredor", nextPage: "hall_continue" }
+                ]
+            },
+            
+            "grand_door": {
+                title: "A Grande Porta",
+                text: `Você chega à grande porta no final do corredor. É feita de madeira maciça com detalhes em metal que formam desenhos complexos.
+
+A porta não tem maçaneta visível, apenas um pequeno orifício que parece ser para uma chave.
+
+Ao lado da porta, um pedestal de pedra sustenta uma tigela com água cristalina. Reflexos dançam na superfície da água, mostrando imagens rápidas de lugares diferentes: a torre, uma caverna, uma cidade antiga.
+
+Você se lembra da chave em seu bolso.`,
+                choices: [
+                    { text: "Usar a chave no orifício da porta", nextPage: "key_door" },
+                    { text: "Tocar na água para ver melhor as imagens", nextPage: "water_visions" },
+                    { text: "Voltar e verificar a porta entreaberta", nextPage: "strange_room" }
+                ]
+            },
+            
+            "hall_with_book": {
+                title: "Corredor com o Livro",
+                text: `Você sai do quarto com o livro misterioso em mãos. O corredor é exatamente como descrito antes, com portas múltiplas e tochas nas paredes.
+
+Enquanto caminha, o livro em suas mãos começa a esquentar levemente. Páginas viram sozinhas até parar em uma que mostra o desenho do corredor onde você está.
+
+Na página, há uma indicação para a terceira porta à direita, marcada com um símbolo que brilha suavemente. Olhando para o corredor, você vê que a porta real também tem o mesmo símbolo, quase imperceptível, mas que agora parece brilhar em sintonia com o livro.`,
+                choices: [
+                    { text: "Abrir a terceira porta à direita", nextPage: "symbol_door" },
+                    { text: "Continuar até o final do corredor", nextPage: "grand_door_book" },
+                    { text: "Voltar ao quarto para pegar os outros objetos", nextPage: "start_with_book" }
+                ]
+            },
+            
+            "tower_info": {
+                title: "Segredos da Torre",
+                text: `Você folheia o livro, concentrando-se nas páginas que mostram a torre. À medida que seu interesse se intensifica, mais palavras se tornam legíveis.
+
+"A Torre dos Sete Ventos guarda o Portal entre os mundos. Construída pelos Antigos para manter o equilíbrio entre realidades, agora está sob o controle do Guardião Corrompido.
+
+O Guardião era uma vez um protetor, mas o poder da torre o transformou. Ele coleciona viajantes perdidos entre os mundos, drenando suas memórias e essências para fortalecer o selo que mantém o Portal sob seu controle.
+
+Existem três chaves para desafiar o Guardião: a Chave de Prata que abre o portão exterior, o Medalhão de Âmbar que revela as passagens ocultas, e a Palavra Antiga que desarma as defesas mágicas."
+
+O livro também menciona que o Guardião não pode ser derrotado pela força, apenas pela sabedoria e pelo sacrifício.`,
+                choices: [
+                    { text: "Levar o livro e sair do quarto", nextPage: "hall_with_book" },
+                    { text: "Procurar informações sobre as três chaves", nextPage: "keys_info" },
+                    { text: "Fechar o livro e examinar os outros objetos", nextPage: "start_after_reading" }
+                ]
+            },
+            
+            "lantern": {
+                title: "A Lanterna Misteriosa",
+                text: `Você coloca o livro de volta na mesa e pega a lanterna. Não parece ser uma lanterna comum - é feita de um metal escuro com entalhes delicados que lembram constelações.
+
+Ao ligá-la, em vez de um feixe de luz normal, ela projeta pequenos pontos de luz no teto que formam um mapa estelar.
+
+Conforme seus olhos se ajustam, você percebe que o mapa estelar mostra uma configuração que você nunca viu antes, com uma estrela brilhante no centro que parece pulsar.
+
+Intrigado, você move a lanterna e nota que o mapa muda, revelando diferentes "céus". Uma posição específica faz com que uma das estrelas brilhe intensamente, projetando um raio de luz que aponta para a parede do quarto.`,
+                choices: [
+                    { text: "Seguir o raio de luz até a parede", nextPage: "secret_wall" },
+                    { text: "Usar a lanterna para olhar embaixo da cama", nextPage: "under_bed" },
+                    { text: "Pegar a lanterna e tentar sair do quarto", nextPage: "hall_with_lantern" }
+                ]
+            },
+            
+            "trapdoor": {
+                title: "A Escotilha Secreta",
+                text: `Você puxa a escotilha, que se abre com um rangido baixo, revelando uma escada que desce para a escuridão.
+
+O ar que vem de baixo é fresco e tem um leve cheiro de terra úmida. Você direciona a lanterna para baixo e vê que a escada leva a um túnel.
+
+Decidindo explorar, você desce cuidadosamente. O túnel é estreito, com raízes ocasionais pendendo do teto. Após alguns minutos de caminhada, você chega a uma bifurcação.
+
+À esquerda, o túnel continua, com o que parece ser luz natural ao longe. À direita, há uma porta de madeira com o mesmo símbolo que você viu no livro sobre a mesa.`,
+                choices: [
+                    { text: "Seguir o túnel à esquerda em direção à luz", nextPage: "tunnel_exit" },
+                    { text: "Abrir a porta de madeira à direita", nextPage: "symbol_chamber" },
+                    { text: "Voltar ao quarto para pegar os outros objetos", nextPage: "start_after_trapdoor" }
+                ]
+            },
+            
+            "secret_wall": {
+                title: "A Parede Secreta",
+                text: `Você segue as pegadas empoeiradas até a parede. À primeira vista, parece ser uma parede normal, mas examinando mais de perto, você nota pequenas diferenças na textura.
+
+Passando a mão sobre a superfície, você sente um leve tremor. De repente, uma seção da parede desliza para o lado, revelando uma passagem secreta.
+
+A passagem leva a uma pequena sala com prateleiras cheias de livros antigos, frascos com substâncias coloridas e vários artefatos estranhos.
+
+No centro da sala, há uma mesa com um mapa detalhado da região. A torre está marcada, assim como vários outros locais com símbolos diferentes. Há também uma mochila que parece estar preparada para uma viagem.`,
+                choices: [
+                    { text: "Examinar o mapa detalhadamente", nextPage: "detailed_map" },
+                    { text: "Verificar o conteúdo da mochila", nextPage: "backpack" },
+                    { text: "Olhar os livros e artefatos nas prateleiras", nextPage: "artifacts" }
+                ]
+            },
+            
+            "old_man_answers": {
+                title: "Respostas do Ancião",
+                text: `"Perguntas, sempre perguntas," diz o homem idoso com um sorriso irônico. "Mas nem sempre as respostas são o que queremos ouvir."
+
+Ele gesticula para que você se sente à sua frente.
+
+"Você está em Limbrethil, um reino entre os mundos. Não é nem seu mundo nem completamente outro. É um lugar de transição, de testes."
+
+O homem aponta para a janela, onde a torre é visível ao longe.
+
+"Aquela é a Torre dos Sete Ventos, o centro de Limbrethil. É de lá que o Guardião observa e controla as passagens entre os mundos. Se deseja voltar para casa, precisará chegar à torre e confrontar o Guardião."
+
+Ele faz uma pausa, olhando profundamente em seus olhos.
+
+"Mas saiba que o Guardião não deixará você passar facilmente. Ele se alimenta de viajantes perdidos como você, coletando suas memórias. É por isso que você não se lembra como chegou aqui - ele já começou a drenar você."`,
+                choices: [
+                    { text: "Perguntar como derrotar o Guardião", nextPage: "guardian_info" },
+                    { text: "Perguntar sobre o jogo de tabuleiro", nextPage: "game_info" },
+                    { text: "Agradecer e sair para continuar pelo corredor", nextPage: "hall_continue" }
+                ]
+            },
+            
+            "hall_continue": {
+                title: "Continuando pelo Corredor",
+                text: `Você deixa a sala do homem idoso e continua pelo corredor. Os sussurros atrás das portas parecem mais intensos agora, como se sua presença tivesse agitado os habitantes ocultos.
+
+Mais à frente, você nota algo estranho: uma das tochas nas paredes não está emitindo luz, mas sim uma espécie de escuridão que parece engolir o ar ao redor.
+
+Ao passar por ela, você sente um arrepio percorrer sua espinha, como se algo estivesse observando você das sombras.
+
+O final do corredor está próximo, com a grande porta ainda aguardando.`,
+                choices: [
+                    { text: "Examinar a tocha estranha", nextPage: "dark_torch" },
+                    { text: "Apressar-se para a grande porta no final", nextPage: "grand_door" },
+                    { text: "Voltar para falar novamente com o homem idoso", nextPage: "strange_room_return" }
+                ]
+            },
+            
+            "key_door": {
+                title: "A Chave e a Porta",
+                text: `Você insere a chave no pequeno orifício da grande porta. Ela entra perfeitamente, e ao girá-la, você ouve um mecanismo complexo se movendo dentro da porta.
+
+Com um clique final, a porta começa a se abrir lentamente, revelando uma sala ampla além. É uma biblioteca circular, com estantes que vão do chão ao teto, cheias de livros de todos os tamanhos e cores.
+
+No centro da biblioteca, há um pedestal com um grande livro aberto e, ao lado dele, uma figura encapuzada está parada, de costas para você.
+
+À medida que a porta termina de se abrir, a figura se vira lentamente. Sob o capuz, não há um rosto, apenas uma máscara branca sem feições.
+
+"Bem-vindo, Viajante," diz uma voz que parece vir de todos os lugares ao mesmo tempo. "Eu sou o Bibliotecário. O que você busca no Repositório do Conhecimento?"`,
+                choices: [
+                    { text: "Perguntar sobre a torre e o Guardião", nextPage: "librarian_tower" },
+                    { text: "Pedir ajuda para recuperar suas memórias", nextPage: "librarian_memories" },
+                    { text: "Perguntar como voltar para casa", nextPage: "librarian_home" }
+                ]
+            },
+            
+            "water_visions": {
+                title: "Visões na Água",
+                text: `Você se inclina sobre a tigela e toca suavemente a superfície da água. Ao fazer isso, a água começa a brilhar e as imagens se tornam mais nítidas, como uma janela para outros lugares.
+
+De repente, você se sente puxado para dentro das visões. Sua consciência parece flutuar entre as cenas:
+
+Você vê a torre de perto, seus portões guardados por estátuas que giram a cabeça quando alguém se aproxima.
+
+Você está em uma caverna cristalina, onde cristais ressoam com melodias etéreas.
+
+Você caminha por uma cidade antiga com arquitetura impossível, onde edifícios se dobram sobre si mesmos.
+
+Então, você vê a si mesmo, dormindo em sua própria cama em seu mundo, como se estivesse vendo seu corpo físico que deixou para trás.
+
+Com um sobressalto, você é puxado de volta ao corredor, mas agora com um conhecimento que não possuía antes: você não está realmente aqui. Seu corpo físico ainda está em seu mundo, e o que está experimentando é uma espécie de viagem astral ou sonho consciente.`,
+                choices: [
+                    { text: "Usar a chave na porta, com esse novo conhecimento", nextPage: "key_door_aware" },
+                    { text: "Voltar à sala do homem idoso para confrontá-lo", nextPage: "confront_old_man" },
+                    { text: "Tentar acordar ou controlar o 'sonho'", nextPage: "lucid_dream" }
+                ]
+            },
+            
+            "symbol_door": {
+                title: "A Porta do Símbolo",
+                text: `Você se aproxima da terceira porta à direita, onde o símbolo agora brilha claramente. Ao tocar na porta, ela se abre suavemente, sem qualquer som.
+
+Dentro, você encontra uma sala circular muito semelhante à sala do homem idoso, mas sem ninguém presente. No centro há o mesmo tabuleiro de jogo estranho, mas as peças estão organizadas de forma diferente.
+
+Nas paredes, em vez de tapeçarias, há espelhos que não refletem corretamente - cada um mostra você de forma ligeiramente diferente, como versões alternativas de si mesmo.
+
+No chão ao redor do tabuleiro, há um círculo de runas que brilham suavemente. O livro em suas mãos se abre sozinho em uma página com instruções sobre um ritual.`,
+                choices: [
+                    { text: "Sentar e estudar o tabuleiro de jogo", nextPage: "study_game" },
+                    { text: "Examinar os espelhos nas paredes", nextPage: "mirrors" },
+                    { text: "Tentar realizar o ritual descrito no livro", nextPage: "ritual" }
+                ]
+            },
+            
+            "grand_door_book": {
+                title: "A Grande Porta com o Livro",
+                text: `Você chega à grande porta no final do corredor, ainda segurando o livro misterioso. Assim como antes, a porta é imponente, sem maçaneta visível, apenas com um orifício para chave.
+
+O livro em suas mãos começa a pulsar mais intensamente. Ao olhá-lo, você vê que abriu em uma página que mostra um desenho da própria porta. No desenho, há uma indicação de um símbolo específico que deve ser pressionado na moldura da porta.
+
+Examinando a moldura real, você encontra o símbolo escondido entre os detalhes decorativos.`,
+                choices: [
+                    { text: "Pressionar o símbolo na moldura da porta", nextPage: "hidden_entrance" },
+                    { text: "Usar a chave no orifício da porta", nextPage: "key_door_book" },
+                    { text: "Voltar e verificar a porta marcada com o símbolo", nextPage: "symbol_door" }
+                ]
+            },
+            
+            "start_with_book": {
+                title: "De Volta ao Quarto com o Livro",
+                text: `Você retorna ao quarto onde acordou, ainda segurando o livro misterioso. Os outros objetos ainda estão sobre a mesa: a chave antiga e a lanterna.
+
+Ao aproximar o livro da chave, você percebe que algumas páginas começam a brilhar. Folheando até essas páginas, descobre informações sobre "A Chave de Prata", que aparentemente abre o portão exterior da Torre dos Sete Ventos.
+
+O livro sugere que esta chave é apenas o primeiro passo - você precisará de mais itens e conhecimento para chegar ao coração da torre e confrontar o Guardião.`,
+                choices: [
+                    { text: "Pegar a chave e sair do quarto", nextPage: "hall_with_book_key" },
+                    { text: "Examinar a lanterna com o conhecimento do livro", nextPage: "lantern_book" },
+                    { text: "Olhar embaixo da cama como sugerido em uma página do livro", nextPage: "under_bed_book" }
+                ]
+            },
+            
+            "keys_info": {
+                title: "As Três Chaves",
+                text: `Você continua lendo sobre as três chaves necessárias para desafiar o Guardião:
+
+"A Chave de Prata foi forjada pelo primeiro Viajante a encontrar a torre. Ela abre o portão exterior e é frequentemente o primeiro objeto que os novos Viajantes encontram, como um convite ou desafio.
+
+O Medalhão de Âmbar contém a essência dos sonhos cristalizados de cem Viajantes que escolheram ficar em Limbrethil. Ele revela passagens ocultas e verdades invisíveis aos olhos comuns. O Medalhão está guardado pelo Bibliotecário no Repositório do Conhecimento.
+
+A Palavra Antiga não é um objeto físico, mas um conhecimento sagrado. É uma palavra de poder na língua dos Antigos que desarma as defesas mágicas da torre. Esta palavra só pode ser aprendida através de uma prova de sabedoria administrada pelo Oráculo dos Caminhos."
+
+O livro também menciona que apenas um Viajante que possui as três chaves pode esperar enfrentar o Guardião com alguma chance de sucesso.`,
+                choices: [
+                    { text: "Procurar informações sobre o Bibliotecário", nextPage: "librarian_info" },
+                    { text: "Procurar informações sobre o Oráculo", nextPage: "oracle_info" },
+                    { text: "Fechar o livro e explorar o quarto", nextPage: "start_after_reading" }
+                ]
+            },
+            
+            "start_after_reading": {
+                title: "Explorando Após a Leitura",
+                text: `Depois de obter valiosas informações do livro, você o coloca de volta na mesa e olha ao redor do quarto com novos olhos.
+
+A chave na mesa deve ser a Chave de Prata mencionada no livro. Você nota que a lanterna tem detalhes em âmbar que não tinha percebido antes - talvez uma pista relacionada ao Medalhão de Âmbar?
+
+A janela que mostra a torre ao longe agora parece mais significativa - aquele é seu destino final, mas você sabe que precisará se preparar adequadamente antes de enfrentá-la.`,
+                choices: [
+                    { text: "Pegar a chave e a lanterna, e sair do quarto", nextPage: "hall_prepared" },
+                    { text: "Olhar embaixo da cama em busca de mais pistas", nextPage: "under_bed" },
+                    { text: "Examinar mais atentamente a janela e a vista da torre", nextPage: "window_view" }
+                ]
+            },
+            
+            "hall_with_lantern": {
+                title: "Corredor com a Lanterna",
+                text: `Você sai para o corredor segurando a lanterna misteriosa. As tochas nas paredes continuam lançando suas sombras inquietantes, mas a luz estelar da sua lanterna adiciona uma camada surreal ao ambiente.
+
+Ao apontar a lanterna para diferentes partes do corredor, você nota que certos pontos fazem a luz reagir de forma diferente. Próximo a uma das portas, os pontos de luz se concentram e formam uma constelação específica.
+
+Intrigado, você move a lanterna para outras áreas e descobre que duas outras portas também provocam reações similares, cada uma formando uma constelação diferente.`,
+                choices: [
+                    { text: "Abrir a porta marcada pela primeira constelação", nextPage: "constellation_door1" },
+                    { text: "Examinar as outras portas que reagem à lanterna", nextPage: "constellation_doors" },
+                    { text: "Continuar até o final do corredor com a lanterna", nextPage: "grand_door_lantern" }
+                ]
+            },
+            
+            "tunnel_exit": {
+                title: "A Saída do Túnel",
+                text: `Você segue o túnel à esquerda, em direção à luz que viu. Após alguns minutos de caminhada, o túnel começa a subir gradualmente e a luz fica mais forte.
+
+Finalmente, você emerge em uma pequena clareira na floresta. A torre que viu pela janela está muito mais próxima agora, talvez a algumas horas de caminhada.
+
+A floresta ao seu redor é densa, com árvores enormes que parecem antigas como o próprio mundo. Raios de sol penetram entre as folhas, criando padrões dançantes no chão coberto de musgo.
+
+Não muito longe, você vê o que parece ser um caminho trilhado, como se outras pessoas tivessem passado por aqui recentemente.`,
+                choices: [
+                    { text: "Seguir o caminho trilhado", nextPage: "forest_path" },
+                    { text: "Caminhar diretamente em direção à torre", nextPage: "towards_tower" },
+                    { text: "Voltar ao túnel para explorar o outro caminho", nextPage: "return_to_fork" }
+                ]
+            },
+            
+            "symbol_chamber": {
+                title: "A Câmara do Símbolo",
+                text: `Você abre a porta de madeira à direita e entra em uma câmara pequena e circular. O símbolo que você viu no livro está entalhado no centro do piso de pedra, muito maior e mais detalhado.
+
+A câmara é iluminada por cristais azuis que crescem das paredes, emitindo uma luz suave e pulsante. Não há outros móveis ou objetos, apenas um pedestal no centro, sobre o símbolo.
+
+No pedestal, há um medalhão de âmbar com o mesmo símbolo entalhado. À medida que você se aproxima, o medalhão começa a brilhar em sincronia com os cristais nas paredes.
+
+Você se lembra da informação do livro sobre o Medalhão de Âmbar, uma das três chaves necessárias para desafiar o Guardião da torre.`,
+                choices: [
+                    { text: "Pegar o Medalhão de Âmbar", nextPage: "take_medallion" },
+                    { text: "Examinar mais detalhadamente o símbolo no chão", nextPage: "floor_symbol" },
+                    { text: "Sair da câmara e voltar à bifurcação", nextPage: "return_to_fork" }
+                ]
+            },
+            
+            "detailed_map": {
+                title: "O Mapa Detalhado",
+                text: `Você se debruça sobre o mapa na mesa, estudando seus detalhes. É muito mais completo que o vislumbre que teve do terreno pela janela.
+
+A Torre dos Sete Ventos é claramente marcada no centro, mas há muitos outros locais interessantes:
+
+Um círculo de pedras chamado "O Conclave dos Antigos" fica a nordeste.
+Uma região de cavernas cristalinas chamada "As Câmaras de Eco" está marcada a oeste.
+Uma pequena vila chamada "Refúgio dos Perdidos" aparece ao sul.
+Um grande lago com uma ilha no centro, chamado "Espelho dos Mundos" está a leste.
+
+Cada local tem anotações escritas em uma caligrafia delicada, descrevendo características e possíveis perigos. Há também rotas traçadas entre eles, algumas marcadas como seguras e outras com avisos de perigo.
+
+Ao lado do mapa, há um pequeno caderno com mais detalhes sobre cada local e histórias sobre outros viajantes que passaram por aqui.`,
+                choices: [
+                    { text: "Memorizar o mapa e verificar a mochila", nextPage: "backpack" },
+                    { text: "Ler o caderno com histórias de outros viajantes", nextPage: "travelers_journal" },
+                    { text: "Pegar o mapa e sair pela passagem secreta", nextPage: "leave_with_map" }
+                ]
+            },
+            
+            "backpack": {
+                title: "Conteúdo da Mochila",
+                text: `Você abre a mochila e examina seu conteúdo. Parece ter sido preparada para uma jornada por alguém que conhece bem os perigos deste mundo.
+
+Dentro, você encontra:
+
+Uma garrafa de água que parece normal, mas tem um brilho sutil quando agitada.
+Algumas frutas secas e nozes embrulhadas em folhas.
+Um pequeno estojo com ervas medicinais rotuladas em uma língua estranha.
+Uma faca com uma lâmina que muda de cor dependendo do ângulo da luz.
+Uma bússola que, em vez de apontar para o norte, parece apontar para onde você mais deseja ir no momento.
+Um caderno em branco com uma pena que não precisa de tinta.
+
+Também há um bilhete no fundo da mochila, escrito com a mesma caligrafia do mapa:
+
+"Para o próximo Viajante: Use estes itens com sabedoria. A Torre chama a todos nós, mas poucos retornam de seus salões. Se está lendo isto, fui em frente. Talvez nos encontremos no caminho. -J"`,
+                choices: [
+                    { text: "Pegar a mochila e o mapa, e sair pela passagem", nextPage: "leave_with_gear" },
+                    { text: "Examinar a bússola de desejos mais detalhadamente", nextPage: "desire_compass" },
+                    { text: "Procurar mais informações sobre 'J' nos livros e artefatos", nextPage: "search_for_j" }
+                ]
+            },
+            
+            "artifacts": {
+                title: "Livros e Artefatos",
+                text: `Você examina as prateleiras repletas de livros antigos e artefatos curiosos. A coleção é impressionante e eclética, como se fosse reunida ao longo de muitos anos.
+
+Alguns livros estão em línguas que você reconhece, outros em escritas completamente alienígenas. Os artefatos variam de pequenos cristais e estatuetas a dispositivos mecânicos cujo propósito você não consegue imaginar.
+
+Um livro em particular chama sua atenção - está aberto em uma mesa lateral e parece ser um diário. As entradas mais recentes descrevem as experiências de alguém chamado Janus, que aparentemente está explorando este mundo há algum tempo.
+
+Janus escreve sobre encontros com outras pessoas perdidas, sobre criaturas estranhas que vagam pelas áreas mais selvagens, e sobre sua obsessão crescente com a Torre dos Sete Ventos.
+
+A última entrada é preocupante:
+
+"Finalmente descobri a Palavra Antiga. O Oráculo foi... diferente do que eu esperava. Agora tenho as três chaves. Amanhã irei à Torre. Se não retornar, que o próximo Viajante aprenda com meus erros."`,
+                choices: [
+                    { text: "Procurar mais informações sobre o Oráculo", nextPage: "oracle_search" },
+                    { text: "Verificar os artefatos em busca de algo útil", nextPage: "useful_artifacts" },
+                    { text: "Pegar o diário de Janus e a mochila, e partir", nextPage: "leave_with_journal" }
+                ]
+            },
+            
+            "guardian_info": {
+                title: "Segredos do Guardião",
+                text: `O homem idoso suspira profundamente antes de falar, como se pesasse suas palavras cuidadosamente.
+
+"O Guardião não é o que parece. Ele já foi um Viajante como você, muitos ciclos atrás. Ele chegou à torre buscando retornar ao seu mundo, mas descobriu o poder que ela oferecia - o controle sobre as passagens entre mundos."
+
+O homem se levanta e caminha até uma das tapeçarias, apontando para uma figura central.
+
+"Ele escolheu ficar e assumiu o papel de Guardião, mas o poder corrompeu seu propósito. Agora, ele se alimenta da essência dos Viajantes para manter seu domínio. Cada memória que ele coleta fortalece seu controle sobre Limbrethil."
+
+Voltando a se sentar, ele continua:
+
+"Para derrotá-lo, você precisará das três chaves: a Chave de Prata, o Medalhão de Âmbar e a Palavra Antiga. Mas mesmo com elas, a força bruta não será suficiente. Você precisará usar o próprio poder do Guardião contra ele."
+
+O homem sorri enigmaticamente.
+
+"Há uma razão pela qual ele coleta memórias, sabe? Cada memória contém um fragmento de outro mundo, outras possibilidades. Se você puder recuperar suas próprias memórias antes de enfrentá-lo, talvez possa usar esse conhecimento para abrir um caminho de volta."`,
+                choices: [
+                    { text: "Perguntar onde encontrar as três chaves", nextPage: "keys_locations" },
+                    { text: "Perguntar como recuperar suas memórias", nextPage: "recover_memories" },
+                    { text: "Agradecer e continuar sua jornada", nextPage: "hall_continue" }
+                ]
+            },
+            
+            "game_info": {
+                title: "O Jogo de Tabuleiro",
+                text: `O homem idoso sorri ao ver seu interesse no estranho tabuleiro entre vocês.
+
+"Isso? É o Jogo dos Caminhos. Um reflexo de Limbrethil em miniatura, se preferir."
+
+Ele move suavemente uma das peças - que parece vagamente humana, mas com detalhes que mudam quando você tenta focalizá-los.
+
+"Cada peça representa um Viajante ou um guardião de conhecimento. Cada movimento representa uma escolha. O objetivo não é necessariamente vencer, mas encontrar o caminho correto através do tabuleiro."
+
+Ele olha para você com interesse renovado.
+
+"Gostaria de jogar? Poderia ser... educativo. Se conseguir avançar sua peça até a torre no centro, eu lhe darei uma informação valiosa sobre como recuperar suas memórias."
+
+Olhando para o tabuleiro, você percebe que é incrivelmente complexo, com zonas de diferentes cores e símbolos que parecem mudar sutilmente quando não está olhando diretamente para eles.`,
+                choices: [
+                    { text: "Aceitar o desafio e jogar", nextPage: "combat", enemy: "Mestre do Jogo", difficulty: "medium" },
+                    { text: "Perguntar mais sobre as regras antes de decidir", nextPage: "game_rules" },
+                    { text: "Recusar educadamente e perguntar sobre a torre", nextPage: "guardian_info" }
+                ]
+            },
+            
+            "game_rules": {
+                title: "Regras do Jogo dos Caminhos",
+                text: `"As regras são simples na superfície, mas infinitamente complexas nas nuances," explica o homem idoso, movendo as peças para suas posições iniciais.
+
+"Você controla esta peça" - ele aponta para uma figura que, por um momento, parece ter seu rosto - "e seu objetivo é chegar à torre no centro do tabuleiro."
+
+Ele indica os diferentes setores do tabuleiro.
+
+"Cada área representa um aspecto de Limbrethil. As Florestas do Esquecimento, o Mar de Memórias, as Montanhas do Desafio... Cada uma tem suas próprias regras de movimento e desafios."
+
+Ele coloca várias peças de aparência ameaçadora em diferentes pontos do tabuleiro.
+
+"Estes são os Guardiões. Eles patrulham seus territórios, tentando impedir sua passagem. Se um deles alcançar sua peça, você enfrentará um desafio. Superá-lo permite que continue; falhar significa recuar."
+
+O homem sorri, seus olhos brilhando com conhecimento antigo.
+
+"Há também atalhos e passagens secretas a serem descobertos, aliados a serem recrutados, e itens a serem coletados. E claro, há sempre mais de um caminho para a torre."`,
+                choices: [
+                    { text: "Aceitar o desafio e começar a jogar", nextPage: "combat", enemy: "Mestre do Jogo", difficulty: "medium" },
+                    { text: "Perguntar se há uma maneira de trapacear ou contornar as regras", nextPage: "game_cheat" },
+                    { text: "Agradecer pela explicação, mas decidir seguir seu caminho", nextPage: "hall_continue" }
+                ]
+            },
+            
+            "librarian_tower": {
+                title: "O Bibliotecário e a Torre",
+                text: `A figura encapuzada com a máscara branca permanece imóvel por um momento, como se estivesse consultando algum vasto catálogo mental.
+
+"A Torre dos Sete Ventos," diz o Bibliotecário, sua voz ecoando de forma não natural, "é o axis mundi de Limbrethil. Ela conecta todos os mundos, todos os reinos de possibilidade."
+
+O Bibliotecário flutua até uma das estantes e retira um livro antigo, que abre sem tocar. Páginas viram sozinhas até parar em uma ilustração detalhada da torre.
+
+"O Guardião atual não é o primeiro, nem será o último. Ele mantém o equilíbrio entre os mundos, embora seus métodos sejam... questionáveis. Ele coleta memórias, essências e potenciais de Viajantes como você, usando esse poder para fortalecer as barreiras entre os mundos."
+
+O livro flutua até você, mostrando diagramas da torre - sete níveis, cada um representando um aspecto diferente da realidade.
+
+"Para desafiar o Guardião, você precisará das três chaves. Vejo que já possui a Chave de Prata. O Medalhão de Âmbar..."
+
+O Bibliotecário pausa, inclinando levemente a cabeça.
+
+"...está sob minha proteção, como um dos tesouros do Repositório. Quanto à Palavra Antiga, apenas o Oráculo dos Caminhos pode concedê-la, e apenas para aqueles que provarem ser dignos."`,
+                choices: [
+                    { text: "Pedir ao Bibliotecário o Medalhão de Âmbar", nextPage: "ask_medallion" },
+                    { text: "Perguntar sobre a localização do Oráculo", nextPage: "oracle_location" },
+                    { text: "Perguntar sobre o Guardião atual", nextPage: "current_guardian" }
+                ]
+            },
+            
+            "librarian_memories": {
+                title: "Em Busca de Memórias Perdidas",
+                text: `A máscara branca do Bibliotecário parece estudar você atentamente, apesar de não ter olhos visíveis.
+
+"Memórias perdidas... sim, uma queixa comum entre os Viajantes. O Guardião se alimenta delas, sabia? Um método eficiente de manter os Viajantes desorientados e obter poder ao mesmo tempo."
+
+O Bibliotecário flutua até uma seção particular da biblioteca e gesticula. Um livro de capa azul profundo voa da prateleira para suas mãos. Ele o abre, revelando páginas em branco.
+
+"Este é seu Livro de Memórias, Viajante. Vazio, como pode ver. O Guardião tem suas memórias armazenadas na torre."
+
+Ele passa as páginas vazias lentamente.
+
+"No entanto, há formas de recuperar fragmentos. Memórias poderosas deixam ecos, mesmo quando removidas. Lugares significativos, objetos pessoais, encontros emocionais - todos podem desencadear esses ecos."
+
+O Bibliotecário retorna o livro à prateleira.
+
+"Há também o Poço de Reflexos, no Espelho dos Mundos. Dizem que suas águas podem mostrar verdades ocultas e memórias perdidas para aqueles que sabem como olhar."`,
+                choices: [
+                    { text: "Perguntar mais sobre o Poço de Reflexos", nextPage: "reflection_well" },
+                    { text: "Perguntar sobre objetos que poderiam desencadear memórias", nextPage: "memory_objects" },
+                    { text: "Pedir ajuda para chegar à torre e confrontar o Guardião", nextPage: "librarian_help" }
+                ]
+            },
+            
+            "librarian_home": {
+                title: "O Caminho de Volta",
+                text: `A figura encapuzada do Bibliotecário fica imóvel por um momento, a máscara branca sem expressão voltada para você.
+
+"Voltar para casa," diz ele, a voz ecoando de forma estranha. "Um desejo compartilhado por quase todos os Viajantes que chegam a Limbrethil."
+
+O Bibliotecário flutua até uma seção distante da biblioteca e retorna com um livro que parece estar feito de luz solidificada.
+
+"Há duas formas de retornar ao seu mundo de origem. A primeira é encontrar um Portal Natural - raros pontos de intersecção entre os mundos que aparecem em ciclos imprevisíveis. Esperar por um que leve ao seu mundo pode levar... muito tempo."
+
+Ele vira uma página do livro de luz, revelando uma ilustração da torre.
+
+"A segunda forma é através da Torre dos Sete Ventos. No topo da torre, há uma câmara chamada Nexus dos Caminhos, de onde o Guardião pode abrir portais para qualquer mundo."
+
+O Bibliotecário fecha o livro, que desaparece em um lampejo.
+
+"Para alcançar o Nexus, você precisará das três chaves e enfrentar o Guardião. Ele não abrirá um caminho voluntariamente - você precisará forçá-lo ou negociar."`,
+                choices: [
+                    { text: "Perguntar sobre as três chaves", nextPage: "three_keys_info" },
+                    { text: "Perguntar se há maneiras de negociar com o Guardião", nextPage: "negotiate_guardian" },
+                    { text: "Perguntar sobre os Portais Naturais", nextPage: "natural_portals" }
+                ]
+            },
+            
+            "negotiate_guardian": {
+                title: "Negociando com o Guardião",
+                text: `A máscara branca do Bibliotecário inclina-se levemente, como se considerando sua pergunta com interesse.
+
+"Negociar com o Guardião... uma abordagem incomum," diz ele, sua voz ecoando entre as estantes. "A maioria dos Viajantes tenta derrotá-lo ou enganá-lo. Poucos consideram a diplomacia."
+
+O Bibliotecário flutua até outra seção e retorna com um pequeno livro de capa vermelha.
+
+"Este é o diário de Elara, uma Viajante que chegou aqui há sete ciclos. Ela conseguiu uma audiência com o Guardião sem confronto, oferecendo algo de valor em troca de sua passagem de volta."
+
+Ele abre o diário em uma página específica e o entrega a você.
+
+"Elara descobriu que o Guardião, apesar de seu poder, é solitário. A imortalidade e o isolamento têm seu preço. Ela ofereceu memórias - não as suas próprias, mas as que coletou em suas viagens por Limbrethil. Histórias, experiências, conhecimentos que ele não poderia obter de outra forma."
+
+O Bibliotecário faz uma pausa significativa.
+
+"O Guardião aceitou sua oferta, mas com uma condição: ela teria que escolher uma memória sua para deixar para trás. Uma troca, se preferir. Elara escolheu deixar a memória de seu primeiro amor, considerando que a dor da perda superava o valor da lembrança."`,
+                choices: [
+                    { text: "Perguntar que tipo de memórias seriam valiosas para o Guardião", nextPage: "valuable_memories" },
+                    { text: "Perguntar se Elara conseguiu voltar para seu mundo", nextPage: "elara_fate" },
+                    { text: "Agradecer ao Bibliotecário e perguntar sobre as três chaves", nextPage: "three_keys_info" }
+                ]
+            },
+            
+            "combat": {
+                title: "Preparando-se para o Combate",
+                text: `Você percebe que um desafio inevitável está à sua frente. A tensão no ar é palpável enquanto você se prepara para enfrentar seu oponente.
+
+As regras deste mundo são estranhas, e você sabe que este não será um combate comum. Aqui, as batalhas são tanto físicas quanto mentais, tanto literais quanto simbólicas.
+
+Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
+                choices: [
+                    { text: "Preparar-se para o combate", nextPage: "begin_combat" }
+                ]
+            },
+            
+            "begin_combat": {
+                title: "Início do Combate",
+                text: `O combate está prestes a começar. Prepare suas estratégias e boa sorte!`,
+                choices: [
+                    { text: "Iniciar Combate", nextPage: "combat_system" }
+                ]
+            }
+        };
+        
+        // ===== DADOS DOS INIMIGOS =====
+        const enemies = {
+            "Mestre do Jogo": {
+                health: 100,
+                avatar: "🧙‍♂️",
+                attacks: [
+                    { name: "Paradoxo Lógico", damage: 15, message: "lança um paradoxo lógico que confunde sua mente!" },
+                    { name: "Peças Rebeldes", damage: 10, message: "comanda peças do tabuleiro para atacar você!" },
+                    { name: "Distorção de Regras", damage: 20, message: "distorce as regras do jogo, criando uma onda de energia!" }
+                ],
+                winPage: "game_victory",
+                losePage: "game_defeat",
+                difficulty: "medium"
+            },
+            "Guardião da Floresta": {
+                health: 120,
+                avatar: "🌳",
+                attacks: [
+                    { name: "Raízes Agarradoras", damage: 12, message: "envia raízes que tentam prender seus pés!" },
+                    { name: "Espinhos Venenosos", damage: 18, message: "dispara espinhos venenosos em sua direção!" },
+                    { name: "Fúria da Natureza", damage: 25, message: "conjura uma tempestade de folhas afiadas!" }
+                ],
+                winPage: "forest_victory",
+                losePage: "forest_defeat",
+                difficulty: "hard"
+            },
+            "Espectro de Memórias": {
+                health: 80,
+                avatar: "👻",
+                attacks: [
+                    { name: "Toque Gélido", damage: 10, message: "passa através de você com um toque gélido!" },
+                    { name: "Eco do Passado", damage: 15, message: "evoca memórias dolorosas que machucam sua mente!" },
+                    { name: "Dissonância Temporal", damage: 20, message: "cria uma distorção no tempo que causa dor!" }
+                ],
+                winPage: "spectre_victory",
+                losePage: "spectre_defeat",
+                difficulty: "easy"
+            }
+        };
+        
+        // ===== COMPONENTES INTERATIVOS E ENGRAÇADOS PARA COMBATE =====
+        const funnyAttacks = [
+            "um abacaxi explosivo",
+            "um peixe congelado",
+            "uma bola de meias sujas",
+            "um patinho de borracha supersônico",
+            "uma chaleira assobiante",
+            "uma banana escorregadia",
+            "um livro de piadas ruins",
+            "um controle remoto universal",
+            "um chapéu falante",
+            "uma escova de dentes elétrica"
+        ];
+        
+        const funnyDefenses = [
+            "um guarda-chuva invertido",
+            "uma almofada gigante",
+            "um escudo feito de gelatina",
+            "uma porta de geladeira",
+            "uma coleção de adesivos defensivos",
+            "um moletom com capuz mágico",
+            "um tapete flutuante",
+            "um espelho de bolso reflexivo",
+            "uma concha de tartaruga emprestada",
+            "uma bolha de sabão gigante"
+        ];
+        
+        const funnySpecials = [
+            "a Dança da Galinha Hipnótica",
+            "o Bocejo Contagioso Nível 10",
+            "o Ataque de Cócegas Imparável",
+            "a Técnica Secreta do Espirro Glitter",
+            "o Grito Ultrassônico de Soprano",
+            "a Invocação do Exército de Patos",
+            "o Golpe Surpresa do Travesseiro",
+            "a Magia Ancestral do Troca-Troca de Meias",
+            "o Ritual Proibido da Pizza Abacaxi",
+            "o Truque do Polegar Removível"
+        ];
+        
+        const funnyItems = [
+            "Poção de Coragem (é só refrigerante com corante)",
+            "Granada de Glitter Ofuscante",
+            "Spray Anti-Monstro (desodorante com etiqueta diferente)",
+            "Sanduíche da Força Suprema",
+            "Amuleto da Sorte (uma ferradura de plástico)",
+            "Elixir Energético (café com muito açúcar)",
+            "Bolinhas de Gude Distrativas",
+            "Pompom de Torcida Motivacional",
+            "Carta de Uno 'Reverse'",
+            "Apito Ensurdecedor de Treinador"
+        ];
+        
+        // ===== VARIÁVEIS DE ESTADO DO JOGO =====
+        let gameState = {
+            currentPage: "start",
+            inventory: [],
+            health: 100,
+            combatStats: {
+                inCombat: false,
+                playerHealth: 100,
+                enemyHealth: 100,
+                currentEnemy: null,
+                playerTurn: true,
+                specialAvailable: true,
+                itemsAvailable: 3
+            }
+        };
+        
+        // ===== FUNÇÕES DE GERENCIAMENTO DE TELA =====
+        
+        // Função para criar elementos flutuantes na tela inicial
+        function createFloatingElements() {
+            const container = document.getElementById('floating-elements');
+            const symbols = ['💫', '✨', '🔮', '📚', '🗝️', '🧩', '🔍', '⏳', '🧿', '🏺'];
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                // Posição aleatória
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                element.style.left = `${posX}%`;
+                element.style.top = `${posY}%`;
+                
+                // Tamanho aleatório
+                const size = Math.random() * 2 + 1;
+                element.style.fontSize = `${size}rem`;
+                
+                // Animação aleatória
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 10 + 10;
+                element.style.animationDelay = `${delay}s`;
+                element.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(element);
+            }
+        }
+        
+        // Função para mostrar a tela específica
+        function showScreen(screenId) {
+            // Esconder todas as telas
+            document.querySelectorAll('#start-screen, #prologue-screen, .story-screen, #combat-screen, #result-screen').forEach(screen => {
+                screen.classList.remove('visible');
+            });
+            
+            // Mostrar a tela solicitada
+            document.getElementById(screenId).classList.add('visible');
+        }
+        
+        // Função para navegar para uma página da história
+        function navigateToPage(pageId) {
+            // Atualizar o estado do jogo
+            gameState.currentPage = pageId;
+            
+            if (pageId === "begin_combat") {
+                startCombat();
+                return;
+            }
+            
+            const page = storyData[pageId];
+            
+            if (!page) {
+                console.error(`Página não encontrada: ${pageId}`);
+                return;
+            }
+            
+            // Clonar o template
+            const storyScreen = document.getElementById('story-template').cloneNode(true);
+            storyScreen.id = `story-screen-${pageId}`;
+            storyScreen.classList.add('visible');
+            
+            // Adicionar o texto da história
+            const storyText = storyScreen.querySelector('.story-text');
+            storyText.innerHTML = `<h2>${page.title}</h2>${page.text.replace(/\n/g, '<br>')}<br><br>`;
+            
+            // Ajustar duração da animação com base no comprimento do texto
+            const textLength = page.text.length;
+            const scrollDuration = Math.max(30, textLength / 20); // 1 segundo para cada 20 caracteres, mínimo 30s
+            storyText.style.setProperty('--story-scroll-duration', `${scrollDuration}s`);
+            
+            // Adicionar os botões de escolha
+            const choicesContainer = storyScreen.querySelector('.choices-container');
+            choicesContainer.innerHTML = '';
+            
+            page.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-button';
+                button.textContent = choice.text;
+                button.dataset.nextPage = choice.nextPage;
+                
+                if (choice.nextPage === 'combat') {
+                    button.dataset.enemy = choice.enemy;
+                    button.dataset.difficulty = choice.difficulty;
+                }
+                
+                choicesContainer.appendChild(button);
+            });
+            
+            // Remover qualquer outra tela de história
+            document.querySelectorAll('.story-screen.visible').forEach(screen => {
+                if (screen.id !== storyScreen.id) {
+                    screen.remove();
+                }
+            });
+            
+            // Se não existir no DOM, adicionar
+            if (!document.getElementById(storyScreen.id)) {
+                document.body.appendChild(storyScreen);
+            }
+            
+            // Configurar eventos de toque/clique para pausa do texto
+            setupTextScrollPause(storyScreen);
+        }
+        
+        // Função para configurar pausa do texto com toque
+        function setupTextScrollPause(storyScreen) {
+            const storyContainer = storyScreen.querySelector('.story-container');
+            const storyText = storyScreen.querySelector('.story-text');
+            
+            let isPaused = false;
+            
+            // Função para pausar/resumir a animação
+            function togglePause(e) {
+                // Impedir comportamento padrão
+                e.preventDefault();
+                
+                if (isPaused) {
+                    // Resumir
+                    storyText.classList.remove('paused');
+                } else {
+                    // Pausar
+                    storyText.classList.add('paused');
+                }
+                
+                isPaused = !isPaused;
+            }
+            
+            // Eventos de mouse
+            storyContainer.addEventListener('mousedown', togglePause);
+            storyContainer.addEventListener('mouseup', togglePause);
+            
+            // Eventos de toque para dispositivos móveis
+            storyContainer.addEventListener('touchstart', togglePause, { passive: false });
+            storyContainer.addEventListener('touchend', togglePause, { passive: false });
+        }
+        
+        // ===== SISTEMA DE COMBATE =====
+        function startCombat() {
+            // Mostrar tela de combate
+            showScreen('combat-screen');
+            
+            // Determinar inimigo com base na escolha ou página atual
+            const enemyData = gameState.combatEnemy || enemies["Mestre do Jogo"];
+            
+            // Configurar estado do combate
+            gameState.combatStats.inCombat = true;
+            gameState.combatStats.playerHealth = 100;
+            gameState.combatStats.enemyHealth = enemyData.health;
+            gameState.combatStats.currentEnemy = enemyData;
+            gameState.combatStats.playerTurn = true;
+            gameState.combatStats.specialAvailable = true;
+            gameState.combatStats.itemsAvailable = 3;
+            
+            // Atualizar a interface de combate
+            updateCombatUI();
+            
+            // Configurar eventos dos botões de combate
+            document.getElementById('attack-button').onclick = performAttack;
+            document.getElementById('defend-button').onclick = performDefend;
+            document.getElementById('special-button').onclick = performSpecial;
+            document.getElementById('item-button').onclick = useItem;
+            
+            // Limpar log de combate
+            document.getElementById('combat-log').innerHTML = '<p>Prepare-se para o combate!</p>';
+            
+            // Configurar o nome e avatar do inimigo
+            document.getElementById('enemy-name').textContent = enemyData.name || "Inimigo";
+            document.getElementById('enemy-avatar').textContent = enemyData.avatar || "👹";
+            
+            // Ajustar barras de saúde
+            updateHealthBars();
+        }
+        
+        function updateCombatUI() {
+            const { currentEnemy, playerTurn, specialAvailable, itemsAvailable } = gameState.combatStats;
+            
+            // Atualizar subtítulo
+            document.getElementById('combat-subtitle').textContent = 
+                playerTurn ? "Sua vez de agir!" : `${currentEnemy.name} está se preparando...`;
+            
+            // Desabilitar botões quando não for a vez do jogador
+            document.querySelectorAll('.combat-button').forEach(button => {
+                button.disabled = !playerTurn;
+            });
+            
+            // Gerenciar botão de especial
+            document.getElementById('special-button').disabled = !playerTurn || !specialAvailable;
+            if (!specialAvailable) {
+                document.getElementById('special-button').textContent = "Especial (Usado)";
+            } else {
+                document.getElementById('special-button').textContent = "Ataque Especial";
+            }
+            
+            // Gerenciar botão de item
+            document.getElementById('item-button').disabled = !playerTurn || itemsAvailable <= 0;
+            document.getElementById('item-button').textContent = 
+                itemsAvailable > 0 ? `Usar Item (${itemsAvailable})` : "Sem Itens";
+        }
+        
+        function updateHealthBars() {
+            const { playerHealth, enemyHealth } = gameState.combatStats;
+            
+            // Atualizar barra de saúde do jogador
+            document.getElementById('player-health').style.width = `${playerHealth}%`;
+            
+            // Atualizar barra de saúde do inimigo
+            document.getElementById('enemy-health').style.width = `${enemyHealth}%`;
+        }
+        
+        function addCombatLog(message) {
+            const log = document.getElementById('combat-log');
+            const entry = document.createElement('p');
+            entry.innerHTML = message;
+            log.insertBefore(entry, log.firstChild);
+            
+            // Limitar o número de entradas para evitar sobrecarga
+            if (log.children.length > 10) {
+                log.removeChild(log.lastChild);
+            }
+        }
+        
+        function performAttack() {
+            if (!gameState.combatStats.playerTurn) return;
+            
+            // Selecionar um ataque engraçado aleatório
+            const attackItem = funnyAttacks[Math.floor(Math.random() * funnyAttacks.length)];
+            
+            // Calcular dano
+            const damage = Math.floor(Math.random() * 15) + 10;
+            
+            // Aplicar dano ao inimigo
+            gameState.combatStats.enemyHealth -= damage;
+            if (gameState.combatStats.enemyHealth < 0) gameState.combatStats.enemyHealth = 0;
+            
+            // Adicionar ao log
+            addCombatLog(`Você ataca com <strong>${attackItem}</strong> e causa <strong>${damage}</strong> de dano!`);
+            
+            // Atualizar UI
+            updateHealthBars();
+            
+            // Verificar se o combate terminou
+            if (gameState.combatStats.enemyHealth <= 0) {
+                endCombat(true);
+                return;
+            }
+            
+            // Passar a vez para o inimigo
+            gameState.combatStats.playerTurn = false;
+            updateCombatUI();
+            
+            // Inimigo ataca após um pequeno delay
+            setTimeout(enemyTurn, 1500);
+        }
+        
+        function performDefend() {
+            if (!gameState.combatStats.playerTurn) return;
+            
+            // Selecionar uma defesa engraçada aleatória
+            const defenseItem = funnyDefenses[Math.floor(Math.random() * funnyDefenses.length)];
+            
+            // Adicionar ao log
+            addCombatLog(`Você se defende com <strong>${defenseItem}</strong>!`);
+            
+            // Definir estado de defesa (reduz dano do próximo ataque)
+            gameState.combatStats.defending = true;
+            
+            // Recuperar um pouco de saúde
+            const heal = Math.floor(Math.random() * 10) + 5;
+            gameState.combatStats.playerHealth += heal;
+            if (gameState.combatStats.playerHealth > 100) gameState.combatStats.playerHealth = 100;
+            
+            addCombatLog(`Você recupera <strong>${heal}</strong> pontos de vida!`);
+            
+            // Atualizar UI
+            updateHealthBars();
+            
+            // Passar a vez para o inimigo
+            gameState.combatStats.playerTurn = false;
+            updateCombatUI();
+            
+            // Inimigo ataca após um pequeno delay
+            setTimeout(enemyTurn, 1500);
+        }
+        
+        function performSpecial() {
+            if (!gameState.combatStats.playerTurn || !gameState.combatStats.specialAvailable) return;
+            
+            // Selecionar um ataque especial engraçado aleatório
+            const specialAttack = funnySpecials[Math.floor(Math.random() * funnySpecials.length)];
+            
+            // Calcular dano (maior que o ataque normal)
+            const damage = Math.floor(Math.random() * 20) + 20;
+            
+            // Aplicar dano ao inimigo
+            gameState.combatStats.enemyHealth -= damage;
+            if (gameState.combatStats.enemyHealth < 0) gameState.combatStats.enemyHealth = 0;
+            
+            // Adicionar ao log
+            addCombatLog(`Você usa <strong>${specialAttack}</strong> e causa um incrível <strong>${damage}</strong> de dano!`);
+            
+            // Atualizar UI
+            updateHealthBars();
+            
+            // Desabilitar o especial (uso único por combate)
+            gameState.combatStats.specialAvailable = false;
+            
+            // Verificar se o combate terminou
+            if (gameState.combatStats.enemyHealth <= 0) {
+                endCombat(true);
+                return;
+            }
+            
+            // Passar a vez para o inimigo
+            gameState.combatStats.playerTurn = false;
+            updateCombatUI();
+            
+            // Inimigo ataca após um pequeno delay
+            setTimeout(enemyTurn, 1500);
+        }
+        
+        function useItem() {
+            if (!gameState.combatStats.playerTurn || gameState.combatStats.itemsAvailable <= 0) return;
+            
+            // Selecionar um item engraçado aleatório
+            const item = funnyItems[Math.floor(Math.random() * funnyItems.length)];
+            
+            // Efeito aleatório (cura ou dano)
+            const effect = Math.random();
+            
+            if (effect < 0.7) {
+                // 70% chance de curar
+                const heal = Math.floor(Math.random() * 30) + 20;
+                gameState.combatStats.playerHealth += heal;
+                if (gameState.combatStats.playerHealth > 100) gameState.combatStats.playerHealth = 100;
+                
+                addCombatLog(`Você usa <strong>${item}</strong> e recupera <strong>${heal}</strong> pontos de vida!`);
+            } else {
+                // 30% chance de causar dano
+                const damage = Math.floor(Math.random() * 25) + 15;
+                gameState.combatStats.enemyHealth -= damage;
+                if (gameState.combatStats.enemyHealth < 0) gameState.combatStats.enemyHealth = 0;
+                
+                addCombatLog(`Você usa <strong>${item}</strong> e causa <strong>${damage}</strong> de dano!`);
+                
+                // Verificar se o combate terminou
+                if (gameState.combatStats.enemyHealth <= 0) {
+                    endCombat(true);
+                    return;
+                }
+            }
+            
+            // Decrementar contador de itens
+            gameState.combatStats.itemsAvailable--;
+            
+            // Atualizar UI
+            updateHealthBars();
+            updateCombatUI();
+            
+            // Passar a vez para o inimigo
+            gameState.combatStats.playerTurn = false;
+            
+            // Inimigo ataca após um pequeno delay
+            setTimeout(enemyTurn, 1500);
+        }
+        
+        function enemyTurn() {
+            const { currentEnemy, defending } = gameState.combatStats;
+            
+            // Selecionar um ataque aleatório do inimigo
+            const attackIndex = Math.floor(Math.random() * currentEnemy.attacks.length);
+            const attack = currentEnemy.attacks[attackIndex];
+            
+            // Calcular dano com base na dificuldade e estado de defesa
+            let damage = attack.damage;
+            
+            // Ajustar dano com base na dificuldade
+            if (currentEnemy.difficulty === "easy") damage = Math.floor(damage * 0.8);
+            if (currentEnemy.difficulty === "hard") damage = Math.floor(damage * 1.2);
+            
+            // Reduzir dano se o jogador estiver defendendo
+            if (defending) {
+                damage = Math.floor(damage * 0.5);
+                addCombatLog(`Sua defesa reduz o dano do ataque!`);
+            }
+            
+            // Aplicar dano ao jogador
+            gameState.combatStats.playerHealth -= damage;
+            if (gameState.combatStats.playerHealth < 0) gameState.combatStats.playerHealth = 0;
+            
+            // Adicionar ao log
+            addCombatLog(`<strong>${currentEnemy.name}</strong> ${attack.message} <strong>${damage}</strong> de dano!`);
+            
+            // Atualizar UI
+            updateHealthBars();
+            
+            // Resetar estado de defesa
+            gameState.combatStats.defending = false;
+            
+            // Verificar se o combate terminou
+            if (gameState.combatStats.playerHealth <= 0) {
+                endCombat(false);
+                return;
+            }
+            
+            // Devolver a vez para o jogador
+            gameState.combatStats.playerTurn = true;
+            updateCombatUI();
+        }
+        
+        function endCombat(victory) {
+            const { currentEnemy } = gameState.combatStats;
+            const resultScreen = document.getElementById('result-screen');
+            const resultTitle = document.getElementById('result-title');
+            const resultText = document.getElementById('result-text');
+            
+            // Configurar tela de resultado
+            if (victory) {
+                resultTitle.textContent = "Vitória!";
+                resultTitle.className = "result-title win-title";
+                resultText.textContent = `Você derrotou ${currentEnemy.name}! Sua jornada pode continuar.`;
+                
+                // Preparar para ir para a próxima página após a vitória
+                document.getElementById('continue-button').onclick = function() {
+                    showScreen('result-screen'); // Esconder resultados
+                    navigateToPage(currentEnemy.winPage || "start"); // Ir para a próxima página
+                };
+            } else {
+                resultTitle.textContent = "Derrota";
+                resultTitle.className = "result-title lose-title";
+                resultText.textContent = `Você foi derrotado por ${currentEnemy.name}. Talvez outra abordagem seria melhor...`;
+                
+                // Preparar para ir para a página de derrota
+                document.getElementById('continue-button').onclick = function() {
+                    showScreen('result-screen'); // Esconder resultados
+                    navigateToPage(currentEnemy.losePage || "start"); // Ir para a página de derrota
+                };
+            }
+            
+            // Configurar botão de reinício
+            document.getElementById('restart-button').onclick = function() {
+                showScreen('result-screen'); // Esconder resultados
+                showScreen('start-screen'); // Voltar à tela inicial
+            };
+            
+            // Mostrar tela de resultado
+            showScreen('result-screen');
+            
+            // Resetar estado de combate
+            gameState.combatStats.inCombat = false;
+        }
+        
+        // ===== INICIALIZAÇÃO DO JOGO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Criar elementos flutuantes na tela inicial
+            createFloatingElements();
+            
+            // Inicializar botão de início
+            document.getElementById('start-button').addEventListener('click', function() {
+                showScreen('prologue-screen');
+                
+                // Configurar duração do prólogo
+                const prologueText = document.getElementById('prologue-text');
+                prologueText.style.setProperty('--scroll-duration', '60s');
+                
+                // Configurar timer para mudar para a primeira página após o prólogo
+                setTimeout(() => {
+                    navigateToPage('start');
+                }, 20000); // 20 segundos para o prólogo
+            });
+            
+            // Inicializar botão para pular prólogo
+            document.getElementById('skip-prologue').addEventListener('click', function() {
+                navigateToPage('start');
+            });
+            
+            // Configurar evento de escolha para botões dinâmicos
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('choice-button')) {
+                    const nextPage = e.target.dataset.nextPage;
+                    
+                    if (nextPage === 'combat') {
+                        // Configurar combate
+                        const enemy = enemies[e.target.dataset.enemy];
+                        gameState.combatEnemy = enemy;
+                        startCombat();
+                    } else {
+                        navigateToPage(nextPage);
+                    }
+                }
+            });
+            
+            // Prevenir comportamentos indesejados de toque
+            document.addEventListener('touchmove', function(e) {
+                if (e.target.closest('.story-container')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // Configurar botões de resultado de combate
+            document.getElementById('continue-button').addEventListener('click', function() {
+                showScreen('result-screen');
+                navigateToPage(gameState.nextPage || 'start');
+            });
+            
+            document.getElementById('restart-button').addEventListener('click', function() {
+                showScreen('start-screen');
+            });
+        });
+    </script>
+</body>
+</html>
