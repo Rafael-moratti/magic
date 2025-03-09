@@ -179,7 +179,7 @@
             padding: 20px;
             transform: translateY(100%);
             animation: scrollUp var(--story-scroll-duration, 30s) linear forwards;
-            animation-delay: 5s; /* Atraso de 5 segundos conforme solicitado */
+            animation-delay: 1s; /* Reduzido para 1 segundo */
             line-height: 1.6;
             font-size: 1.1rem;
             background-color: rgba(30, 30, 30, 0.7);
@@ -1254,6 +1254,7 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         // ===== DADOS DOS INIMIGOS =====
         const enemies = {
             "Mestre do Jogo": {
+                name: "Mestre do Jogo",
                 health: 100,
                 avatar: "🧙‍♂️",
                 attacks: [
@@ -1266,6 +1267,7 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
                 difficulty: "medium"
             },
             "Guardião da Floresta": {
+                name: "Guardião da Floresta",
                 health: 120,
                 avatar: "🌳",
                 attacks: [
@@ -1278,6 +1280,7 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
                 difficulty: "hard"
             },
             "Espectro de Memórias": {
+                name: "Espectro de Memórias",
                 health: 80,
                 avatar: "👻",
                 attacks: [
@@ -1394,17 +1397,24 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         
         // Função para mostrar a tela específica
         function showScreen(screenId) {
+            console.log(`Mostrando tela: ${screenId}`);
             // Esconder todas as telas
             document.querySelectorAll('#start-screen, #prologue-screen, .story-screen, #combat-screen, #result-screen').forEach(screen => {
                 screen.classList.remove('visible');
             });
             
             // Mostrar a tela solicitada
-            document.getElementById(screenId).classList.add('visible');
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('visible');
+            } else {
+                console.error(`Tela não encontrada: ${screenId}`);
+            }
         }
         
         // Função para navegar para uma página da história
         function navigateToPage(pageId) {
+            console.log(`Navegando para página: ${pageId}`);
             // Atualizar o estado do jogo
             gameState.currentPage = pageId;
             
@@ -1420,58 +1430,82 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
                 return;
             }
             
-            // Clonar o template
-            const storyScreen = document.getElementById('story-template').cloneNode(true);
-            storyScreen.id = `story-screen-${pageId}`;
-            storyScreen.classList.add('visible');
-            
-            // Adicionar o texto da história
-            const storyText = storyScreen.querySelector('.story-text');
-            storyText.innerHTML = `<h2>${page.title}</h2>${page.text.replace(/\n/g, '<br>')}<br><br>`;
-            
-            // Ajustar duração da animação com base no comprimento do texto
-            const textLength = page.text.length;
-            const scrollDuration = Math.max(30, textLength / 20); // 1 segundo para cada 20 caracteres, mínimo 30s
-            storyText.style.setProperty('--story-scroll-duration', `${scrollDuration}s`);
-            
-            // Adicionar os botões de escolha
-            const choicesContainer = storyScreen.querySelector('.choices-container');
-            choicesContainer.innerHTML = '';
-            
-            page.choices.forEach((choice, index) => {
-                const button = document.createElement('button');
-                button.className = 'choice-button';
-                button.textContent = choice.text;
-                button.dataset.nextPage = choice.nextPage;
-                
-                if (choice.nextPage === 'combat') {
-                    button.dataset.enemy = choice.enemy;
-                    button.dataset.difficulty = choice.difficulty;
+            try {
+                // Clonar o template
+                const storyTemplate = document.getElementById('story-template');
+                if (!storyTemplate) {
+                    console.error('Template de história não encontrado!');
+                    return;
                 }
                 
-                choicesContainer.appendChild(button);
-            });
-            
-            // Remover qualquer outra tela de história
-            document.querySelectorAll('.story-screen.visible').forEach(screen => {
-                if (screen.id !== storyScreen.id) {
+                const storyScreen = storyTemplate.cloneNode(true);
+                storyScreen.id = `story-screen-${pageId}`;
+                
+                // Adicionar o texto da história
+                const storyText = storyScreen.querySelector('.story-text');
+                if (!storyText) {
+                    console.error('Elemento de texto da história não encontrado no template!');
+                    return;
+                }
+                
+                storyText.innerHTML = `<h2>${page.title}</h2>${page.text.replace(/\n/g, '<br>')}<br><br>`;
+                
+                // Ajustar duração da animação com base no comprimento do texto
+                const textLength = page.text.length;
+                const scrollDuration = Math.max(30, textLength / 20); // 1 segundo para cada 20 caracteres, mínimo 30s
+                storyText.style.setProperty('--story-scroll-duration', `${scrollDuration}s`);
+                
+                // Adicionar os botões de escolha
+                const choicesContainer = storyScreen.querySelector('.choices-container');
+                if (!choicesContainer) {
+                    console.error('Container de escolhas não encontrado no template!');
+                    return;
+                }
+                
+                choicesContainer.innerHTML = '';
+                
+                page.choices.forEach((choice, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'choice-button';
+                    button.textContent = choice.text;
+                    button.dataset.nextPage = choice.nextPage;
+                    
+                    if (choice.nextPage === 'combat') {
+                        button.dataset.enemy = choice.enemy;
+                        button.dataset.difficulty = choice.difficulty;
+                    }
+                    
+                    choicesContainer.appendChild(button);
+                });
+                
+                // Remover qualquer tela de história existente
+                document.querySelectorAll('.story-screen.visible').forEach(screen => {
                     screen.remove();
-                }
-            });
-            
-            // Se não existir no DOM, adicionar
-            if (!document.getElementById(storyScreen.id)) {
+                });
+                
+                // Adicionar a nova tela ao DOM
                 document.body.appendChild(storyScreen);
+                
+                // Configurar eventos de toque/clique para pausa do texto
+                setupTextScrollPause(storyScreen);
+                
+                // Usar showScreen para exibir a tela - ADICIONADO PARA CORRIGIR O PROBLEMA
+                showScreen(`story-screen-${pageId}`);
+                
+            } catch (error) {
+                console.error('Erro ao navegar para a página:', error);
             }
-            
-            // Configurar eventos de toque/clique para pausa do texto
-            setupTextScrollPause(storyScreen);
         }
         
         // Função para configurar pausa do texto com toque
         function setupTextScrollPause(storyScreen) {
             const storyContainer = storyScreen.querySelector('.story-container');
             const storyText = storyScreen.querySelector('.story-text');
+            
+            if (!storyContainer || !storyText) {
+                console.error('Elementos não encontrados para configurar pausa de texto');
+                return;
+            }
             
             let isPaused = false;
             
@@ -1502,6 +1536,7 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         
         // ===== SISTEMA DE COMBATE =====
         function startCombat() {
+            console.log('Iniciando combate');
             // Mostrar tela de combate
             showScreen('combat-screen');
             
@@ -1539,6 +1574,11 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         
         function updateCombatUI() {
             const { currentEnemy, playerTurn, specialAvailable, itemsAvailable } = gameState.combatStats;
+            
+            if (!currentEnemy) {
+                console.error('Inimigo não definido para atualizar UI de combate');
+                return;
+            }
             
             // Atualizar subtítulo
             document.getElementById('combat-subtitle').textContent = 
@@ -1732,6 +1772,11 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         function enemyTurn() {
             const { currentEnemy, defending } = gameState.combatStats;
             
+            if (!currentEnemy || !currentEnemy.attacks) {
+                console.error('Dados do inimigo inválidos para o turno do inimigo');
+                return;
+            }
+            
             // Selecionar um ataque aleatório do inimigo
             const attackIndex = Math.floor(Math.random() * currentEnemy.attacks.length);
             const attack = currentEnemy.attacks[attackIndex];
@@ -1775,6 +1820,12 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         
         function endCombat(victory) {
             const { currentEnemy } = gameState.combatStats;
+            
+            if (!currentEnemy) {
+                console.error('Inimigo não definido ao finalizar combate');
+                return;
+            }
+            
             const resultScreen = document.getElementById('result-screen');
             const resultTitle = document.getElementById('result-title');
             const resultText = document.getElementById('result-text');
@@ -1817,11 +1868,14 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
         
         // ===== INICIALIZAÇÃO DO JOGO =====
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando o jogo...');
+            
             // Criar elementos flutuantes na tela inicial
             createFloatingElements();
             
             // Inicializar botão de início
             document.getElementById('start-button').addEventListener('click', function() {
+                console.log('Botão de início clicado');
                 showScreen('prologue-screen');
                 
                 // Configurar duração do prólogo
@@ -1831,24 +1885,31 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
                 // Configurar timer para mudar para a primeira página após o prólogo
                 setTimeout(() => {
                     navigateToPage('start');
-                }, 20000); // 20 segundos para o prólogo
+                }, 10000); // Reduzido para 10 segundos para facilitar os testes
             });
             
             // Inicializar botão para pular prólogo
             document.getElementById('skip-prologue').addEventListener('click', function() {
+                console.log('Prólogo pulado');
                 navigateToPage('start');
             });
             
             // Configurar evento de escolha para botões dinâmicos
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('choice-button')) {
+                    console.log(`Escolha selecionada: ${e.target.textContent}`);
                     const nextPage = e.target.dataset.nextPage;
                     
                     if (nextPage === 'combat') {
                         // Configurar combate
-                        const enemy = enemies[e.target.dataset.enemy];
-                        gameState.combatEnemy = enemy;
-                        startCombat();
+                        const enemyName = e.target.dataset.enemy;
+                        const enemy = enemies[enemyName];
+                        if (enemy) {
+                            gameState.combatEnemy = enemy;
+                            startCombat();
+                        } else {
+                            console.error(`Inimigo não encontrado: ${enemyName}`);
+                        }
                     } else {
                         navigateToPage(nextPage);
                     }
@@ -1871,6 +1932,8 @@ Seu adversário aguarda, e é hora de mostrar do que você é capaz.`,
             document.getElementById('restart-button').addEventListener('click', function() {
                 showScreen('start-screen');
             });
+            
+            console.log('Jogo inicializado com sucesso!');
         });
     </script>
 </body>
