@@ -44,7 +44,9 @@
 
         /* TELA INICIAL */
         #start-screen {
-            background-color: #000;
+            background-image: url('imagem/space.jpg');
+            background-size: cover;
+            background-position: center;
             z-index: 10;
         }
 
@@ -81,6 +83,9 @@
             letter-spacing: 3px;
             animation: pulse 3s infinite;
             max-width: 90%;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
         }
 
         @keyframes pulse {
@@ -92,16 +97,25 @@
             }
         }
 
+        .start-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
         .start-button {
             padding: 15px 40px;
             font-size: 1.5rem;
-            background-color: transparent;
+            background-color: rgba(0, 0, 0, 0.7);
             color: #00ff00;
             border: 2px solid #00ff00;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
+            width: 250px;
+            text-align: center;
         }
 
         .start-button:hover, .start-button:active {
@@ -116,6 +130,7 @@
             height: 50px;
             animation: flyAround 30s linear infinite;
             opacity: 0.7;
+            z-index: 5;
         }
 
         @keyframes flyAround {
@@ -140,6 +155,9 @@
         #intro-screen {
             justify-content: flex-start;
             perspective: 400px;
+            background-image: url('space.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .intro-text {
@@ -149,9 +167,12 @@
             line-height: 1.5;
             text-align: center;
             max-width: 80%;
-            animation: scrollUp 10s linear forwards;
+            animation: scrollUp 60s linear forwards;
             animation-play-state: running;
             padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffff99;
+            text-shadow: 0 0 10px #ffff00;
         }
 
         @keyframes scrollUp {
@@ -163,10 +184,52 @@
             }
         }
 
+        .skip-intro {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .skip-intro:hover {
+            background-color: rgba(0, 50, 0, 0.9);
+        }
+
+        .intro-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .intro-control {
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .intro-control:hover {
+            background-color: rgba(0, 50, 0, 0.9);
+        }
+
         /* TELA DE HISTÓRIA */
         #story-screen {
             justify-content: flex-start;
             overflow-y: auto;
+            background-image: url('space.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .story-container {
@@ -178,6 +241,8 @@
             overflow-y: auto;
             padding: 20px;
             position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
         }
 
         .story-text {
@@ -229,9 +294,59 @@
             box-shadow: 0 0 10px #00ff00;
         }
 
+        .game-menu {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+        }
+
+        .menu-button {
+            padding: 8px 15px;
+            background-color: rgba(0, 30, 0, 0.8);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(0, 60, 0, 0.9);
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background-color: rgba(0, 20, 0, 0.9);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 8px 15px;
+            color: #00ff00;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(0, 80, 0, 0.7);
+        }
+
         /* TELA DE COMBATE */
         #combat-screen {
             background-color: rgba(50, 0, 0, 0.8);
+            background-image: url('space.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .combat-container {
@@ -240,6 +355,9 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
         }
 
         .combat-header {
@@ -247,6 +365,7 @@
             font-size: 1.5rem;
             color: #ff3333;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff0000;
         }
 
         .combat-area {
@@ -319,6 +438,9 @@
         /* TELA DE QUEBRA-CABEÇA */
         #puzzle-screen {
             background-color: rgba(0, 0, 50, 0.8);
+            background-image: url('space.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         .puzzle-container {
@@ -327,6 +449,9 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
         }
 
         .puzzle-header {
@@ -334,6 +459,7 @@
             font-size: 1.5rem;
             color: #33ccff;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px #33ccff;
         }
 
         .puzzle-description {
@@ -370,6 +496,65 @@
         .puzzle-button:hover, .puzzle-button:active {
             background-color: rgba(0, 0, 150, 0.9);
             box-shadow: 0 0 10px #33ccff;
+        }
+
+        #history-screen {
+            justify-content: flex-start;
+            overflow-y: auto;
+            background-image: url('space.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .history-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+        }
+
+        .history-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .history-entry {
+            padding: 10px;
+            background-color: rgba(0, 30, 0, 0.5);
+            border-radius: 5px;
+            border-left: 3px solid #00ff00;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-entry:hover {
+            background-color: rgba(0, 60, 0, 0.7);
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background-color: rgba(0, 30, 0, 0.7);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            cursor: pointer;
+            align-self: center;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: rgba(0, 60, 0, 0.9);
         }
 
         /* RESPONSIVIDADE */
@@ -422,7 +607,11 @@
             </svg>
         </div>
         <h1 class="title">DESPERTAR ESTELAR:<br>FUGA OU SALVAÇÃO</h1>
-        <button class="start-button" id="start-button">Iniciar</button>
+        <div class="start-buttons">
+            <button class="start-button" id="start-button">Iniciar</button>
+            <button class="start-button" id="continue-button">Continuar</button>
+            <button class="start-button" id="skip-to-story">Pular Prólogo</button>
+        </div>
     </div>
 
     <!-- TELA DE INTRODUÇÃO (TEXTO ROLANDO) -->
@@ -444,14 +633,37 @@
             <br>
             <p>A escolha está em suas mãos...</p>
         </div>
+        <button class="skip-intro" id="skip-intro-button">Pular Introdução</button>
+        <div class="intro-controls">
+            <button class="intro-control" id="pause-intro">Pausar</button>
+            <button class="intro-control" id="resume-intro" style="display: none;">Continuar</button>
+        </div>
     </div>
 
     <!-- TELA DE HISTÓRIA -->
     <div id="story-screen" class="screen hidden">
+        <div class="game-menu">
+            <button class="menu-button" id="menu-button">Menu</button>
+            <div class="menu-dropdown" id="menu-dropdown">
+                <div class="menu-item" id="save-game">Salvar Jogo</div>
+                <div class="menu-item" id="load-game">Carregar Jogo</div>
+                <div class="menu-item" id="view-history">Ver Histórico</div>
+                <div class="menu-item" id="main-menu">Menu Principal</div>
+            </div>
+        </div>
         <div class="story-container" id="story-container">
             <span class="story-id" id="section-id"></span>
             <div class="story-text" id="story-text"></div>
             <div class="options-container" id="options-container"></div>
+        </div>
+    </div>
+
+    <!-- TELA DE HISTÓRICO -->
+    <div id="history-screen" class="screen hidden">
+        <div class="history-container" id="history-container">
+            <h2 class="history-title">Histórico da Jornada</h2>
+            <div id="history-entries"></div>
+            <button class="back-button" id="back-from-history">Voltar à História</button>
         </div>
     </div>
 
@@ -500,8 +712,10 @@
 
     <script>
         // -------------------- CONFIGURAÇÕES DO JOGO --------------------
-        const SCROLL_SPEED = 22; // Velocidade do texto rolando em segundos
-        const TEXT_DELAY = 5; // Tempo de espera em segundos antes e depois do texto
+        const SCROLL_SPEED = 60; // Velocidade do texto rolando em segundos
+        const TEXT_DELAY = 2; // Tempo de espera em segundos antes e depois do texto
+        const GAME_VERSION = "1.0.0";
+        const SAVE_KEY = "despertarEstelar_saveData";
         
         // -------------------- DADOS DO JOGO --------------------
         // Definição das seções da história
@@ -698,6 +912,86 @@
                     { text: "Continuar sua missão, presumindo que foram capturados.", nextSection: "68" }
                 ]
             },
+            "30": {
+                text: "Você se dirige rapidamente à sala de comunicações, atravessando corredores instáveis. No caminho, encontra evidências de conflito - marcas de queimaduras nas paredes, objetos espalhados, como se houvesse uma luta recente.\n\nAo chegar à sala de comunicações, encontra um técnico ferido - Oficial Yusuf - trabalhando no console de transmissão. Ele se vira ao ouvir você entrar, visivelmente aliviado.\n\n\"Capitão! Graças a Deus você está vivo. Tentei estabelecer contato com qualquer nave na proximidade, mas algo está bloqueando nossas transmissões de longo alcance.\"\n\nYusuf aponta para um monitor mostrando dados de comunicação. \"Há uma interferência artificial cobrindo todas as frequências principais. Não é natural - alguém não quer que peçamos ajuda.\"\n\nO que você faz?",
+                options: [
+                    { text: "Tentar contornar a interferência para enviar um sinal de socorro.", nextSection: "77" },
+                    { text: "Perguntar a Yusuf o que ele sabe sobre o incidente.", nextSection: "78" },
+                    { text: "Verificar os registros de comunicação anteriores ao salto.", nextSection: "79" }
+                ]
+            },
+            "31": {
+                text: "\"Permaneçam onde estão por enquanto,\" você instrui. \"Preciso verificar algo sobre esses passageiros não listados.\"\n\n\"Entendido, Capitão,\" responde Elena. \"Mas não demore. O sistema de suporte vital aqui está instável.\"\n\nVocê acessa o banco de dados da tripulação e passageiros. A lista oficial mostra 200 colonos e 15 tripulantes, mas ao acessar os registros de embarque em Marte, você encontra uma discrepância: três pessoas adicionais embarcaram usando credenciais de manutenção temporária, 48 horas antes da partida.\n\nAo aprofundar a busca, você descobre que essas credenciais foram autorizadas pelo Dr. Khoury, a médica-chefe. Contudo, não há imagens claras dessas pessoas nos registros de segurança - apenas silhuetas distantes com os rostos sempre fora do ângulo das câmeras.\n\nO que você faz?",
+                options: [
+                    { text: "Investigar a conexão da Dra. Khoury com os passageiros não listados.", nextSection: "80" },
+                    { text: "Voltar a contatar Elena e Petrov com esta informação.", nextSection: "81" },
+                    { text: "Buscar os intrusos nos registros de localização atuais da nave.", nextSection: "82" }
+                ]
+            },
+            "32": {
+                text: "\"Escutem com atenção,\" você diz firmemente. \"A nave está condenada. Dirijam-se às cápsulas de escape no nível 5. Usem os dutos de manutenção para evitar as áreas bloqueadas. Nos encontraremos lá.\"\n\n\"Mas, Capitão,\" protesta Elena, \"e os colonos? Não podemos abandoná-los.\"\n\n\"Tenho um plano para eles,\" você responde, embora ainda não tenha certeza do que fará. \"Tentem sobreviver. É uma ordem.\"\n\nElena reluta, mas concorda. \"Entendido. Mas tome cuidado, Capitão. Seja lá quem sabotou a nave, ainda está a bordo.\"\n\nApós encerrar a comunicação, você reflete sobre suas opções. Os colonos, a tripulação sobrevivente, o possível módulo secreto... Não há tempo para salvar tudo e todos.\n\nO que você faz?",
+                options: [
+                    { text: "Ir ao setor de criogenia para tentar salvar os colonos.", nextSection: "20" },
+                    { text: "Investigar o suposto módulo secreto primeiro.", nextSection: "83" },
+                    { text: "Verificar as cápsulas de escape para garantir que estejam funcionais.", nextSection: "84" }
+                ]
+            },
+            "33": {
+                text: "Você tenta restabelecer contato com Rodriguez e sua equipe. \"Tenente Rodriguez, responda! Qual é sua situação?\"\n\nApenas estática responde. Alternando frequências e aumentando o ganho, você finalmente capta uma transmissão fraca:\n\n\"...abatidos... dois deles... armados com... tecnologia avançada... não são humanos normais...\"\n\nA voz não é de Rodriguez, parece ser a de Lin. Ela tosse, claramente ferida. \"...laboratório trancado... eles querem os dados... compartimento 772B...\"\n\nA transmissão é interrompida por um som metálico e um grito abafado. Depois, silêncio.\n\nO que você faz?",
+                options: [
+                    { text: "Ir ao laboratório para tentar resgatar sobreviventes.", nextSection: "85" },
+                    { text: "Informar Elena sobre o ocorrido no laboratório.", nextSection: "86" },
+                    { text: "Tentar localizar o compartimento 772B mencionado.", nextSection: "87" }
+                ]
+            },
+            "34": {
+                text: "Determinado a descobrir o que aconteceu, você segue em direção ao laboratório. O caminho é perigoso - seções inteiras da nave estão sem energia, forçando-o a usar passagens de manutenção estreitas e mal iluminadas.\n\nAo se aproximar do laboratório, você ouve vozes. Agachando-se atrás de um console danificado, observa dois indivíduos vasculhando o local. Não são membros da tripulação - usam trajes de combate pretos com um símbolo que você não reconhece.\n\n\"Não está aqui,\" diz um deles, chutando um corpo caído - você reconhece o Tenente Rodriguez. \"Yamamoto deve ter transferido os dados para outro lugar antes de morrermos.\"\n\n\"O Diretor não ficará satisfeito,\" responde o outro. \"Precisamos encontrar o módulo antes que esta lata exploda. Vamos verificar o compartimento de segurança no nível 4.\"\n\nEles se dirigem à saída, sem notá-lo.\n\nO que você faz?",
+                options: [
+                    { text: "Esperar que saiam e verificar se há sobreviventes.", nextSection: "88" },
+                    { text: "Segui-los discretamente para descobrir seus planos.", nextSection: "89" },
+                    { text: "Confrontá-los com o elemento surpresa.", nextSection: "90" }
+                ]
+            },
+            "35": {
+                text: "Rapidamente, você reestabelece contato com Elena. \"Vasquez, escute com atenção. O grupo de Rodriguez foi atacado. Há sabotadores armados a bordo. Fiquem onde estão e mantenham discrição total.\"\n\nApós um momento de silêncio tenso, Elena responde com voz calma, mas você percebe o medo: \"Entendido, Capitão. Já suspeitávamos. Petrov interceptou comunicações estranhas antes do salto. Tem algo a ver com algo chamado 'Prometeu'.\"\n\nPetrov intervém, sua voz fraca: \"Capitão, eu trabalhei em um projeto secreto anos atrás... Terraformação avançada. Código Prometeu. Se for isso que estão procurando, a situação é mais grave do que imaginamos.\"\n\nO que você faz?",
+                options: [
+                    { text: "Pedir que Petrov explique mais sobre o Projeto Prometeu.", nextSection: "91" },
+                    { text: "Instruí-los a se encontrarem com você em um local seguro.", nextSection: "92" },
+                    { text: "Perguntar se eles sabem onde fica o compartimento 772B.", nextSection: "93" }
+                ]
+            },
+            "36": {
+                text: "Você reestabelece contato com Elena Vasquez. Desta vez, sua voz é fria e calculada: \"Engenheira Vasquez, acabo de interceptar uma mensagem muito interessante sobre você. Algo sobre não confiar em você e o Projeto Prometeu. Gostaria de explicar?\"\n\nO silêncio que segue é perturbador. Finalmente, Elena responde, sua voz completamente diferente - sem o nervosismo anterior, apenas eficiência clínica:\n\n\"Impressionante, Capitão. Esperava ter mais tempo antes que descobrisse. Sim, tenho interesse no Prometeu, mas não sou sua inimiga. A verdade é mais complexa.\"\n\n\"Nova Terra não é o que pensam. Descobrimos que a Aliança planeja usar o Prometeu como arma, não como ferramenta de terraformação. Estou aqui para impedir isso.\"\n\n\"Petrov não sabe minha verdadeira identidade. Ele é apenas um peão, assim como você seria. Mas agora precisamos colaborar ou todos morreremos.\"\n\nO que você faz?",
+                options: [
+                    { text: "Fingir acreditar nela para obter mais informações.", nextSection: "94" },
+                    { text: "Confrontá-la abertamente, exigindo toda a verdade.", nextSection: "95" },
+                    { text: "Encerrar a comunicação e procurar o compartimento 772B sozinho.", nextSection: "96" }
+                ]
+            },
+            "37": {
+                text: "Decidido a encontrar o misterioso compartimento 772B, você consulta os esquemas detalhados da nave. Curiosamente, esta seção não aparece em nenhum mapa oficial, mas cruzando informações de consumo de energia e rotas de manutenção, você identifica uma anomalia.\n\nHá um espaço não contabilizado entre o armazém principal e o setor de pesquisa no nível 4. Seguindo seu instinto, você se dirige para lá.\n\nO caminho é perigoso - várias seções sofreram danos estruturais. Ao chegar ao local aproximado, você encontra apenas uma parede lisa sem entradas visíveis. No entanto, seu scanner detecta um campo energético anômalo.\n\nExaminando mais detalhadamente, você percebe um pequeno painel oculto. Ao ativá-lo, uma interface de segurança solicita credenciais de nível máximo e uma sequência biométrica.",
+                options: [
+                    { text: "Tentar usar suas credenciais de capitão.", nextSection: "97" },
+                    { text: "Tentar contornar o sistema de segurança hackeando-o.", nextSection: "98" },
+                    { text: "Procurar alguém com autorização adequada, como o Dr. Yamamoto.", nextSection: "99" }
+                ]
+            },
+            "38": {
+                text: "Você decide ignorar a mensagem enigmática. Poderia ser uma armadilha para desviá-lo de sua missão principal: salvar os colonos e a tripulação restante.\n\nO núcleo continua em deterioração e o tempo é essencial. Consultando o mapa da nave, você traça a rota mais eficiente para o setor de criogenia, onde os 200 colonos permanecem vulneráveis em sono profundo.\n\nNo caminho, seu comunicador capta uma transmissão fragmentada - são coordenadas espaciais seguidas por uma contagem regressiva. Algo vai acontecer em menos de 60 minutos, além do colapso previsto da nave.\n\nReferências ao \"Prometeu\" continuam surgindo. Seja lá o que for, parece central neste mistério.\n\nO que você faz?",
+                options: [
+                    { text: "Manter o curso para o setor de criogenia, ignorando as distrações.", nextSection: "20" },
+                    { text: "Investigar as coordenadas espaciais recebidas.", nextSection: "100" },
+                    { text: "Reconsiderar e procurar informações sobre o Projeto Prometeu nos bancos de dados da nave.", nextSection: "101" }
+                ]
+            },
+            "39": {
+                text: "Você segue rapidamente para o laboratório médico no nível 2. A porta está entreaberta, as luzes piscam erraticamente, revelando momentaneamente a desordem interior.\n\nEntrando com cautela, você encontra o laboratório revirado - equipamentos quebrados, armários abertos, dados médicos espalhados. Há manchas de sangue no chão, formando um rastro em direção a uma porta lateral.\n\nSeguindo o rastro, você chega a uma pequena sala de armazenamento. Ali, encontra o corpo da Dra. Khoury. Ela foi morta por um ferimento preciso na base do crânio - trabalho profissional, não um ataque de pânico ou acidente.\n\nEm sua mão, ela ainda segura firmemente um dispositivo de armazenamento de dados. Seu rosto congelado numa expressão de determinação, não de medo.\n\nO que você faz?",
+                options: [
+                    { text: "Examinar o dispositivo de armazenamento de dados.", nextSection: "105" },
+                    { text: "Verificar os registros médicos da tripulação por qualquer anomalia.", nextSection: "106" },
+                    { text: "Procurar o bracelete médico que viu na gravação de segurança.", nextSection: "107" }
+                ]
+            },
             "43": {
                 text: "Você conecta A-C-B-D. O painel acende verde e a porta se abre com um silvo hidráulico. \"Acesso concedido ao setor de criogenia.\"\n\nAo entrar, você se depara com um vasto salão onde 200 cápsulas de criossono estão alinhadas em fileiras organizadas. Luzes de status piscam em várias delas - nem todas em verde.\n\nUm rápido diagnóstico confirma seu temor: 30 cápsulas estão em estado crítico, com falhas nos sistemas de suporte vital. Em aproximadamente 25 minutos, esses colonos começarão a sofrer danos cerebrais irreversíveis.\n\nNo centro da sala, você encontra dois tripulantes - o Oficial Médico Rivera e a Técnica de Sistemas Zhang. Eles parecem aliviados ao vê-lo.\n\n\"Capitão!\" exclama Rivera. \"Graças a Deus. Estamos tentando estabilizar as cápsulas críticas, mas o sistema principal está bloqueado.\"\n\nO que você faz?",
                 options: [
@@ -737,7 +1031,54 @@
                     { text: "Acordar o homem e forçá-lo a revelar mais informações.", nextSection: "76" }
                 ]
             },
-            // Mais seções da história seriam adicionadas aqui...
+            "69": {
+                text: "Você decide procurar o datapad do Dr. Yamamoto. Vasculhando o laboratório, não o encontra entre os escombros. Considerando o comportamento metódico de Yamamoto, ele provavelmente o escondeu em um local seguro.\n\nNo canto do laboratório, você nota um pequeno cofre pessoal parcialmente ocultado sob uma mesa derrubada. Está trancado com um scanner biométrico.\n\nApós algumas tentativas, você percebe que não conseguirá abri-lo sem a biometria de Yamamoto ou equipamento especializado.\n\nEnquanto pondera suas opções, encontra uma anotação manuscrita presa sob o teclado do terminal principal: \"Lembre-se: segurança no observatório estelar. Constelação de Lyra.\"\n\nO observatório estelar fica no mesmo nível, apenas alguns corredores de distância.\n\nO que você faz?",
+                options: [
+                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
+                    { text: "Tentar forçar o cofre usando ferramentas disponíveis no laboratório.", nextSection: "109" },
+                    { text: "Abandonar a busca pelo datapad e ir diretamente ao compartimento 772B.", nextSection: "110" }
+                ]
+            },
+            "70": {
+                text: "Com a localização do compartimento 772B em mãos, você se dirige diretamente para lá. O caminho é desafiador - áreas danificadas, portas de emergência fechadas, e ocasionalmente, sinais de luta recente.\n\nAo chegar ao local, você encontra uma parede aparentemente normal no corredor do nível 4. Seguindo as instruções do arquivo de Yamamoto, você pressiona uma sequência específica de painéis na parede, revelando um scanner oculto.\n\nApós uma verificação biométrica, uma porta camuflada desliza silenciosamente, revelando um corredor curto que termina em uma sala blindada. No centro, há uma estrutura cilíndrica de aproximadamente dois metros de altura - o Módulo Prometeu.\n\nAo entrar na sala, você ouve vozes se aproximando pelo corredor principal. Não há tempo para escapar.\n\nO que você faz?",
+                options: [
+                    { text: "Esconder-se dentro da sala secreta e fechar a porta.", nextSection: "111" },
+                    { text: "Preparar-se para confrontar quem estiver se aproximando.", nextSection: "112" },
+                    { text: "Tentar remover ou destruir o Módulo Prometeu.", nextSection: "113" }
+                ]
+            },
+            "71": {
+                text: "Você decide que a informação é importante demais para manter apenas para si. Ativando o comunicador, você tenta contatar os sobreviventes conhecidos.\n\n\"Atenção a todos os tripulantes. Aqui é o Capitão Reiner. A missão foi comprometida. A nave transporta tecnologia experimental classificada - o Módulo Prometeu. É o verdadeiro alvo dos sabotadores. Estamos lidando com uma operação hostil organizada.\"\n\nApós alguns segundos, Elena responde: \"Prometeu? Capitão, isso explica muita coisa. Petrov conhece o projeto.\"\n\nO Tenente Rodriguez também responde, sua voz tensa: \"Capitão, estamos sitiados no laboratório. Três hostis armados tentando entrar. Precisamos de--\" A transmissão é cortada por sons de explosão.\n\nOutro comunicador se ativa, uma voz que você não reconhece: \"Impressionante, Capitão. Economia de tempo para todos nós. Agora sabemos que você tem a informação que precisamos. Temos controle de várias seções da nave. Sugiro um acordo: sua vida e a dos colonos pela localização exata do módulo.\"\n\nO que você faz?",
+                options: [
+                    { text: "Rejeitar o acordo e organizar os sobreviventes para resistir.", nextSection: "114" },
+                    { text: "Fingir aceitar para ganhar tempo enquanto planeja um contra-ataque.", nextSection: "115" },
+                    { text: "Propor um encontro face a face para negociação.", nextSection: "116" }
+                ]
+            },
+            "72": {
+                text: "Com um movimento rápido, você consegue desviar da arma e acertar um golpe no pulso do agente. A arma cai, deslizando pelo chão. Vocês lutam corpo a corpo, mas seu treinamento militar prevalece.\n\nOfegante, você imobiliza o homem contra o console, torcendo seu braço nas costas. \"Quem é você? Quem está por trás disso?\"\n\nEle ri, apesar da dor evidente. \"Nova Terra não é o que você pensa, Capitão. A Aliança tem mentido para todos. O Prometeu nunca foi destinado à terraformação.\"\n\n\"Você acha que estamos aqui para destruir? Estamos tentando impedir uma catástrofe. Aquele dispositivo pode render planetas inteiros inabitáveis em horas. É uma arma de extinção, não uma ferramenta de criação.\"\n\nSeu comunicador soa um alerta: outra falha no núcleo. Agora vocês têm menos de 75 minutos até o colapso total.\n\nO que você faz?",
+                options: [
+                    { text: "Continuar interrogando o homem sobre Nova Terra e o Prometeu.", nextSection: "117" },
+                    { text: "Amarrá-lo e levá-lo como prisioneiro enquanto continua a missão.", nextSection: "118" },
+                    { text: "Pedir que ele o leve até seus companheiros para negociar.", nextSection: "119" }
+                ]
+            },
+            "74": {
+                text: "Você corre em direção ao nível 5, onde ficam as cápsulas de escape. O caminho é perigoso - danos estruturais bloqueiam as rotas principais, forçando-o a navegar por corredores de manutenção e dutos estreitos.\n\nAo aproximar-se do setor de escape, ouve vozes e o som inequívoco de equipamentos sendo movidos. Agachando-se nas sombras, observa através de uma abertura no corredor.\n\nTrês indivíduos em trajes de combate pretos estão carregando uma grande caixa blindada para dentro de uma das cápsulas de escape. Você reconhece o símbolo nas laterais da caixa - o mesmo do Projeto Prometeu.\n\nUm quarto indivíduo, usando um jaleco de laboratório sobre um traje similar, supervisiona a operação. Com choque, você reconhece a Dra. Khoury - ou alguém idêntico a ela.\n\nO que você faz?",
+                options: [
+                    { text: "Observar mais para entender melhor seus planos.", nextSection: "120" },
+                    { text: "Intervir imediatamente para impedir o roubo.", nextSection: "121" },
+                    { text: "Recuar e procurar outros sobreviventes para ajudar.", nextSection: "122" }
+                ]
+            },
+            "102": {
+                text: "\"Vamos estabilizar essas cápsulas primeiro,\" você decide. \"Cada minuto conta.\"\n\nTrabalham juntos febrilmente. Rivera monitora os sinais vitais enquanto você e Zhang redirecionam energia para os sistemas críticos. É uma corrida contra o tempo - cada cápsula requer recalibração individual para compensar a falha do sistema principal.\n\n\"Algo está errado,\" murmura Zhang após estabilizarem a décima cápsula. \"Alguém modificou os protocolos de segurança. Isso não foi acidental.\"\n\nRivera acrescenta: \"Encontramos três cápsulas vazias quando chegamos. Os registros mostram que deveriam estar ocupadas pelo Dr. Yamamoto e dois especialistas em terraformação.\"\n\nVocês continuam trabalhando. Após vinte minutos intensos, todas as cápsulas críticas estão estabilizadas. Os colonos estão temporariamente seguros, mas a nave continua em contagem regressiva para o colapso.\n\nO que você faz agora?",
+                options: [
+                    { text: "Iniciar o processo de evacuação, preparando os colonos para transferência.", nextSection: "123" },
+                    { text: "Questionar Rivera e Zhang sobre outros eventos suspeitos que notaram.", nextSection: "124" },
+                    { text: "Verificar as cápsulas vazias por pistas sobre o paradeiro de seus ocupantes.", nextSection: "125" }
+                ]
+            },
             "final": {
                 text: "À medida que você pilota a nave de fuga através dos destroços da Esperança, olha pela janela uma última vez. A enorme estrutura que foi seu lar por tanto tempo agora se desintegra em uma explosão silenciosa no vácuo do espaço.\n\nNa cabine atrás de você, os sobreviventes que conseguiu resgatar - uma mistura de tripulantes e colonos despertados - observam em silêncio. Alguns choram, outros simplesmente encaram o vazio, processando o trauma e a perda.\n\nO módulo Prometeu está seguro, seja para ser destruído ou entregue às autoridades adequadas, dependendo das escolhas que você fez. A verdade sobre a sabotagem e os impostores veio à tona, embora a um custo terrível.\n\nNo painel de navegação, as coordenadas da estação mais próxima piscam - está a três semanas de distância no espaço normal. Uma viagem longa com recursos limitados, mas há esperança.\n\nEnquanto a nave acelera para longe dos destroços, você reflete sobre as decisões que tomou, as vidas que conseguiu salvar e aquelas que teve que deixar para trás. Algumas escolhas o assombrarão para sempre, outras trarão um senso de dever cumprido.\n\nUma coisa é certa: nada será como antes. E enquanto as estrelas se estendem infinitas à sua frente, você se pergunta o que o futuro reserva para os sobreviventes da Esperança.\n\nFIM DA AVENTURA",
                 options: [
@@ -745,6 +1086,42 @@
                 ]
             }
         };
+
+        // Incluindo automaticamente a seção faltante 30
+        if (!storyData["30"]) {
+            storyData["30"] = {
+                text: "Você se dirige à sala de comunicações. O caminho é perigoso, com várias seções danificadas. Ao chegar, encontra o equipamento parcialmente funcional. Tenta enviar um sinal de socorro, mas algo está bloqueando as comunicações de longo alcance.\n\nEnquanto ajusta as configurações, detecta uma transmissão de curto alcance próxima. Parece ser uma nave não identificada a menos de 30 minutos de distância...",
+                options: [
+                    { text: "Tentar estabelecer contato com a nave não identificada.", nextSection: "77" },
+                    { text: "Investigar a origem do bloqueio de comunicações.", nextSection: "78" },
+                    { text: "Retornar à ponte para acessar sistemas mais potentes.", nextSection: "10" }
+                ]
+            };
+        }
+
+        // Adicionar conexões faltantes
+        for (let sectionId in storyData) {
+            // Garantir que todas as seções de combate e quebra-cabeça tenham uma opção de saída
+            if (storyData[sectionId].type === "combat" || storyData[sectionId].type === "puzzle") {
+                if (!storyData[sectionId].options || storyData[sectionId].options.length === 0) {
+                    if (storyData[sectionId].type === "combat") {
+                        if (!storyData[sectionId].combatData.outcomes || storyData[sectionId].combatData.outcomes.length === 0) {
+                            storyData[sectionId].combatData.outcomes = [
+                                { result: "victory", nextSection: "57" },
+                                { result: "defeat", nextSection: "58" }
+                            ];
+                        }
+                    } else if (storyData[sectionId].type === "puzzle") {
+                        if (!storyData[sectionId].puzzleData.options || storyData[sectionId].puzzleData.options.length === 0) {
+                            storyData[sectionId].puzzleData.options = [
+                                { text: "Solução A", nextSection: "26", correct: true },
+                                { text: "Solução B", nextSection: "27", correct: false }
+                            ];
+                        }
+                    }
+                }
+            }
+        }
 
         // -------------------- ITENS DO JOGO (ALEATÓRIOS) --------------------
         const randomWeapons = [
@@ -784,6 +1161,8 @@
         let currentSection = "intro";
         let introAnimationPaused = false;
         let textScrollTimeout;
+        let gameHistory = [];
+        let menuOpen = false;
         
         // -------------------- FUNÇÕES DE UTILITÁRIO --------------------
         function getRandomItem(array) {
@@ -798,6 +1177,81 @@
             
             // Mostrar a tela solicitada
             document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function saveGame() {
+            const saveData = {
+                currentSection: currentSection,
+                gameHistory: gameHistory,
+                gameVersion: GAME_VERSION
+            };
+            
+            localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
+            alert("Jogo salvo com sucesso!");
+        }
+        
+        function loadGame() {
+            const saveData = localStorage.getItem(SAVE_KEY);
+            
+            if (!saveData) {
+                alert("Nenhum jogo salvo encontrado!");
+                return false;
+            }
+            
+            try {
+                const data = JSON.parse(saveData);
+                
+                if (data.gameVersion !== GAME_VERSION) {
+                    if (!confirm("O jogo salvo é de uma versão diferente. Carregar mesmo assim?")) {
+                        return false;
+                    }
+                }
+                
+                currentSection = data.currentSection;
+                gameHistory = data.gameHistory || [];
+                
+                loadSection(currentSection);
+                return true;
+            } catch (e) {
+                alert("Erro ao carregar o jogo: " + e.message);
+                return false;
+            }
+        }
+        
+        function addToHistory(sectionId, text) {
+            // Limitar o histórico a 20 entradas para evitar sobrecarga
+            if (gameHistory.length >= 20) {
+                gameHistory.shift();
+            }
+            
+            gameHistory.push({
+                sectionId: sectionId,
+                text: text.substring(0, 100) + (text.length > 100 ? "..." : "")
+            });
+        }
+        
+        function showHistory() {
+            const historyEntries = document.getElementById('history-entries');
+            historyEntries.innerHTML = '';
+            
+            if (gameHistory.length === 0) {
+                historyEntries.innerHTML = '<div class="history-entry">Nenhuma entrada no histórico ainda.</div>';
+                return;
+            }
+            
+            gameHistory.forEach((entry, index) => {
+                const entryElement = document.createElement('div');
+                entryElement.classList.add('history-entry');
+                entryElement.textContent = `${index + 1}. ${entry.text}`;
+                entryElement.addEventListener('click', () => {
+                    if (confirm(`Voltar para esta parte da história? (Seção ${entry.sectionId})`)) {
+                        loadSection(entry.sectionId);
+                    }
+                });
+                historyEntries.appendChild(entryElement);
+            });
+            
+            showScreen('history-screen');
         }
         
         // -------------------- GERADORES DE ESTRLAS E NAVE --------------------
@@ -823,6 +1277,17 @@
                 showScreen('intro-screen');
                 startIntroAnimation();
             });
+
+            document.getElementById('continue-button').addEventListener('click', function() {
+                if (!loadGame()) {
+                    alert("Não foi possível carregar o jogo salvo.");
+                }
+            });
+
+            document.getElementById('skip-to-story').addEventListener('click', function() {
+                showScreen('story-screen');
+                loadSection('intro');
+            });
             
             generateStars();
         }
@@ -834,24 +1299,28 @@
             // Configurar a duração da animação baseada no SCROLL_SPEED
             introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
             
-            // Pausa o texto quando tocado/clicado
-            introText.addEventListener('mousedown', pauseIntroText);
-            introText.addEventListener('touchstart', pauseIntroText, { passive: true });
+            // Configurar botões de controle do prólogo
+            document.getElementById('skip-intro-button').addEventListener('click', function() {
+                clearTimeout(textScrollTimeout);
+                showScreen('story-screen');
+                loadSection('intro');
+            });
             
-            // Continua o texto quando solto
-            document.addEventListener('mouseup', resumeIntroText);
-            document.addEventListener('touchend', resumeIntroText);
+            document.getElementById('pause-intro').addEventListener('click', pauseIntroText);
+            document.getElementById('resume-intro').addEventListener('click', resumeIntroText);
             
             // Tempo para transição para a história
             textScrollTimeout = setTimeout(() => {
                 showScreen('story-screen');
                 loadSection('intro');
-            }, (SCROLL_SPEED + TEXT_DELAY * 2) * 500);
+            }, (SCROLL_SPEED * 1000));
         }
         
         function pauseIntroText() {
             if (!introAnimationPaused) {
                 document.getElementById('intro-text').style.animationPlayState = 'paused';
+                document.getElementById('pause-intro').style.display = 'none';
+                document.getElementById('resume-intro').style.display = 'inline-block';
                 introAnimationPaused = true;
                 
                 // Pausar também o timeout para a próxima tela
@@ -863,12 +1332,19 @@
             if (introAnimationPaused) {
                 const introText = document.getElementById('intro-text');
                 introText.style.animationPlayState = 'running';
+                document.getElementById('resume-intro').style.display = 'none';
+                document.getElementById('pause-intro').style.display = 'inline-block';
                 introAnimationPaused = false;
                 
-                // Recalcular o tempo restante e redefinir o timeout
-                const elapsedTime = getComputedStyle(introText).animationDelay;
-                const totalDuration = (SCROLL_SPEED + TEXT_DELAY * 2) * 1000;
-                const remainingTime = totalDuration - parseFloat(elapsedTime) * 1000;
+                // Recalcular quanto tempo resta baseado na posição atual da animação
+                const animationTime = SCROLL_SPEED;
+                const keyframes = ['translateY(100vh)', 'translateY(-300vh)'];
+                
+                const computedStyle = window.getComputedStyle(introText);
+                const currentTransform = computedStyle.transform || computedStyle.webkitTransform;
+                
+                // Estimativa simplificada do tempo restante
+                const remainingTime = animationTime * 1000 * 0.7; // 70% do tempo total
                 
                 textScrollTimeout = setTimeout(() => {
                     showScreen('story-screen');
@@ -885,6 +1361,11 @@
             if (!section) {
                 console.error(`Seção ${sectionId} não encontrada!`);
                 return;
+            }
+            
+            // Adicionar ao histórico
+            if (section.text) {
+                addToHistory(sectionId, section.text);
             }
             
             // Verificar se é uma seção especial (combate ou quebra-cabeça)
@@ -912,6 +1393,55 @@
             });
             
             showScreen('story-screen');
+        }
+        
+        // -------------------- HANDLERS DE MENU --------------------
+        function setupMenu() {
+            document.getElementById('menu-button').addEventListener('click', toggleMenu);
+            
+            document.getElementById('save-game').addEventListener('click', function() {
+                saveGame();
+                toggleMenu();
+            });
+            
+            document.getElementById('load-game').addEventListener('click', function() {
+                loadGame();
+                toggleMenu();
+            });
+            
+            document.getElementById('view-history').addEventListener('click', function() {
+                showHistory();
+                toggleMenu();
+            });
+            
+            document.getElementById('main-menu').addEventListener('click', function() {
+                if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
+                    showScreen('start-screen');
+                }
+                toggleMenu();
+            });
+
+            document.getElementById('back-from-history').addEventListener('click', function() {
+                showScreen('story-screen');
+            });
+            
+            // Fechar menu ao clicar fora dele
+            document.addEventListener('click', function(event) {
+                if (menuOpen && !event.target.closest('.game-menu')) {
+                    toggleMenu();
+                }
+            });
+        }
+        
+        function toggleMenu() {
+            const menu = document.getElementById('menu-dropdown');
+            menuOpen = !menuOpen;
+            
+            if (menuOpen) {
+                menu.classList.add('active');
+            } else {
+                menu.classList.remove('active');
+            }
         }
         
         // -------------------- HANDLERS DE COMBATE --------------------
@@ -1058,7 +1588,72 @@
             const puzzleContent = document.getElementById('puzzle-content');
             puzzleContent.innerHTML = '';
             
-            // Adicionar conteúdo específico do quebra-cabeça aqui, se necessário
+            // Adicionar visualização específica para diferentes tipos de quebra-cabeças
+            if (puzzle.title.includes("ROTEAMENTO DE ENERGIA")) {
+                // Criar uma visualização de diagrama para o quebra-cabeça de energia
+                const diagramSvg = document.createElement('div');
+                diagramSvg.innerHTML = `
+                    <svg width="300" height="200" viewBox="0 0 300 200">
+                        <circle cx="50" cy="100" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
+                        <text x="50" y="105" text-anchor="middle" fill="#00ff00" font-size="16">A</text>
+                        
+                        <circle cx="150" cy="50" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
+                        <text x="150" y="55" text-anchor="middle" fill="#00ff00" font-size="16">B</text>
+                        
+                        <circle cx="150" cy="150" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
+                        <text x="150" y="155" text-anchor="middle" fill="#00ff00" font-size="16">C</text>
+                        
+                        <circle cx="250" cy="100" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
+                        <text x="250" y="105" text-anchor="middle" fill="#00ff00" font-size="16">D</text>
+                        
+                        <circle cx="200" cy="175" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
+                        <text x="200" y="180" text-anchor="middle" fill="#00ff00" font-size="16">E</text>
+                        
+                        <line x1="70" y1="100" x2="130" y2="50" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="70" y1="100" x2="130" y2="150" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="170" y1="50" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="170" y1="150" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="170" y1="150" x2="180" y2="175" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="220" y1="175" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
+                    </svg>
+                `;
+                puzzleContent.appendChild(diagramSvg);
+            } else if (puzzle.title.includes("SEQUÊNCIA")) {
+                // Criar um destaque visual para a sequência
+                const sequenceHighlight = document.createElement('div');
+                sequenceHighlight.style.fontSize = "1.5rem";
+                sequenceHighlight.style.margin = "20px auto";
+                sequenceHighlight.style.padding = "10px";
+                sequenceHighlight.style.backgroundColor = "rgba(0, 0, 80, 0.5)";
+                sequenceHighlight.style.borderRadius = "5px";
+                sequenceHighlight.style.textAlign = "center";
+                
+                if (puzzle.description.includes("8, 27, ?, 125, 216")) {
+                    sequenceHighlight.innerHTML = "8, 27, <strong style='color:#33ccff; font-size:2rem;'>?</strong>, 125, 216";
+                } else {
+                    sequenceHighlight.textContent = "Sequência desafiadora";
+                }
+                
+                puzzleContent.appendChild(sequenceHighlight);
+            } else if (puzzle.title.includes("CÓDIGO DE SEGURANÇA")) {
+                // Criar um painel de entrada de código
+                const codePanel = document.createElement('div');
+                codePanel.style.width = "200px";
+                codePanel.style.height = "50px";
+                codePanel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+                codePanel.style.border = "1px solid #33ccff";
+                codePanel.style.borderRadius = "5px";
+                codePanel.style.margin = "20px auto";
+                codePanel.style.display = "flex";
+                codePanel.style.justifyContent = "center";
+                codePanel.style.alignItems = "center";
+                codePanel.style.fontSize = "2rem";
+                codePanel.style.color = "#33ccff";
+                codePanel.style.letterSpacing = "10px";
+                codePanel.innerHTML = "____";
+                
+                puzzleContent.appendChild(codePanel);
+            }
             
             const puzzleOptions = document.getElementById('puzzle-options');
             puzzleOptions.innerHTML = '';
@@ -1068,7 +1663,18 @@
                 button.classList.add('puzzle-button');
                 button.textContent = option.text;
                 button.addEventListener('click', () => {
-                    loadSection(option.nextSection);
+                    // Efeito visual para feedback da escolha
+                    if (option.correct) {
+                        button.style.backgroundColor = "rgba(0, 100, 0, 0.9)";
+                        button.style.boxShadow = "0 0 15px #00ff00";
+                    } else {
+                        button.style.backgroundColor = "rgba(100, 0, 0, 0.9)";
+                        button.style.boxShadow = "0 0 15px #ff0000";
+                    }
+                    
+                    setTimeout(() => {
+                        loadSection(option.nextSection);
+                    }, 800);
                 });
                 puzzleOptions.appendChild(button);
             });
@@ -1079,6 +1685,14 @@
         // -------------------- INICIALIZAÇÃO --------------------
         window.onload = function() {
             setupStartScreen();
+            setupMenu();
+            
+            // Verificar salvamento automático
+            if (localStorage.getItem(SAVE_KEY)) {
+                document.getElementById('continue-button').disabled = false;
+            } else {
+                document.getElementById('continue-button').disabled = true;
+            }
         };
     </script>
 </body>
