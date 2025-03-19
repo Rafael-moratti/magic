@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DESPERTAR ESTELAR: FUGA OU SALVAÇÃO</title>
     <style>
+        /* Todo o CSS permanece o mesmo */
         * {
             margin: 0;
             padding: 0;
@@ -155,9 +156,7 @@
         #intro-screen {
             justify-content: flex-start;
             perspective: 400px;
-            background-image: url('space.jpg');
-            background-size: cover;
-            background-position: center;
+            background-color: #000;
         }
 
         .intro-text {
@@ -227,9 +226,7 @@
         #story-screen {
             justify-content: flex-start;
             overflow-y: auto;
-            background-image: url('space.jpg');
-            background-size: cover;
-            background-position: center;
+            background-color: #000;
         }
 
         .story-container {
@@ -344,9 +341,6 @@
         /* TELA DE COMBATE */
         #combat-screen {
             background-color: rgba(50, 0, 0, 0.8);
-            background-image: url('space.jpg');
-            background-size: cover;
-            background-position: center;
         }
 
         .combat-container {
@@ -438,9 +432,6 @@
         /* TELA DE QUEBRA-CABEÇA */
         #puzzle-screen {
             background-color: rgba(0, 0, 50, 0.8);
-            background-image: url('space.jpg');
-            background-size: cover;
-            background-position: center;
         }
 
         .puzzle-container {
@@ -501,9 +492,6 @@
         #history-screen {
             justify-content: flex-start;
             overflow-y: auto;
-            background-image: url('space.jpg');
-            background-size: cover;
-            background-position: center;
         }
 
         .history-container {
@@ -686,7 +674,7 @@
         <h1 class="title">DESPERTAR ESTELAR:<br>FUGA OU SALVAÇÃO</h1>
         <div class="start-buttons">
             <button class="start-button" id="start-button">Iniciar</button>
-            <button class="start-button" id="continue-button">Continuar</button>
+            <button class="start-button" id="continue-button" disabled>Continuar</button>
             <button class="start-button" id="skip-to-story">Pular Prólogo</button>
         </div>
     </div>
@@ -800,18 +788,18 @@
     
     <!-- SISTEMA DE ÁUDIO -->
     <audio id="intro-music" loop>
-        <source src="musica/intro_theme.mp3" type="audio/mpeg">
+        <source src="https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3" type="audio/mpeg">
     </audio>
     
     <audio id="game-music" loop>
-        <source src="musica/game_theme.mp3" type="audio/mpeg">
+        <source src="https://dl.dropboxusercontent.com/s/9a1uxpayvplfxfa/space_main.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         // -------------------- CONFIGURAÇÕES DO JOGO --------------------
         const SCROLL_SPEED = 60; // Velocidade do texto rolando em segundos
         const TEXT_DELAY = 2; // Tempo de espera em segundos antes e depois do texto
-        const GAME_VERSION = "1.0.1";
+        const GAME_VERSION = "1.0.2";
         const SAVE_KEY = "despertarEstelar_saveData";
         const DEBUG_MODE = true; // Ativar para ver mensagens de debugging no console
         
@@ -1018,23 +1006,31 @@
                     { text: "Verificar os registros de comunicação anteriores ao salto.", nextSection: "79" }
                 ]
             },
-            // Outras seções da história... o código é muito extenso para incluir tudo, mas você pode adicionar o resto
-            "42": {
-                text: "Você tenta conectar A-B-E-D. O painel pisca vermelho e exibe uma mensagem de erro: \"Caminho sobrecarregado. O nó 'B' excede a capacidade máxima de conexões. Tentativa falhou.\"\n\nEssa não era a solução correta. O nó B ficaria com 3 conexões, excedendo o limite de 2 por nó.\n\nVocê precisa tentar outra configuração.",
+            "36": {
+                text: "Você reestabelece contato com Elena Vasquez. Desta vez, sua voz é fria e calculada: \"Engenheira Vasquez, acabo de interceptar uma mensagem muito interessante sobre você. Algo sobre não confiar em você e o Projeto Prometeu. Gostaria de explicar?\"\n\nO silêncio que segue é perturbador. Finalmente, Elena responde, sua voz completamente diferente - sem o nervosismo anterior, apenas eficiência clínica:\n\n\"Impressionante, Capitão. Esperava ter mais tempo antes que descobrisse. Sim, tenho interesse no Prometeu, mas não sou sua inimiga. A verdade é mais complexa.\"\n\n\"Nova Terra não é o que pensam. Descobrimos que a Aliança planeja usar o Prometeu como arma, não como ferramenta de terraformação. Estou aqui para impedir isso.\"\n\n\"Petrov não sabe minha verdadeira identidade. Ele é apenas um peão, assim como você seria. Mas agora precisamos colaborar ou todos morreremos.\"\n\nO que você faz?",
                 options: [
-                    { text: "Tentar conectar A-C-B-D", nextSection: "43", correct: true },
-                    { text: "Tentar conectar A-C-E-D", nextSection: "44", correct: false }
+                    { text: "Fingir acreditar nela para obter mais informações.", nextSection: "94" },
+                    { text: "Confrontá-la abertamente, exigindo toda a verdade.", nextSection: "95" },
+                    { text: "Encerrar a comunicação e procurar o compartimento 772B sozinho.", nextSection: "96" }
                 ]
             },
-            "43": {
-                text: "Você conecta A-C-B-D. O painel acende verde e a porta se abre com um silvo hidráulico. \"Acesso concedido ao setor de criogenia.\"\n\nAo entrar, você se depara com um vasto salão onde 200 cápsulas de criossono estão alinhadas em fileiras organizadas. Luzes de status piscam em várias delas - nem todas em verde.\n\nUm rápido diagnóstico confirma seu temor: 30 cápsulas estão em estado crítico, com falhas nos sistemas de suporte vital. Em aproximadamente 25 minutos, esses colonos começarão a sofrer danos cerebrais irreversíveis.\n\nNo centro da sala, você encontra dois tripulantes - o Oficial Médico Rivera e a Técnica de Sistemas Zhang. Eles parecem aliviados ao vê-lo.\n\n\"Capitão!\" exclama Rivera. \"Graças a Deus. Estamos tentando estabilizar as cápsulas críticas, mas o sistema principal está bloqueado.\"\n\nO que você faz?",
+            "37": {
+                text: "Decidido a encontrar o misterioso compartimento 772B, você consulta os esquemas detalhados da nave. Curiosamente, esta seção não aparece em nenhum mapa oficial, mas cruzando informações de consumo de energia e rotas de manutenção, você identifica uma anomalia.\n\nHá um espaço não contabilizado entre o armazém principal e o setor de pesquisa no nível 4. Seguindo seu instinto, você se dirige para lá.\n\nO caminho é perigoso - várias seções sofreram danos estruturais. Ao chegar ao local aproximado, você encontra apenas uma parede lisa sem entradas visíveis. No entanto, seu scanner detecta um campo energético anômalo.\n\nExaminando mais detalhadamente, você percebe um pequeno painel oculto. Ao ativá-lo, uma interface de segurança solicita credenciais de nível máximo e uma sequência biométrica.",
                 options: [
-                    { text: "Ajudar Rivera e Zhang a estabilizar as cápsulas críticas.", nextSection: "102" },
-                    { text: "Questionar Rivera e Zhang sobre o que aconteceu durante o salto.", nextSection: "103" },
-                    { text: "Informá-los sobre a sabotagem e pedir que ajudem na evacuação.", nextSection: "104" }
+                    { text: "Tentar usar suas credenciais de capitão.", nextSection: "97" },
+                    { text: "Tentar contornar o sistema de segurança hackeando-o.", nextSection: "98" },
+                    { text: "Procurar alguém com autorização adequada, como o Dr. Yamamoto.", nextSection: "99" }
                 ]
             },
-            // Adicione as demais seções conforme necessário
+            "38": {
+                text: "Você decide ignorar a mensagem enigmática. Poderia ser uma armadilha para desviá-lo de sua missão principal: salvar os colonos e a tripulação restante.\n\nO núcleo continua em deterioração e o tempo é essencial. Consultando o mapa da nave, você traça a rota mais eficiente para o setor de criogenia, onde os 200 colonos permanecem vulneráveis em sono profundo.\n\nNo caminho, seu comunicador capta uma transmissão fragmentada - são coordenadas espaciais seguidas por uma contagem regressiva. Algo vai acontecer em menos de 60 minutos, além do colapso previsto da nave.\n\nReferências ao \"Prometeu\" continuam surgindo. Seja lá o que for, parece central neste mistério.\n\nO que você faz?",
+                options: [
+                    { text: "Manter o curso para o setor de criogenia, ignorando as distrações.", nextSection: "20" },
+                    { text: "Investigar as coordenadas espaciais recebidas.", nextSection: "100" },
+                    { text: "Reconsiderar e procurar informações sobre o Projeto Prometeu nos bancos de dados da nave.", nextSection: "101" }
+                ]
+            },
+            // Mais seções aqui...
             "final": {
                 text: "À medida que você pilota a nave de fuga através dos destroços da Esperança, olha pela janela uma última vez. A enorme estrutura que foi seu lar por tanto tempo agora se desintegra em uma explosão silenciosa no vácuo do espaço.\n\nNa cabine atrás de você, os sobreviventes que conseguiu resgatar - uma mistura de tripulantes e colonos despertados - observam em silêncio. Alguns choram, outros simplesmente encaram o vazio, processando o trauma e a perda.\n\nO módulo Prometeu está seguro, seja para ser destruído ou entregue às autoridades adequadas, dependendo das escolhas que você fez. A verdade sobre a sabotagem e os impostores veio à tona, embora a um custo terrível.\n\nNo painel de navegação, as coordenadas da estação mais próxima piscam - está a três semanas de distância no espaço normal. Uma viagem longa com recursos limitados, mas há esperança.\n\nEnquanto a nave acelera para longe dos destroços, você reflete sobre as decisões que tomou, as vidas que conseguiu salvar e aquelas que teve que deixar para trás. Algumas escolhas o assombrarão para sempre, outras trarão um senso de dever cumprido.\n\nUma coisa é certa: nada será como antes. E enquanto as estrelas se estendem infinitas à sua frente, você se pergunta o que o futuro reserva para os sobreviventes da Esperança.\n\nFIM DA AVENTURA",
                 options: [
@@ -1044,38 +1040,9 @@
         };
 
         // -------------------- ITENS DO JOGO (ALEATÓRIOS) --------------------
-        const randomWeapons = [
-            "Pistola de Plasma", 
-            "Rifle de Pulso", 
-            "Lança-Dardos Tranquilizantes", 
-            "Bastão de Choque", 
-            "Canhão Sônico", 
-            "Lâmina Vibratória", 
-            "Projector de Campo de Força"
-        ];
-        
-        const randomItems = [
-            "Kit Médico Avançado", 
-            "Injetor de Adrenalina", 
-            "Escudo Pessoal", 
-            "Módulo de Camuflagem", 
-            "Granada de Choque", 
-            "Ferramenta Multiuso", 
-            "Hacker Portátil", 
-            "Oxigênio de Emergência", 
-            "Estimulante Neural", 
-            "Bateria de Energia"
-        ];
-        
-        const randomEnemies = [
-            "Agente de Nova Terra", 
-            "Sabotador Infiltrado", 
-            "Segurança Corrompido", 
-            "Mercenário Contratado", 
-            "Drone de Combate", 
-            "Tripulante Controlado", 
-            "Caçador de Recompensas"
-        ];
+        const randomWeapons = ["Pistola de Plasma", "Rifle de Pulso", "Lança-Dardos Tranquilizantes", "Bastão de Choque"];
+        const randomItems = ["Kit Médico Avançado", "Injetor de Adrenalina", "Escudo Pessoal", "Módulo de Camuflagem"];
+        const randomEnemies = ["Agente de Nova Terra", "Sabotador Infiltrado", "Segurança Corrompido", "Mercenário Contratado"];
 
         // -------------------- VARIÁVEIS GLOBAIS --------------------
         let currentSection = "intro";
@@ -1083,31 +1050,218 @@
         let textScrollTimeout;
         let gameHistory = [];
         let menuOpen = false;
-        
-        // -------------------- VARIÁVEIS DE ÁUDIO --------------------
         let audioEnabled = true;
         let currentTrack = "intro";
         let volumeLevel = 0.7;
-        
+
+        // -------------------- ELEMENTOS DE ÁUDIO --------------------
         const introMusic = document.getElementById('intro-music');
         const gameMusic = document.getElementById('game-music');
         const audioToggle = document.getElementById('audio-toggle');
         const volumeControl = document.getElementById('volume-control');
         const audioStatus = document.getElementById('audio-status');
-        
-        // -------------------- FUNÇÕES DE UTILITÁRIO --------------------
+
+        // -------------------- FUNÇÕES PRINCIPAIS --------------------
         function getRandomItem(array) {
             return array[Math.floor(Math.random() * array.length)];
         }
-        
+
         function showScreen(screenId) {
-            // Esconder todas as telas
+            console.log(`Mostrando tela: ${screenId}`);
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.add('hidden');
             });
-            
-            // Mostrar a tela solicitada
             document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function startIntroAnimation() {
+            const introText = document.getElementById('intro-text');
+            introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
+            
+            document.getElementById('skip-intro-button').addEventListener('click', function() {
+                clearTimeout(textScrollTimeout);
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game");
+            });
+            
+            document.getElementById('pause-intro').addEventListener('click', pauseIntroText);
+            document.getElementById('resume-intro').addEventListener('click', resumeIntroText);
+            
+            textScrollTimeout = setTimeout(() => {
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game");
+            }, (SCROLL_SPEED * 1000));
+        }
+
+        function pauseIntroText() {
+            if (!introAnimationPaused) {
+                document.getElementById('intro-text').style.animationPlayState = 'paused';
+                document.getElementById('pause-intro').style.display = 'none';
+                document.getElementById('resume-intro').style.display = 'inline-block';
+                introAnimationPaused = true;
+                clearTimeout(textScrollTimeout);
+            }
+        }
+
+        function resumeIntroText() {
+            if (introAnimationPaused) {
+                document.getElementById('intro-text').style.animationPlayState = 'running';
+                document.getElementById('resume-intro').style.display = 'none';
+                document.getElementById('pause-intro').style.display = 'inline-block';
+                introAnimationPaused = false;
+                
+                const remainingTime = SCROLL_SPEED * 1000 * 0.7;
+                textScrollTimeout = setTimeout(() => {
+                    showScreen('story-screen');
+                    loadSection('intro');
+                    changeTrack("game");
+                }, remainingTime);
+            }
+        }
+
+        function loadSection(sectionId) {
+            console.log(`Carregando seção: ${sectionId}`);
+            
+            currentSection = sectionId;
+            const section = storyData[sectionId];
+            
+            if (!section) {
+                console.error(`Seção ${sectionId} não encontrada!`);
+                alert(`Erro: Seção ${sectionId} não encontrada. Retornando ao menu inicial.`);
+                showScreen('start-screen');
+                return;
+            }
+            
+            if (section.text) {
+                addToHistory(sectionId, section.text);
+            }
+            
+            if (section.type === 'combat') {
+                setupCombat(section);
+                return;
+            } else if (section.type === 'puzzle') {
+                setupPuzzle(section);
+                return;
+            }
+            
+            document.getElementById('section-id').textContent = `Seção ${sectionId}`;
+            document.getElementById('story-text').innerHTML = section.text.replace(/\n/g, '<br>');
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            if (section.options && section.options.length > 0) {
+                section.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.classList.add('option-button');
+                    button.textContent = option.text;
+                    button.addEventListener('click', () => {
+                        console.log(`Clique em opção para seção: ${option.nextSection}`);
+                        loadSection(option.nextSection);
+                    });
+                    optionsContainer.appendChild(button);
+                });
+            } else {
+                console.warn(`A seção ${sectionId} não tem opções definidas.`);
+                const button = document.createElement('button');
+                button.classList.add('option-button');
+                button.textContent = "Continuar...";
+                button.addEventListener('click', () => {
+                    showScreen('start-screen');
+                });
+                optionsContainer.appendChild(button);
+            }
+            
+            showScreen('story-screen');
+        }
+
+        function generateStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 200;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function setupStartScreen() {
+            generateStars();
+            
+            document.getElementById('start-button').addEventListener('click', function() {
+                showScreen('intro-screen');
+                startIntroAnimation();
+                initAudio();
+            });
+            
+            document.getElementById('continue-button').addEventListener('click', function() {
+                if (!loadGame()) {
+                    alert("Não foi possível carregar o jogo salvo.");
+                } else {
+                    changeTrack("game");
+                    initAudio();
+                }
+            });
+            
+            document.getElementById('skip-to-story').addEventListener('click', function() {
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game");
+                initAudio();
+            });
+            
+            if (localStorage.getItem(SAVE_KEY)) {
+                document.getElementById('continue-button').disabled = false;
+            }
+        }
+
+        function setupMenu() {
+            document.getElementById('menu-button').addEventListener('click', toggleMenu);
+            
+            document.getElementById('save-game').addEventListener('click', function() {
+                saveGame();
+                toggleMenu();
+            });
+            
+            document.getElementById('load-game').addEventListener('click', function() {
+                loadGame();
+                toggleMenu();
+            });
+            
+            document.getElementById('view-history').addEventListener('click', function() {
+                showHistory();
+                toggleMenu();
+            });
+            
+            document.getElementById('main-menu').addEventListener('click', function() {
+                if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
+                    showScreen('start-screen');
+                }
+                toggleMenu();
+            });
+            
+            document.getElementById('back-from-history').addEventListener('click', function() {
+                showScreen('story-screen');
+            });
+            
+            document.addEventListener('click', function(event) {
+                if (menuOpen && !event.target.closest('.game-menu')) {
+                    toggleMenu();
+                }
+            });
+        }
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            document.getElementById('menu-dropdown').classList.toggle('active', menuOpen);
         }
 
         function saveGame() {
@@ -1120,7 +1274,7 @@
             localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
             alert("Jogo salvo com sucesso!");
         }
-        
+
         function loadGame() {
             const saveData = localStorage.getItem(SAVE_KEY);
             
@@ -1148,9 +1302,8 @@
                 return false;
             }
         }
-        
+
         function addToHistory(sectionId, text) {
-            // Limitar o histórico a 20 entradas para evitar sobrecarga
             if (gameHistory.length >= 20) {
                 gameHistory.shift();
             }
@@ -1160,7 +1313,7 @@
                 text: text.substring(0, 100) + (text.length > 100 ? "..." : "")
             });
         }
-        
+
         function showHistory() {
             const historyEntries = document.getElementById('history-entries');
             historyEntries.innerHTML = '';
@@ -1184,34 +1337,38 @@
             
             showScreen('history-screen');
         }
-        
+
         // -------------------- FUNÇÕES DE ÁUDIO --------------------
         function initAudio() {
+            console.log("Inicializando áudio");
             if (introMusic && gameMusic) {
                 introMusic.volume = volumeLevel;
                 gameMusic.volume = volumeLevel;
                 
-                if (audioEnabled) {
-                    try {
+                try {
+                    if (audioEnabled) {
                         if (currentTrack === "intro") {
                             introMusic.play();
-                            audioStatus.textContent = "Tocando: Tema Inicial";
                         } else {
                             gameMusic.play();
-                            audioStatus.textContent = "Tocando: Tema Principal";
                         }
-                        audioStatus.style.display = "block";
-                        setTimeout(() => {
-                            audioStatus.style.display = "none";
-                        }, 3000);
-                    } catch (e) {
-                        console.log("Erro ao reproduzir áudio:", e);
+                        
+                        if (audioStatus) {
+                            audioStatus.textContent = currentTrack === "intro" ? "Tocando: Tema Inicial" : "Tocando: Tema Principal";
+                            audioStatus.style.display = "block";
+                            setTimeout(() => { audioStatus.style.display = "none"; }, 3000);
+                        }
                     }
+                } catch (e) {
+                    console.error("Erro ao inicializar áudio:", e);
                 }
+            } else {
+                console.warn("Elementos de áudio não encontrados");
             }
         }
-        
+
         function changeTrack(track) {
+            console.log(`Alterando faixa para: ${track}`);
             if (!audioEnabled || !introMusic || !gameMusic) return;
             
             try {
@@ -1220,352 +1377,116 @@
                     gameMusic.currentTime = 0;
                     introMusic.play();
                     currentTrack = "intro";
-                    audioStatus.textContent = "Tocando: Tema Inicial";
                 } else if (track === "game" && currentTrack !== "game") {
                     introMusic.pause();
                     introMusic.currentTime = 0;
                     gameMusic.play();
                     currentTrack = "game";
-                    audioStatus.textContent = "Tocando: Tema Principal";
                 }
                 
-                audioStatus.style.display = "block";
-                setTimeout(() => {
-                    audioStatus.style.display = "none";
-                }, 3000);
+                if (audioStatus) {
+                    audioStatus.textContent = currentTrack === "intro" ? "Tocando: Tema Inicial" : "Tocando: Tema Principal";
+                    audioStatus.style.display = "block";
+                    setTimeout(() => { audioStatus.style.display = "none"; }, 3000);
+                }
             } catch (e) {
-                console.log("Erro ao trocar faixa de áudio:", e);
+                console.error("Erro ao trocar faixa:", e);
             }
         }
-        
-        // -------------------- GERADORES DE ESTRLAS E NAVE --------------------
-        function generateStars() {
-            const starsContainer = document.querySelector('.stars');
-            if (!starsContainer) return;
-            
-            const numberOfStars = 200;
-            
-            for (let i = 0; i < numberOfStars; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.width = `${Math.random() * 3}px`;
-                star.style.height = star.style.width;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 2}s`;
-                starsContainer.appendChild(star);
-            }
-        }
-        
-        // -------------------- HANDLERS DA TELA INICIAL --------------------
-        function setupStartScreen() {
-            const startButton = document.getElementById('start-button');
-            const continueButton = document.getElementById('continue-button');
-            const skipButton = document.getElementById('skip-to-story');
-            
-            if (startButton) {
-                startButton.addEventListener('click', function() {
-                    showScreen('intro-screen');
-                    startIntroAnimation();
-                    initAudio(); // Iniciar áudio quando o usuário interagir
-                });
-            }
 
-            if (continueButton) {
-                continueButton.addEventListener('click', function() {
-                    if (!loadGame()) {
-                        alert("Não foi possível carregar o jogo salvo.");
+        function setupAudioControls() {
+            if (audioToggle) {
+                audioToggle.addEventListener('click', function() {
+                    audioEnabled = !audioEnabled;
+                    
+                    if (audioEnabled) {
+                        if (currentTrack === "intro" && introMusic) {
+                            introMusic.play();
+                        } else if (gameMusic) {
+                            gameMusic.play();
+                        }
+                        
+                        audioToggle.classList.remove('muted');
                     } else {
-                        changeTrack("game"); // Trocar para música principal ao continuar jogo
-                        initAudio();
+                        if (introMusic) introMusic.pause();
+                        if (gameMusic) gameMusic.pause();
+                        
+                        audioToggle.classList.add('muted');
+                    }
+                    
+                    if (audioStatus) {
+                        audioStatus.textContent = audioEnabled ? 
+                            (currentTrack === "intro" ? "Tocando: Tema Inicial" : "Tocando: Tema Principal") : 
+                            "Áudio Desativado";
+                        audioStatus.style.display = "block";
+                        setTimeout(() => { audioStatus.style.display = "none"; }, 3000);
                     }
                 });
             }
-
-            if (skipButton) {
-                skipButton.addEventListener('click', function() {
-                    showScreen('story-screen');
-                    loadSection('intro');
-                    changeTrack("game"); // Trocar para música principal ao pular prólogo
-                    initAudio();
-                });
-            }
             
-            generateStars();
-        }
-        
-        // -------------------- HANDLERS DA ANIMAÇÃO INTRODUTÓRIA --------------------
-        function startIntroAnimation() {
-            const introText = document.getElementById('intro-text');
-            const skipButton = document.getElementById('skip-intro-button');
-            const pauseButton = document.getElementById('pause-intro');
-            const resumeButton = document.getElementById('resume-intro');
-            
-            if (introText) {
-                // Configurar a duração da animação baseada no SCROLL_SPEED
-                introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
-            }
-            
-            // Configurar botões de controle do prólogo
-            if (skipButton) {
-                skipButton.addEventListener('click', function() {
-                    clearTimeout(textScrollTimeout);
-                    showScreen('story-screen');
-                    loadSection('intro');
-                    changeTrack("game"); // Trocar para música principal ao pular intro
-                });
-            }
-            
-            if (pauseButton) {
-                pauseButton.addEventListener('click', pauseIntroText);
-            }
-            
-            if (resumeButton) {
-                resumeButton.addEventListener('click', resumeIntroText);
-            }
-            
-            // Tempo para transição para a história
-            textScrollTimeout = setTimeout(() => {
-                showScreen('story-screen');
-                loadSection('intro');
-                changeTrack("game"); // Trocar para música principal quando o prólogo termina
-            }, (SCROLL_SPEED * 1000));
-        }
-        
-        function pauseIntroText() {
-            if (!introAnimationPaused) {
-                const introText = document.getElementById('intro-text');
-                const pauseButton = document.getElementById('pause-intro');
-                const resumeButton = document.getElementById('resume-intro');
-                
-                if (introText) introText.style.animationPlayState = 'paused';
-                if (pauseButton) pauseButton.style.display = 'none';
-                if (resumeButton) resumeButton.style.display = 'inline-block';
-                
-                introAnimationPaused = true;
-                
-                // Pausar também o timeout para a próxima tela
-                clearTimeout(textScrollTimeout);
-            }
-        }
-        
-        function resumeIntroText() {
-            if (introAnimationPaused) {
-                const introText = document.getElementById('intro-text');
-                const pauseButton = document.getElementById('pause-intro');
-                const resumeButton = document.getElementById('resume-intro');
-                
-                if (introText) introText.style.animationPlayState = 'running';
-                if (resumeButton) resumeButton.style.display = 'none';
-                if (pauseButton) pauseButton.style.display = 'inline-block';
-                
-                introAnimationPaused = false;
-                
-                // Recalcular quanto tempo resta baseado na posição atual da animação
-                const animationTime = SCROLL_SPEED;
-                
-                // Estimativa simplificada do tempo restante
-                const remainingTime = animationTime * 1000 * 0.7; // 70% do tempo total
-                
-                textScrollTimeout = setTimeout(() => {
-                    showScreen('story-screen');
-                    loadSection('intro');
-                    changeTrack("game"); // Trocar para música principal
-                }, remainingTime);
-            }
-        }
-        
-        // -------------------- HANDLERS DA HISTÓRIA --------------------
-        function loadSection(sectionId) {
-            if (DEBUG_MODE) console.log(`Carregando seção: ${sectionId}`);
-            
-            currentSection = sectionId;
-            const section = storyData[sectionId];
-            
-            if (!section) {
-                console.error(`Seção ${sectionId} não encontrada!`);
-                return;
-            }
-            
-            // Adicionar ao histórico
-            if (section.text) {
-                addToHistory(sectionId, section.text);
-            }
-            
-            // Verificar se é uma seção especial (combate ou quebra-cabeça)
-            if (section.type === 'combat') {
-                setupCombat(section);
-                return;
-            } else if (section.type === 'puzzle') {
-                setupPuzzle(section);
-                return;
-            }
-            
-            // Seção normal de história
-            const sectionId_elem = document.getElementById('section-id');
-            const storyText = document.getElementById('story-text');
-            const optionsContainer = document.getElementById('options-container');
-            
-            if (sectionId_elem) sectionId_elem.textContent = `Seção ${sectionId}`;
-            if (storyText) storyText.innerHTML = section.text.replace(/\n/g, '<br>');
-            
-            if (optionsContainer) {
-                optionsContainer.innerHTML = '';
-                
-                section.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.classList.add('option-button');
-                    button.textContent = option.text;
-                    button.addEventListener('click', () => {
-                        if (DEBUG_MODE) console.log(`Clicado em opção para seção: ${option.nextSection}`);
-                        loadSection(option.nextSection);
-                    });
-                    optionsContainer.appendChild(button);
-                });
-            }
-            
-            showScreen('story-screen');
-        }
-        
-        // -------------------- HANDLERS DE MENU --------------------
-        function setupMenu() {
-            const menuButton = document.getElementById('menu-button');
-            const saveGame_btn = document.getElementById('save-game');
-            const loadGame_btn = document.getElementById('load-game');
-            const viewHistory = document.getElementById('view-history');
-            const mainMenu = document.getElementById('main-menu');
-            const backFromHistory = document.getElementById('back-from-history');
-            
-            if (menuButton) {
-                menuButton.addEventListener('click', toggleMenu);
-            }
-            
-            if (saveGame_btn) {
-                saveGame_btn.addEventListener('click', function() {
-                    saveGame();
-                    toggleMenu();
-                });
-            }
-            
-            if (loadGame_btn) {
-                loadGame_btn.addEventListener('click', function() {
-                    loadGame();
-                    toggleMenu();
-                });
-            }
-            
-            if (viewHistory) {
-                viewHistory.addEventListener('click', function() {
-                    showHistory();
-                    toggleMenu();
-                });
-            }
-            
-            if (mainMenu) {
-                mainMenu.addEventListener('click', function() {
-                    if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
-                        showScreen('start-screen');
+            if (volumeControl) {
+                volumeControl.addEventListener('input', function() {
+                    volumeLevel = this.value / 100;
+                    
+                    if (introMusic) introMusic.volume = volumeLevel;
+                    if (gameMusic) gameMusic.volume = volumeLevel;
+                    
+                    if (audioStatus) {
+                        audioStatus.textContent = `Volume: ${this.value}%`;
+                        audioStatus.style.display = "block";
+                        setTimeout(() => { audioStatus.style.display = "none"; }, 1500);
                     }
-                    toggleMenu();
                 });
             }
+        }
 
-            if (backFromHistory) {
-                backFromHistory.addEventListener('click', function() {
-                    showScreen('story-screen');
-                });
-            }
-            
-            // Fechar menu ao clicar fora dele
-            document.addEventListener('click', function(event) {
-                if (menuOpen && !event.target.closest('.game-menu')) {
-                    toggleMenu();
-                }
-            });
-        }
-        
-        function toggleMenu() {
-            const menuDropdown = document.getElementById('menu-dropdown');
-            menuOpen = !menuOpen;
-            
-            if (menuOpen && menuDropdown) {
-                menuDropdown.classList.add('active');
-            } else if (menuDropdown) {
-                menuDropdown.classList.remove('active');
-            }
-        }
-        
-        // -------------------- HANDLERS DE COMBATE --------------------
+        // -------------------- FUNÇÕES DE COMBATE E QUEBRA-CABEÇA --------------------
         function setupCombat(section) {
             const combat = section.combatData;
             
-            // Verificar se os elementos existem
-            const combatHeader = document.getElementById('combat-header');
-            const enemyName = document.getElementById('enemy-name');
-            const enemyInfo = document.getElementById('enemy-info');
-            const characterHealth = document.getElementById('character-health');
-            const enemyHealth = document.getElementById('enemy-health');
-            const characterItems = document.getElementById('character-items');
-            const actionsContainer = document.getElementById('combat-actions');
-            const combatLog = document.getElementById('combat-log');
+            document.getElementById('combat-header').textContent = "COMBATE";
+            document.getElementById('enemy-name').textContent = combat.enemyName;
+            document.getElementById('enemy-info').textContent = combat.enemyInfo;
             
-            // Configurar detalhes do combate
-            if (combatHeader) combatHeader.textContent = "COMBATE";
-            if (enemyName) enemyName.textContent = combat.enemyName;
-            if (enemyInfo) enemyInfo.textContent = combat.enemyInfo;
+            document.getElementById('character-health').style.width = '100%';
+            document.getElementById('enemy-health').style.width = '100%';
             
-            // Restaurar saúde
-            if (characterHealth) characterHealth.style.width = '100%';
-            if (enemyHealth) enemyHealth.style.width = '100%';
-            
-            // Itens aleatórios do jogador
             const randomPlayerItems = [];
             for (let i = 0; i < 3; i++) {
                 randomPlayerItems.push(getRandomItem(randomItems));
             }
             
-            if (characterItems) {
-                characterItems.innerHTML = `Arma: ${getRandomItem(randomWeapons)}<br>Itens: ${randomPlayerItems.join(', ')}`;
-            }
+            document.getElementById('character-items').innerHTML = `Arma: ${getRandomItem(randomWeapons)}<br>Itens: ${randomPlayerItems.join(', ')}`;
             
-            // Configurar botões de ação
-            if (actionsContainer) {
-                actionsContainer.innerHTML = '';
-                
-                const actions = [
-                    { text: "Atacar", action: "attack" },
-                    { text: "Defender", action: "defend" },
-                    { text: `Usar ${randomPlayerItems[0]}`, action: "useItem1" },
-                    { text: `Usar ${randomPlayerItems[1]}`, action: "useItem2" },
-                    { text: `Usar ${randomPlayerItems[2]}`, action: "useItem3" }
-                ];
-                
-                actions.forEach(action => {
-                    const button = document.createElement('button');
-                    button.classList.add('combat-button');
-                    button.textContent = action.text;
-                    button.addEventListener('click', () => performCombatAction(action.action, combat));
-                    actionsContainer.appendChild(button);
-                });
-            }
+            const actionsContainer = document.getElementById('combat-actions');
+            actionsContainer.innerHTML = '';
             
-            // Mostrar tela de combate
+            const actions = [
+                { text: "Atacar", action: "attack" },
+                { text: "Defender", action: "defend" },
+                { text: `Usar ${randomPlayerItems[0]}`, action: "useItem1" },
+                { text: `Usar ${randomPlayerItems[1]}`, action: "useItem2" },
+                { text: `Usar ${randomPlayerItems[2]}`, action: "useItem3" }
+            ];
+            
+            actions.forEach(action => {
+                const button = document.createElement('button');
+                button.classList.add('combat-button');
+                button.textContent = action.text;
+                button.addEventListener('click', () => performCombatAction(action.action, combat));
+                actionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('combat-log').innerHTML = section.text + '<br>Prepare-se para o combate!';
+            
             showScreen('combat-screen');
-            
-            // Texto inicial do combate
-            if (combatLog) {
-                combatLog.innerHTML = section.text + '<br>Prepare-se para o combate!';
-            }
         }
-        
+
         function performCombatAction(action, combat) {
             const log = document.getElementById('combat-log');
             const characterHealth = document.getElementById('character-health');
             const enemyHealth = document.getElementById('enemy-health');
             
-            if (!log || !characterHealth || !enemyHealth) return;
-            
-            // Valores atuais de saúde
             let playerHealthValue = parseInt(characterHealth.style.width) || 100;
             let enemyHealthValue = parseInt(enemyHealth.style.width) || 100;
             
@@ -1573,7 +1494,6 @@
             let playerDamage = 0;
             let enemyDamage = 0;
             
-            // Processar a ação do jogador
             switch(action) {
                 case 'attack':
                     playerDamage = Math.floor(Math.random() * 30) + 10;
@@ -1585,7 +1505,6 @@
                 case 'useItem1':
                 case 'useItem2':
                 case 'useItem3':
-                    // Efeitos aleatórios para os itens
                     const effectType = Math.floor(Math.random() * 3);
                     if (effectType === 0) {
                         playerDamage = Math.floor(Math.random() * 40) + 20;
@@ -1601,11 +1520,9 @@
                     break;
             }
             
-            // Aplicar dano ao inimigo
             enemyHealthValue = Math.max(0, enemyHealthValue - playerDamage);
             enemyHealth.style.width = `${enemyHealthValue}%`;
             
-            // Ação do inimigo (se ainda estiver vivo)
             if (enemyHealthValue > 0 && action !== 'defend') {
                 const enemyAttackDamage = Math.floor(Math.random() * 25) + 5;
                 playerHealthValue = Math.max(0, playerHealthValue - enemyAttackDamage);
@@ -1616,57 +1533,45 @@
                 actionResult += `<br>${combat.enemyName} ataca, mas sua defesa reduz o dano para ${reducedDamage}!`;
             }
             
-            // Aplicar dano adicional ao jogador (de efeitos colaterais)
             playerHealthValue = Math.max(0, playerHealthValue - enemyDamage);
             characterHealth.style.width = `${playerHealthValue}%`;
             
-            // Atualizar log de combate
             log.innerHTML += '<br>' + actionResult;
             log.scrollTop = log.scrollHeight;
             
-            // Verificar fim do combate
             if (enemyHealthValue <= 0 || playerHealthValue <= 0) {
                 const result = enemyHealthValue <= 0 ? 'victory' : 'defeat';
-                const nextSection = combat.outcomes.find(outcome => outcome.result === result)?.nextSection || 'final';
+                let nextSection = 'final';
+                
+                if (combat.outcomes) {
+                    const outcome = combat.outcomes.find(o => o.result === result);
+                    if (outcome) nextSection = outcome.nextSection;
+                }
                 
                 setTimeout(() => {
-                    if (result === 'victory') {
-                        log.innerHTML += '<br><br>Você derrotou o inimigo!';
-                    } else {
-                        log.innerHTML += '<br><br>Você foi derrotado!';
-                    }
+                    log.innerHTML += '<br><br>' + (result === 'victory' ? 'Você derrotou o inimigo!' : 'Você foi derrotado!');
                     
-                    setTimeout(() => loadSection(nextSection), 2000);
+                    setTimeout(() => {
+                        loadSection(nextSection);
+                    }, 2000);
                 }, 1000);
                 
-                // Desabilitar botões
                 document.querySelectorAll('.combat-button').forEach(button => {
                     button.disabled = true;
                 });
             }
         }
-        
-        // -------------------- HANDLERS DE QUEBRA-CABEÇA --------------------
+
         function setupPuzzle(section) {
             const puzzle = section.puzzleData;
             
-            const puzzleHeader = document.getElementById('puzzle-header');
-            const puzzleDescription = document.getElementById('puzzle-description');
+            document.getElementById('puzzle-header').textContent = puzzle.title;
+            document.getElementById('puzzle-description').innerHTML = puzzle.description.replace(/\n/g, '<br>');
+            
             const puzzleContent = document.getElementById('puzzle-content');
-            const puzzleOptions = document.getElementById('puzzle-options');
-            
-            if (!puzzleHeader || !puzzleDescription || !puzzleContent || !puzzleOptions) {
-                console.error("Elementos de quebra-cabeça não encontrados");
-                return;
-            }
-            
-            puzzleHeader.textContent = puzzle.title;
-            puzzleDescription.innerHTML = puzzle.description.replace(/\n/g, '<br>');
             puzzleContent.innerHTML = '';
             
-            // Adicionar visualização específica para diferentes tipos de quebra-cabeças
             if (puzzle.title.includes("ROTEAMENTO DE ENERGIA")) {
-                // Criar uma visualização de diagrama para o quebra-cabeça de energia
                 const diagramSvg = document.createElement('div');
                 diagramSvg.innerHTML = `
                     <svg width="300" height="200" viewBox="0 0 300 200">
@@ -1695,7 +1600,6 @@
                 `;
                 puzzleContent.appendChild(diagramSvg);
             } else if (puzzle.title.includes("SEQUÊNCIA")) {
-                // Criar um destaque visual para a sequência
                 const sequenceHighlight = document.createElement('div');
                 sequenceHighlight.style.fontSize = "1.5rem";
                 sequenceHighlight.style.margin = "20px auto";
@@ -1712,7 +1616,6 @@
                 
                 puzzleContent.appendChild(sequenceHighlight);
             } else if (puzzle.title.includes("CÓDIGO DE SEGURANÇA")) {
-                // Criar um painel de entrada de código
                 const codePanel = document.createElement('div');
                 codePanel.style.width = "200px";
                 codePanel.style.height = "50px";
@@ -1731,6 +1634,7 @@
                 puzzleContent.appendChild(codePanel);
             }
             
+            const puzzleOptions = document.getElementById('puzzle-options');
             puzzleOptions.innerHTML = '';
             
             puzzle.options.forEach(option => {
@@ -1738,7 +1642,6 @@
                 button.classList.add('puzzle-button');
                 button.textContent = option.text;
                 button.addEventListener('click', () => {
-                    // Efeito visual para feedback da escolha
                     if (option.correct) {
                         button.style.backgroundColor = "rgba(0, 100, 0, 0.9)";
                         button.style.boxShadow = "0 0 15px #00ff00";
@@ -1748,7 +1651,6 @@
                     }
                     
                     setTimeout(() => {
-                        if (DEBUG_MODE) console.log(`Selecionada opção de puzzle: ${option.nextSection}`);
                         loadSection(option.nextSection);
                     }, 800);
                 });
@@ -1757,81 +1659,14 @@
             
             showScreen('puzzle-screen');
         }
-        
+
         // -------------------- INICIALIZAÇÃO --------------------
         window.onload = function() {
-            if (DEBUG_MODE) console.log("Inicializando jogo...");
+            console.log("Inicializando jogo");
             setupStartScreen();
             setupMenu();
             setupAudioControls();
-            
-            // Verificar salvamento automático
-            const continueButton = document.getElementById('continue-button');
-            if (continueButton) {
-                if (localStorage.getItem(SAVE_KEY)) {
-                    continueButton.disabled = false;
-                } else {
-                    continueButton.disabled = true;
-                }
-            }
-            
-            // Configurar URLs de áudio alternativas para teste, caso necessário
-            if (introMusic && !introMusic.src) {
-                try {
-                    console.log("Usando URLs de áudio alternativas para teste");
-                    introMusic.src = "https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3";
-                    gameMusic.src = "https://dl.dropboxusercontent.com/s/9a1uxpayvplfxfa/space_main.mp3";
-                } catch (e) {
-                    console.log("Erro ao configurar áudio alternativo:", e);
-                }
-            }
         };
-        
-        // -------------------- CONFIGURAÇÃO DE ÁUDIO --------------------
-        function setupAudioControls() {
-            if (audioToggle) {
-                audioToggle.addEventListener('click', function() {
-                    audioEnabled = !audioEnabled;
-                    
-                    if (audioEnabled) {
-                        // Reativar o áudio
-                        if (currentTrack === "intro" && introMusic) {
-                            introMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
-                            audioStatus.textContent = "Tocando: Tema Inicial";
-                        } else if (gameMusic) {
-                            gameMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
-                            audioStatus.textContent = "Tocando: Tema Principal";
-                        }
-                        audioToggle.classList.remove('muted');
-                    } else {
-                        // Desativar o áudio
-                        if (introMusic) introMusic.pause();
-                        if (gameMusic) gameMusic.pause();
-                        audioStatus.textContent = "Áudio Desativado";
-                        audioToggle.classList.add('muted');
-                    }
-                    
-                    audioStatus.style.display = "block";
-                    setTimeout(() => {
-                        audioStatus.style.display = "none";
-                    }, 3000);
-                });
-            }
-            
-            if (volumeControl) {
-                volumeControl.addEventListener('input', function() {
-                    volumeLevel = this.value / 100;
-                    if (introMusic) introMusic.volume = volumeLevel;
-                    if (gameMusic) gameMusic.volume = volumeLevel;
-                    
-                    audioStatus.textContent = `Volume: ${this.value}%`;
-                    audioStatus.style.display = "block";
-                    setTimeout(() => {
-                        audioStatus.style.display = "none";
-                    }, 1500);
-                });
-            }
-        }
     </script>
 </body>
 </html>
