@@ -593,6 +593,83 @@
             .intro-text {
                 font-size: 1rem;
             }
+
+            /* parte de musica do jogo*/
+                    .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            }
+        
+            .audio-button {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff00;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #00ff00;
+            transition: all 0.3s;
+            }
+            
+            .audio-button:hover {
+                background-color: rgba(0, 50, 0, 0.8);
+                box-shadow: 0 0 10px #00ff00;
+            }
+            
+            .audio-button svg {
+                width: 20px;
+                height: 20px;
+                fill: #00ff00;
+            }
+            
+            .audio-button.muted svg path {
+                d: path("M19,11h-8v6h8v-6z M13,3v2h4v12h-4v2h6v-16h-6z");
+            }
+            
+            .volume-slider {
+                width: 80px;
+                height: 5px;
+                -webkit-appearance: none;
+                appearance: none;
+                background: rgba(0, 50, 0, 0.5);
+                border-radius: 5px;
+                outline: none;
+            }
+            
+            .volume-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background: #00ff00;
+                cursor: pointer;
+            }
+            
+            .volume-slider::-moz-range-thumb {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background: #00ff00;
+                cursor: pointer;
+            }
+            
+            .audio-status {
+                color: #00ff00;
+                font-size: 0.8rem;
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 5px 10px;
+                border-radius: 10px;
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1694,6 +1771,201 @@
                 document.getElementById('continue-button').disabled = true;
             }
         };
+    </script>
+
+        <!-- Adicionar o controle de áudio -->
+    <div class="audio-controls">
+        <div class="audio-button" id="audio-toggle">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+        </div>
+        <input type="range" min="0" max="100" value="70" class="volume-slider" id="volume-control">
+        <div class="audio-status" id="audio-status">Tocando: Tema Inicial</div>
+    </div>
+    
+    <!-- Sistema de áudio -->
+    <audio id="intro-music" loop>
+        <source src="musica/intro_theme.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="game-music" loop>
+        <source src="musica/game_theme.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // Seu JavaScript existente aqui...
+        
+        // Adicionar funcionalidade de áudio
+        let audioEnabled = true;
+        let currentTrack = "intro";
+        let volumeLevel = 0.7;
+        
+        const introMusic = document.getElementById('intro-music');
+        const gameMusic = document.getElementById('game-music');
+        const audioToggle = document.getElementById('audio-toggle');
+        const volumeControl = document.getElementById('volume-control');
+        const audioStatus = document.getElementById('audio-status');
+        
+        // Função para iniciar áudio - precisa ser chamada após interação do usuário devido a políticas dos navegadores
+        function initAudio() {
+            introMusic.volume = volumeLevel;
+            gameMusic.volume = volumeLevel;
+            
+            if (audioEnabled) {
+                if (currentTrack === "intro") {
+                    introMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
+                    audioStatus.textContent = "Tocando: Tema Inicial";
+                } else {
+                    gameMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
+                    audioStatus.textContent = "Tocando: Tema Principal";
+                }
+                audioStatus.style.display = "block";
+                setTimeout(() => {
+                    audioStatus.style.display = "none";
+                }, 3000);
+            }
+        }
+        
+        // Alternar entre som ligado/desligado
+        audioToggle.addEventListener('click', function() {
+            audioEnabled = !audioEnabled;
+            
+            if (audioEnabled) {
+                // Reativar o áudio
+                if (currentTrack === "intro") {
+                    introMusic.play();
+                    audioStatus.textContent = "Tocando: Tema Inicial";
+                } else {
+                    gameMusic.play();
+                    audioStatus.textContent = "Tocando: Tema Principal";
+                }
+                audioToggle.classList.remove('muted');
+            } else {
+                // Desativar o áudio
+                introMusic.pause();
+                gameMusic.pause();
+                audioStatus.textContent = "Áudio Desativado";
+                audioToggle.classList.add('muted');
+            }
+            
+            audioStatus.style.display = "block";
+            setTimeout(() => {
+                audioStatus.style.display = "none";
+            }, 3000);
+        });
+        
+        // Controle de volume
+        volumeControl.addEventListener('input', function() {
+            volumeLevel = this.value / 100;
+            introMusic.volume = volumeLevel;
+            gameMusic.volume = volumeLevel;
+            
+            audioStatus.textContent = `Volume: ${this.value}%`;
+            audioStatus.style.display = "block";
+            setTimeout(() => {
+                audioStatus.style.display = "none";
+            }, 1500);
+        });
+        
+        // Função para trocar a música
+        function changeTrack(track) {
+            if (!audioEnabled) return;
+            
+            if (track === "intro" && currentTrack !== "intro") {
+                gameMusic.pause();
+                gameMusic.currentTime = 0;
+                introMusic.play();
+                currentTrack = "intro";
+                audioStatus.textContent = "Tocando: Tema Inicial";
+            } else if (track === "game" && currentTrack !== "game") {
+                introMusic.pause();
+                introMusic.currentTime = 0;
+                gameMusic.play();
+                currentTrack = "game";
+                audioStatus.textContent = "Tocando: Tema Principal";
+            }
+            
+            audioStatus.style.display = "block";
+            setTimeout(() => {
+                audioStatus.style.display = "none";
+            }, 3000);
+        }
+        
+        // Modificar as funções existentes para trocar a música em pontos chave
+        
+        // Modificar a função setupStartScreen
+        function setupStartScreen() {
+            document.getElementById('start-button').addEventListener('click', function() {
+                showScreen('intro-screen');
+                startIntroAnimation();
+                initAudio(); // Iniciar áudio quando o usuário interagir
+            });
+
+            document.getElementById('continue-button').addEventListener('click', function() {
+                if (!loadGame()) {
+                    alert("Não foi possível carregar o jogo salvo.");
+                } else {
+                    changeTrack("game"); // Trocar para música principal ao continuar jogo
+                    initAudio();
+                }
+            });
+
+            document.getElementById('skip-to-story').addEventListener('click', function() {
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game"); // Trocar para música principal ao pular prólogo
+                initAudio();
+            });
+            
+            generateStars();
+        }
+        
+        // Modificar o fim da animação do prólogo para trocar a música
+        function startIntroAnimation() {
+            const introText = document.getElementById('intro-text');
+            
+            introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
+            
+            document.getElementById('skip-intro-button').addEventListener('click', function() {
+                clearTimeout(textScrollTimeout);
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game"); // Trocar para música principal ao pular intro
+            });
+            
+            document.getElementById('pause-intro').addEventListener('click', pauseIntroText);
+            document.getElementById('resume-intro').addEventListener('click', resumeIntroText);
+            
+            textScrollTimeout = setTimeout(() => {
+                showScreen('story-screen');
+                loadSection('intro');
+                changeTrack("game"); // Trocar para música principal quando o prólogo termina
+            }, (SCROLL_SPEED * 1000));
+        }
+        
+        // Atenção: Você precisará fornecer os arquivos de áudio
+        // 1. intro_theme.mp3 - para a música da tela inicial e prólogo
+        // 2. game_theme.mp3 - para a música principal do jogo
+        
+        // Se não tiver arquivos de áudio, você pode usar URLs para áudios online:
+        // Adicione após a declaração do <audio>:
+        /*
+        window.onload = function() {
+            // Configurar fontes de áudio online (apenas para teste)
+            introMusic.src = "https://url-para-musica-intro.mp3";
+            gameMusic.src = "https://url-para-musica-jogo.mp3";
+            
+            setupStartScreen();
+            setupMenu();
+            
+            if (localStorage.getItem(SAVE_KEY)) {
+                document.getElementById('continue-button').disabled = false;
+            } else {
+                document.getElementById('continue-button').disabled = true;
+            }
+        };
+        */
     </script>
 </body>
 </html>
