@@ -718,17 +718,20 @@
     </div>
 
     <!-- ÁUDIO DO JOGO (Simplificado) -->
+    <audio id="intro_music" loop>
+        <source src="musica/intro_theme.mp3" type="audio/mp3">
+    </audio>
     <audio id="game_theme" loop>
-        <source src="https://dl.dropboxusercontent.com/s/9a1uxpayvplfxfa/space_main.mp3" type="audio/mp3">
+        <source src="musica/game_theme.mp3" type="audio/mp3">
     </audio>
     <audio id="music1" loop>
-        <source src="https://dl.dropboxusercontent.com/s/kvn9sp4xtgo1f92/space_ambient1.mp3" type="audio/mp3">
+        <source src="musica/music1.mp3" type="audio/mp3">
     </audio>
     <audio id="music2" loop>
-        <source src="https://dl.dropboxusercontent.com/s/yih4m8c42k3qzjy/space_ambient2.mp3" type="audio/mp3">
+        <source src="musica/music2.mp3" type="audio/mp3">
     </audio>
     <audio id="music3" loop>
-        <source src="https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3" type="audio/mp3">
+        <source src="musica/music3.mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -1232,6 +1235,7 @@
         
         // -------------------- VARIÁVEIS DE ÁUDIO --------------------
         const audioElements = {
+            intro_music: document.getElementById('intro_music'),
             game_theme: document.getElementById('game_theme'),
             music1: document.getElementById('music1'),
             music2: document.getElementById('music2'),
@@ -1244,18 +1248,34 @@
             return array[Math.floor(Math.random() * array.length)];
         }
         
-        function getRandomMusic() {
-            const musicKeys = Object.keys(audioElements);
+        function getRandomGameMusic() {
+            const musicKeys = ['game_theme', 'music1', 'music2', 'music3'];
             return audioElements[musicKeys[Math.floor(Math.random() * musicKeys.length)]];
         }
-
+        
+        function playIntroMusic() {
+            if (currentMusic) {
+                currentMusic.pause();
+                currentMusic.currentTime = 0;
+            }
+            
+            currentMusic = audioElements.intro_music;
+            
+            try {
+                currentMusic.volume = 0.5;
+                currentMusic.play().catch(e => console.log("Erro ao reproduzir áudio de introdução:", e));
+            } catch (error) {
+                console.log("Erro ao tocar música de introdução:", error);
+            }
+        }
+        
         function playRandomMusic() {
             if (currentMusic) {
                 currentMusic.pause();
                 currentMusic.currentTime = 0;
             }
             
-            currentMusic = getRandomMusic();
+            currentMusic = getRandomGameMusic();
             
             try {
                 currentMusic.volume = 0.5;
@@ -1267,6 +1287,24 @@
         
         function showScreen(screenId) {
             console.log(`Mostrando tela: ${screenId}`);
+            
+            // Esconder todas as telas
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            
+            // Mostrar a tela solicitada
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            // Tocar música adequada dependendo da tela
+            if (screenId === 'start-screen') {
+                playIntroMusic();
+            } else if (screenId === 'intro-screen') {
+                playIntroMusic();
+            } else {
+                playRandomMusic();
+            }
+        }
             
             // Esconder todas as telas
             document.querySelectorAll('.screen').forEach(screen => {
@@ -1819,7 +1857,6 @@
         window.onload = function() {
             // Adicionar as seções de fallback antes de iniciar
             addFallbackSections();
-            
             setupStartScreen();
             setupMenu();
             playRandomMusic();
