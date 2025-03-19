@@ -124,12 +124,12 @@
             box-shadow: 0 0 20px #00ff00;
         }
 
-        /* Animação do Satélite */
+        /* Animação do Satélite - Mais Lenta */
         .satellite {
             position: absolute;
             width: 80px;
             height: 40px;
-            animation: orbitPlanet 20s linear infinite;
+            animation: orbitPlanet 45s linear infinite;
             opacity: 0.8;
             z-index: 3;
         }
@@ -149,6 +149,38 @@
             }
             100% {
                 transform: translate(-100px, 200px);
+            }
+        }
+
+        /* Cometa */
+        .comet {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8),
+                        0 0 20px 10px rgba(255, 255, 255, 0.4),
+                        -30px 0 30px 15px rgba(255, 255, 255, 0.2);
+            animation: cometFly 15s linear infinite;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        @keyframes cometFly {
+            0% {
+                transform: translate(-100px, 50px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw + 100px), 300px);
+                opacity: 0;
             }
         }
 
@@ -601,7 +633,8 @@
 <body>
     <!-- TELA INICIAL -->
     <div id="start-screen" class="screen">
-        <div class="stars"></div>
+        <div class="stars" id="stars-container"></div>
+        <div class="comet"></div>
         <div class="planet"></div>
         <div class="satellite">
             <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
@@ -717,27 +750,10 @@
         </div>
     </div>
 
-    <!-- ÁUDIO DO JOGO (Simplificado) -->
-    <audio id="intro_music" loop>
-        <source src="musica/intro_theme.mp3" type="audio/mp3">
-    </audio>
-    <audio id="game_theme" loop>
-        <source src="musica/game_theme.mp3" type="audio/mp3">
-    </audio>
-    <audio id="music1" loop>
-        <source src="musica/music1.mp3" type="audio/mp3">
-    </audio>
-    <audio id="music2" loop>
-        <source src="musica/music2.mp3" type="audio/mp3">
-    </audio>
-    <audio id="music3" loop>
-        <source src="musica/music3.mp3" type="audio/mp3">
-    </audio>
-
     <script>
         // -------------------- CONFIGURAÇÕES DO JOGO --------------------
         const SCROLL_SPEED = 60; // Velocidade do texto rolando em segundos
-        const GAME_VERSION = "1.0.3";
+        const GAME_VERSION = "1.0.4";
         const SAVE_KEY = "despertarEstelar_saveData";
         const DEBUG_MODE = true; // Ativar para ver mensagens de debugging no console
         
@@ -784,164 +800,12 @@
                     { text: "Investigar o último local conhecido do Dr. Yamamoto.", nextSection: "22" }
                 ]
             },
-            "14": {
-                text: "Você navega pelos corredores parcialmente iluminados em direção ao setor de segurança. A gravidade artificial oscila, fazendo com que às vezes seus passos sejam mais leves ou mais pesados.\n\nAo chegar ao setor de segurança, encontra a porta entreaberta. Dentro, vê um homem debruçado sobre o console principal. Ele não está usando uniforme da tripulação.\n\nAo perceber sua presença, ele se vira rapidamente. É um rosto que você não reconhece. \"Capitão,\" ele diz com um sorriso tenso. \"Que bom que está vivo. Estou tentando restaurar os protocolos de segurança.\"\n\nSeu instinto diz que algo está errado. Ele está usando um distintivo de autorização de nível superior que nem mesmo você possui.\n\nO que você faz?",
-                options: [
-                    { text: "Confrontá-lo diretamente sobre sua identidade.", nextSection: "23" },
-                    { text: "Fingir que acredita nele e pedir mais informações.", nextSection: "24" },
-                    { text: "Atacá-lo imediatamente, considerando-o uma ameaça.", nextSection: "25" }
-                ]
-            },
-            "15": {
-                text: "Você acessa os protocolos de emergência, redirecionando energia dos sistemas não essenciais para reforçar a contenção do núcleo. O sistema informa que isso pode dar à nave mais 30 minutos antes do colapso total.\n\nDurante o processo, você descobre uma sequência de comandos recentemente introduzida no sistema. Alguém programou o desligamento dos suportes de vida no setor de criogenia para daqui a 15 minutos.",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: CÓDIGO DE SEGURANÇA",
-                    description: "Para cancelar esta sequência, você precisa resolver o código de segurança. O sistema fornece a seguinte dica:\n\n\"Eu sou o que resta quando tudo falha. Meu primeiro dígito é o número de planetas habitáveis no sistema Kepler-62. Meu segundo dígito é o número de cápsulas de escape funcionais. Meu terceiro dígito é o número de níveis da nave Esperança. Meu último dígito é o valor de X na equação: 3X + 7 = 22.\"",
-                    options: [
-                        { text: "2255", nextSection: "26", correct: true },
-                        { text: "2250", nextSection: "27", correct: false },
-                        { text: "2505", nextSection: "28", correct: false }
-                    ]
-                }
-            },
-            "16": {
-                text: "\"Capitão,\" a voz de Elena soa ansiosa, \"algo muito estranho aconteceu antes do salto. O Dr. Petrov detectou uma transmissão não autorizada saindo da nave, mas quando fomos investigar, houve uma explosão no corredor J. Petrov acha que foi deliberado.\"\n\n\"Conseguimos acessar brevemente os registros de segurança. Havia passageiros não listados embarcados em Marte. Três deles. Não estão nos registros oficiais.\"\n\nPetrov tosse ao fundo antes de falar: \"Capitão, suspeitamos que sejam agentes de Nova Terra. A colônia em Kepler-62 representa uma vantagem estratégica que eles não queriam que a Aliança obtivesse.\"\n\n\"Precisamos chegar até você,\" diz Elena, \"mas os corredores entre nós estão bloqueados. Há uma forma de nos ajudar a passar pelo sistema de manutenção?\"\n\nO que você faz?",
-                options: [
-                    { text: "Ajudar Elena e Petrov a navegar pelos dutos de manutenção.", nextSection: "29" },
-                    { text: "Pedir que permaneçam onde estão enquanto você verifica a informação sobre os passageiros não listados.", nextSection: "31" },
-                    { text: "Instruí-los a tentar alcançar as cápsulas de escape e encontrar você lá.", nextSection: "32" }
-                ]
-            },
-            "17": {
-                text: "\"Capitão,\" o Tenente Rodriguez responde com voz firme, \"a situação é crítica. Estou com os oficiais Kowalski, Takahashi e Lin. Tentamos acessar o setor de criogenia, mas alguém alterou os códigos de segurança.\"\n\n\"Descobrimos algo perturbador nos laboratórios. Os dados da missão foram alterados. As coordenadas do salto foram manipuladas para nos levar a este setor específico do espaço. Não foi um acidente.\"\n\n\"Takahashi identificou três assinaturas biométricas não registradas movendo-se pela nave pouco antes do salto. Suspeitamos que são sabotadores.\"\n\nEnquanto ele fala, você ouve um ruído metálico ao fundo, seguido por gritos. A comunicação fica cheia de estática. A última coisa que ouve é: \"Eles estão aqui! Corra para o--\" antes de ser cortada.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar restabelecer contato com o grupo de Rodriguez.", nextSection: "33" },
-                    { text: "Dirigir-se ao laboratório para verificar o que aconteceu.", nextSection: "34" },
-                    { text: "Alertar Elena e Petrov sobre o possível perigo.", nextSection: "35" }
-                ]
-            },
             "18": {
                 text: "Você utiliza ferramentas avançadas de análise de áudio para reconstruir a transmissão cortada. Depois de alguns ajustes, consegue recuperar parte da mensagem:\n\n\"...sabotagem confirmada. Não confie na Vasquez. Eles querem os dados do projeto Prometeu. Os passageiros são apenas disfarce. O verdadeiro objetivo é o módulo secreto. Capitão, você precisa acessar o compartimento 772B antes que eles destruam...\"\n\nA mensagem termina aí. Não há identificação de quem a enviou.\n\nVocê verifica rapidamente sua base de dados pessoal. O projeto Prometeu está classificado como ultra-secreto, algo que apenas capitães de alto escalão deveriam conhecer. Envolve tecnologia de terraformação revolucionária.\n\nO compartimento 772B não aparece em nenhum mapa oficial da nave.\n\nO que você faz?",
                 options: [
                     { text: "Confrontar Elena Vasquez sobre a mensagem.", nextSection: "36" },
                     { text: "Procurar o misterioso compartimento 772B.", nextSection: "37" },
                     { text: "Ignorar a mensagem, considerando-a uma possível armadilha.", nextSection: "38" }
-                ]
-            },
-            "19": {
-                text: "As gravações de segurança mostram uma figura encapuzada entrando na sala de controle do salto. A pessoa move-se com precisão, conhecendo exatamente para onde ir. Ela insere um dispositivo no console principal, digita uma sequência de comandos e sai rapidamente.\n\nO ângulo da câmera não permite ver o rosto, mas você nota um detalhe perturbador: a pessoa usa um bracelete médico idêntico ao da Dra. Yasmin Khoury, a médica-chefe da nave.\n\nConsultando o sistema de localização da tripulação, você descobre que o último registro da Dra. Khoury a coloca no laboratório médico, aproximadamente 20 minutos antes do salto. Não há registros após isso.\n\nO que você faz?",
-                options: [
-                    { text: "Ir ao laboratório médico investigar o paradeiro da Dra. Khoury.", nextSection: "39" },
-                    { text: "Alertar os sobreviventes sobre uma possível impostora.", nextSection: "40" },
-                    { text: "Verificar as credenciais e histórico da Dra. Khoury no banco de dados da nave.", nextSection: "41" }
-                ]
-            },
-            "20": {
-                text: "O caminho para o setor de criogenia é mais difícil do que esperava. Portas de emergência bloqueiam as rotas principais, forçando-o a navegar por corredores de manutenção estreitos e mal iluminados.\n\nAo chegar à entrada do setor de criogenia, você encontra a porta principal selada. O painel de acesso está danificado, mas ainda funcional. Para abri-lo, precisará resolver um quebra-cabeça de roteamento de energia.",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: ROTEAMENTO DE ENERGIA",
-                    description: "O painel mostra um diagrama com 5 nós de energia (A, B, C, D, E) e 6 caminhos possíveis. Você precisa fazer a energia fluir da fonte ao destino sem sobrecarregar nenhum nó. Cada nó pode suportar apenas duas conexões ativas.",
-                    options: [
-                        { text: "Conectar A-B-E-D", nextSection: "42", correct: false },
-                        { text: "Conectar A-C-B-D", nextSection: "43", correct: true },
-                        { text: "Conectar A-C-E-D", nextSection: "44", correct: false }
-                    ]
-                }
-            },
-            "21": {
-                text: "Você consulta o sistema de localização para encontrar o Oficial Chen. Seu último registro o coloca no Armamento, duas horas antes do salto. Nenhuma atividade desde então.\n\nO caminho para o Armamento está parcialmente bloqueado por destroços. Você navega com dificuldade, passando por corredores que mostram sinais claros de luta - marcas de tiros nas paredes, manchas de sangue no chão.\n\nAo chegar ao Armamento, encontra a porta arrombada. Dentro, o corpo do Oficial Chen está caído próximo ao arsenal. A maioria das armas desapareceu. Ele tem um mensageiro pessoal na mão, travado com segurança biométrica.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar desbloquear o mensageiro usando o reconhecimento biométrico de Chen.", nextSection: "45" },
-                    { text: "Procurar outras pistas no Armamento.", nextSection: "46" },
-                    { text: "Pegar qualquer arma restante e continuar sua missão.", nextSection: "47" }
-                ]
-            },
-            "22": {
-                text: "O laboratório do Dr. Yamamoto está localizado no nível 2, próximo aos observatórios. Você segue por corredores cada vez mais escuros, com a energia falhando em seções inteiras.\n\nA porta do laboratório está entreaberta. Dentro, encontra um caos de equipamentos quebrados e papéis espalhados. Houve claramente uma busca violenta.\n\nNo centro da sala, um holograma está pausado, mostrando uma estranha estrutura orbital próxima ao ponto de saída do salto hiperespacial. Parece artificial, definitivamente não natural.\n\nNo terminal principal, protegido por uma sequência de segurança, há um arquivo marcado como \"URGENTE - CAPITÃO\".",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: SEQUÊNCIA NUMÉRICA",
-                    description: "Para acessar o arquivo, você precisa resolver a sequência:\n8, 27, ?, 125, 216\n\nQual número falta?",
-                    options: [
-                        { text: "64", nextSection: "48", correct: true },
-                        { text: "36", nextSection: "49", correct: false },
-                        { text: "81", nextSection: "50", correct: false }
-                    ]
-                }
-            },
-            "23": {
-                text: "\"Quem é você realmente?\" você pergunta, mantendo distância. \"Esse distintivo não está autorizado nem mesmo para mim.\"\n\nO homem congela por um momento, então seu comportamento muda completamente. Ele se endireita e sorri com confiança.\n\n\"Perspicaz, Capitão. Teria sido mais fácil se você simplesmente corresse para as cápsulas como previsto.\" Ele não parece preocupado com sua presença. \"Meu nome não importa. Represento pessoas que têm grande interesse no que esta nave transporta.\"\n\n\"O salto foi apenas parcialmente sabotado. Não queríamos destruir a nave, apenas desviá-la para este setor para que meus associados pudessem recuperar o módulo Prometeu. Os colonos são apenas... cobertura conveniente.\"\n\nEle saca uma arma. \"Agora, temos aproximadamente 90 minutos antes que esta nave se desintegre. Você pode cooperar e me levar ao compartimento 772B, ou posso encontrá-lo sozinho depois de eliminar você.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar negociar para ganhar tempo.", nextSection: "51" },
-                    { text: "Atacar imediatamente, aproveitando sua proximidade.", nextSection: "52" },
-                    { text: "Fingir cooperação para descobrir mais sobre seus planos.", nextSection: "53" }
-                ]
-            },
-            "24": {
-                text: "\"Entendo,\" você diz, tentando parecer aliviado. \"Que bom que alguém está trabalhando nisso. Qual é a situação atual dos sistemas?\"\n\nO homem parece relaxar um pouco, voltando sua atenção ao console. \"Estou tentando restabelecer o controle após o... incidente. Alguns membros da tripulação estão complicando as coisas. Especialmente aqueles no laboratório.\"\n\nEnquanto ele fala, você nota algo estranho - ele está inserindo comandos para desativar os sistemas de suporte vital em várias seções da nave.\n\n\"O Diretor ficará satisfeito por você ter sobrevivido, Capitão,\" ele continua. \"Quase pensamos que tínhamos perdido você junto com os outros na ponte.\"\n\nVocê não estava sozinho na ponte quando acordou? E qual diretor?\n\nO que você faz?",
-                options: [
-                    { text: "Continuar o disfarce, tentando obter mais informações.", nextSection: "54" },
-                    { text: "Procurar uma arma ou objeto para neutralizá-lo.", nextSection: "55" },
-                    { text: "Ativar discretamente o alarme de segurança no seu comunicador.", nextSection: "56" }
-                ]
-            },
-            "25": {
-                type: "combat",
-                text: "Sem hesitar, você avança contra o desconhecido. O elemento surpresa funciona a seu favor - ele não espera um ataque frontal.",
-                combatData: {
-                    enemyName: "Sabotador Desconhecido",
-                    enemyInfo: "Armado com pistola de energia",
-                    playerHealth: 100,
-                    enemyHealth: 80,
-                    playerItems: ["Ferramenta de reparo", "Comunicador de emergência", "Kit médico básico"],
-                    outcomes: [
-                        { result: "victory", nextSection: "57" },
-                        { result: "defeat", nextSection: "58" }
-                    ]
-                }
-            },
-            "26": {
-                text: "Você insere o código 2255. O painel acende verde: \"Código correto. Sequência cancelada. Sistemas de suporte vital no setor de criogenia estabilizados.\"\n\nVocê suspira aliviado. Os colonos estão temporariamente seguros, mas o tempo continua correndo para o colapso do núcleo.\n\nEnquanto avalia suas próximas opções, uma nova mensagem surge no console: \"Transmissão recebida. Origem: desconhecida.\"\n\nAo abrir a mensagem, você vê coordenadas espaciais e uma mensagem críptica: \"A Prometeu está comprometida. Rendezvous em Delta-9. Elimine testemunhas.\"\n\nA mensagem claramente não era destinada a você.\n\nO que você faz?",
-                options: [
-                    { text: "Rastrear a origem da transmissão.", nextSection: "60" },
-                    { text: "Investigar o que é \"Prometeu\" nos bancos de dados da nave.", nextSection: "61" },
-                    { text: "Ignorar a mensagem e seguir para o setor de criogenia.", nextSection: "62" }
-                ]
-            },
-            "27": {
-                text: "Você insere o código 2250. O sistema pisca vermelho: \"Código incorreto. Uma tentativa restante.\"\n\nReanalisando o quebra-cabeça com atenção: o sistema Kepler-62 tem 2 planetas habitáveis confirmados, existem 2 cápsulas de escape funcionais, a nave tem 5 níveis, e resolvendo 3X + 7 = 22, temos X = 5.\n\nSua última chance:",
-                options: [
-                    { text: "Inserir o código 2255.", nextSection: "26" },
-                    { text: "Inserir o código 2505.", nextSection: "28" }
-                ]
-            },
-            "28": {
-                text: "Você insere o código 2505. O sistema pisca vermelho: \"Código incorreto. Acesso bloqueado. Alerta enviado à segurança.\"\n\nVocê tenta contornar o bloqueio, mas sem sucesso. Agora está preso, e o tempo está acabando. Você precisará encontrar outra forma de salvar os colonos.\n\nEnquanto pondera suas opções, ouve passos se aproximando pelo corredor. Alguém vem verificar o alerta de segurança.\n\nO que você faz?",
-                options: [
-                    { text: "Esconder-se e observar quem vem investigar.", nextSection: "63" },
-                    { text: "Preparar-se para confrontar quem vier.", nextSection: "64" },
-                    { text: "Fugir e buscar outro caminho para o setor de criogenia.", nextSection: "65" }
-                ]
-            },
-            "29": {
-                text: "Você acessa o sistema de manutenção e estabelece comunicação com Elena e Petrov. Usando o mapa da nave, você os guia através dos dutos de serviço.\n\n\"Há uma passagem de manutenção a dez metros à sua direita,\" você instrui. \"Isso levará vocês ao elevador de carga secundário, que ainda está operacional.\"\n\nEnquanto os guia, Elena compartilha mais informações: \"Antes do salto, interceptamos uma transmissão codificada. Petrov conseguiu decifrar parte dela - mencionava algo chamado 'Projeto Prometeu' e um 'módulo de contenção'. Você sabe do que se trata, Capitão?\"\n\nAntes que você possa responder, ouve sons de luta e gritos. A comunicação fica fragmentada.\n\nElena: \"Eles nos encontraram! São--\" A transmissão é cortada.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar restabelecer contato com Elena e Petrov.", nextSection: "66" },
-                    { text: "Dirigir-se ao local onde estavam para ajudá-los.", nextSection: "67" },
-                    { text: "Continuar sua missão, presumindo que foram capturados.", nextSection: "68" }
-                ]
-            },
-            "30": {
-                text: "Você se dirige rapidamente à sala de comunicações, atravessando corredores instáveis. No caminho, encontra evidências de conflito - marcas de queimaduras nas paredes, objetos espalhados, como se houvesse uma luta recente.\n\nAo chegar à sala de comunicações, encontra um técnico ferido - Oficial Yusuf - trabalhando no console de transmissão. Ele se vira ao ouvir você entrar, visivelmente aliviado.\n\n\"Capitão! Graças a Deus você está vivo. Tentei estabelecer contato com qualquer nave na proximidade, mas algo está bloqueando nossas transmissões de longo alcance.\"\n\nYusuf aponta para um monitor mostrando dados de comunicação. \"Há uma interferência artificial cobrindo todas as frequências principais. Não é natural - alguém não quer que peçamos ajuda.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar contornar a interferência para enviar um sinal de socorro.", nextSection: "77" },
-                    { text: "Perguntar a Yusuf o que ele sabe sobre o incidente.", nextSection: "78" },
-                    { text: "Verificar os registros de comunicação anteriores ao salto.", nextSection: "79" }
                 ]
             },
             "36": {
@@ -968,210 +832,7 @@
                     { text: "Reconsiderar e procurar informações sobre o Projeto Prometeu nos bancos de dados da nave.", nextSection: "101" }
                 ]
             },
-            "39": {
-                text: "Você segue rapidamente para o laboratório médico no nível 2. A porta está entreaberta, as luzes piscam erraticamente, revelando momentaneamente a desordem interior.\n\nEntrando com cautela, você encontra o laboratório revirado - equipamentos quebrados, armários abertos, dados médicos espalhados. Há manchas de sangue no chão, formando um rastro em direção a uma porta lateral.\n\nSeguindo o rastro, você chega a uma pequena sala de armazenamento. Ali, encontra o corpo da Dra. Khoury. Ela foi morta por um ferimento preciso na base do crânio - trabalho profissional, não um ataque de pânico ou acidente.\n\nEm sua mão, ela ainda segura firmemente um dispositivo de armazenamento de dados. Seu rosto congelado numa expressão de determinação, não de medo.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o dispositivo de armazenamento de dados.", nextSection: "105" },
-                    { text: "Verificar os registros médicos da tripulação por qualquer anomalia.", nextSection: "106" },
-                    { text: "Procurar o bracelete médico que viu na gravação de segurança.", nextSection: "107" }
-                ]
-            },
-            "42": {
-                text: "Você tenta conectar A-B-E-D. O painel pisca vermelho e exibe uma mensagem de erro: \"Caminho sobrecarregado. O nó 'B' excede a capacidade máxima de conexões. Tentativa falhou.\"\n\nEssa não era a solução correta. O nó B ficaria com 3 conexões, excedendo o limite de 2 por nó.\n\nVocê precisa tentar outra configuração.",
-                options: [
-                    { text: "Tentar conectar A-C-B-D", nextSection: "43", correct: true },
-                    { text: "Tentar conectar A-C-E-D", nextSection: "44", correct: false }
-                ]
-            },
-            "43": {
-                text: "Você conecta A-C-B-D. O painel acende verde e a porta se abre com um silvo hidráulico. \"Acesso concedido ao setor de criogenia.\"\n\nAo entrar, você se depara com um vasto salão onde 200 cápsulas de criossono estão alinhadas em fileiras organizadas. Luzes de status piscam em várias delas - nem todas em verde.\n\nUm rápido diagnóstico confirma seu temor: 30 cápsulas estão em estado crítico, com falhas nos sistemas de suporte vital. Em aproximadamente 25 minutos, esses colonos começarão a sofrer danos cerebrais irreversíveis.\n\nNo centro da sala, você encontra dois tripulantes - o Oficial Médico Rivera e a Técnica de Sistemas Zhang. Eles parecem aliviados ao vê-lo.\n\n\"Capitão!\" exclama Rivera. \"Graças a Deus. Estamos tentando estabilizar as cápsulas críticas, mas o sistema principal está bloqueado.\"\n\nO que você faz?",
-                options: [
-                    { text: "Ajudar Rivera e Zhang a estabilizar as cápsulas críticas.", nextSection: "102" },
-                    { text: "Questionar Rivera e Zhang sobre o que aconteceu durante o salto.", nextSection: "103" },
-                    { text: "Informá-los sobre a sabotagem e pedir que ajudem na evacuação.", nextSection: "104" }
-                ]
-            },
-            "44": {
-                text: "Você tenta conectar A-C-E-D. O painel pisca vermelho e exibe uma mensagem de erro: \"Caminho instável. Fluxo de energia incompatível com nós selecionados. Tentativa falhou.\"\n\nEssa configuração não funciona devido à incompatibilidade entre os nós C e E neste sistema específico.\n\nVocê precisa tentar outra configuração.",
-                options: [
-                    { text: "Tentar conectar A-B-E-D", nextSection: "42", correct: false },
-                    { text: "Tentar conectar A-C-B-D", nextSection: "43", correct: true }
-                ]
-            },
-            "45": {
-                text: "Você hesita, mas decide usar o reconhecimento biométrico do Oficial Chen para desbloquear seu mensageiro. Com cuidado, posiciona o olho aberto do oficial falecido diante do scanner.\n\nApós alguns segundos tensos, o dispositivo emite um bipe de confirmação e desbloqueio. A última mensagem recebida por Chen aparece na tela:\n\n\"Alerta de segurança nível 1. Detectados três indivíduos não autorizados na sala de controle de salto. Credenciais falsificadas detectadas. A verificação de segurança segunda foi iniciada, mas interrompida por comando administrativo da Dra. Khoury. Investigação imediata necessária.\"\n\nEsta mensagem foi enviada apenas 30 minutos antes do salto. Chen deve ter se dirigido imediatamente ao armamento para se preparar, mas foi emboscado aqui.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o resto das mensagens no dispositivo.", nextSection: "126" },
-                    { text: "Procurar outras pistas no Armamento.", nextSection: "46" },
-                    { text: "Pegar qualquer arma restante e continuar sua missão.", nextSection: "47" }
-                ]
-            },
-            "46": {
-                text: "Você decide investigar o Armamento mais detalhadamente. A sala mostra sinais de uma luta intensa - prateleiras tombadas, marcas de disparos nas paredes, e diversos equipamentos destruídos.\n\nNo terminal de segurança, você encontra o registro de acesso. O último mostra que o Oficial Chen entrou 15 minutos antes do salto, seguido por três outros acessos usando credenciais administrativas - todas da Dra. Khoury, o que é extremamente incomum.\n\nEm um compartimento parcialmente oculto sob o balcão principal, você encontra algo que os intrusos não descobriram: uma maleta de segurança. Dentro dela há um rifle de pulso de alta potência e um comunicador de emergência independente.\n\nO comunicador contém uma mensagem de Chen: \"Yamamoto tinha razão. Infiltração confirmada. Compartimento 772B comprometido. Protocolo Ômega iniciado.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar entender o que é o Protocolo Ômega.", nextSection: "127" },
-                    { text: "Pegar o rifle e comunicador e procurar o Dr. Yamamoto.", nextSection: "22" },
-                    { text: "Pegar o equipamento e ir diretamente ao compartimento 772B.", nextSection: "37" }
-                ]
-            },
-            "47": {
-                text: "Com determinação, você busca por armas restantes no armamento. A maioria das armas de mão desapareceu, mas você descobre um compartimento secreto que aparentemente os sabotadores não encontraram.\n\nDentro, há um rifle de pulso, duas granadas de choque e um escudo de energia pessoal - equipamento de elite, normalmente reservado para situações de extrema emergência. Há também um pequeno kit médico.\n\nEquipado e mais confiante, você decide seu próximo passo. O tempo continua correndo - o sistema da nave anuncia que restam apenas 85 minutos até o colapso total do núcleo.\n\nO que você faz?",
-                options: [
-                    { text: "Ir ao setor de criogenia para salvar os colonos.", nextSection: "20" },
-                    { text: "Procurar pelo compartimento 772B mencionado nas conversas.", nextSection: "37" },
-                    { text: "Tentar localizar sobreviventes da tripulação para formar um grupo.", nextSection: "128" }
-                ]
-            },
-            "48": {
-                text: "Você insere \"64\" e o terminal acende em verde. \"Acesso concedido.\"\n\nO arquivo se abre, revelando um relatório urgente do Dr. Yamamoto, acompanhado de imagens e dados:\n\n\"Capitão, se estiver lendo isto, é porque minhas suspeitas se confirmaram. A anomalia que detectei não é natural - é uma estação de interceptação camuflada. Alguém sabia nossa rota e preparou uma armadilha.\n\nMais perturbador ainda é que o sinal emitido pela estação contém códigos que apenas pessoal da Aliança conheceria. Isso significa que temos um ou mais traidores a bordo.\n\nO verdadeiro propósito desta missão não é colonização. A nave transporta um dispositivo experimental de terraformação chamado 'Módulo Prometeu' no compartimento secreto 772B. Apenas o comando de alto escalão da Aliança sabe disso.\n\nSuspeito que o ataque iminente seja para roubar esta tecnologia. Se eu estiver correto, nosso salto será sabotado para nos desviar para o setor Delta-9, onde seremos abordados.\n\nTransferi a localização exata do módulo e o código de ativação para meu datapad pessoal. Encontre-o e proteja o módulo a todo custo. Se cair em mãos erradas, pode se tornar uma arma devastadora.\"\n\nJunto ao arquivo há uma imagem do compartimento 772B e sua localização precisa na nave.\n\nO que você faz?",
-                options: [
-                    { text: "Procurar o datapad do Dr. Yamamoto.", nextSection: "69" },
-                    { text: "Ir diretamente ao compartimento 772B.", nextSection: "70" },
-                    { text: "Alertar outros sobreviventes sobre a verdadeira natureza da missão.", nextSection: "71" }
-                ]
-            },
-            "49": {
-                text: "Você insere \"36\" na sequência. O terminal pisca vermelho: \"Sequência incorreta. Acesso negado.\"\n\nAnalisando novamente os números 8, 27, ?, 125, 216, você percebe que há um padrão matemático. Cada número é um cubo perfeito: 2³=8, 3³=27, 5³=125, 6³=216. O número que falta deve ser 4³, que é 64.\n\nVocê tem uma última tentativa:",
-                options: [
-                    { text: "Inserir 64", nextSection: "48" },
-                    { text: "Inserir 81", nextSection: "50" }
-                ]
-            },
-            "50": {
-                text: "Você insere \"81\" na sequência. O terminal pisca vermelho: \"Sequência incorreta. Acesso negado. Sistema bloqueado.\"\n\nFracassou na tentativa de acessar o arquivo do Dr. Yamamoto. O terminal agora está bloqueado, e um alarme silencioso provavelmente foi ativado.\n\nEnquanto considera suas opções, você nota uma pequena anotação escrita à mão sob o teclado: \"Em caso de falha, verificar observatório estelar, constelação de Lyra.\" É a caligrafia de Yamamoto.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Procurar mais pistas no próprio laboratório.", nextSection: "129" },
-                    { text: "Abandonar a busca e seguir para o setor de criogenia.", nextSection: "20" }
-                ]
-            },
-            "51": {
-                text: "\"Espere,\" você diz, mantendo a calma apesar do coração acelerado. \"Se é o Módulo Prometeu que você quer, podemos trabalhar juntos. Eu também preciso acessá-lo.\"\n\nO homem estreita os olhos, a arma ainda apontada para você. \"Continue...\"\n\n\"Sou o capitão. Tenho acesso a áreas restritas. Posso levá-lo ao compartimento, mas preciso de informações. Como você sabe sobre o Prometeu? Quem é o 'Diretor' que mencionou?\"\n\nEle considera por um momento. \"Informação por informação, Capitão. O Diretor é o líder da Divisão de Operações Especiais da Nova Terra. Quanto ao Prometeu... digamos que a Aliança criou algo muito mais perigoso do que terraformação.\"\n\nSua história parece coincidir com as pistas que você encontrou. Mas você ainda não confia nele completamente.\n\nO que você faz?",
-                options: [
-                    { text: "Continuar a negociação, tentando obter mais informações.", nextSection: "130" },
-                    { text: "Fingir cooperação enquanto procura uma oportunidade de subjugá-lo.", nextSection: "131" },
-                    { text: "Propor uma aliança genuína para investigar o módulo juntos.", nextSection: "132" }
-                ]
-            },
-            "52": {
-                type: "combat",
-                text: "Você decide atacar antes que ele possa usar a arma. Lançando-se para frente, tenta desarmá-lo em um movimento rápido.",
-                combatData: {
-                    enemyName: "Agente Infiltrado",
-                    enemyInfo: "Treinamento avançado em combate",
-                    playerHealth: 100,
-                    enemyHealth: 90,
-                    playerItems: ["Canivete de emergência", "Fragmento metálico", "Cilindro de oxigênio portátil"],
-                    outcomes: [
-                        { result: "victory", nextSection: "72" },
-                        { result: "defeat", nextSection: "73" }
-                    ]
-                }
-            },
-            "53": {
-                text: "\"Tudo bem,\" você diz, levantando as mãos em sinal de rendição. \"Não precisa de violência. Posso levá-lo ao compartimento 772B. Também quero sobreviver a isso.\"\n\nO homem parece surpreso com sua cooperação, mas mantém a arma apontada. \"Sábia decisão, Capitão. Lidere o caminho, mas sem truques.\"\n\nVocê começa a guiá-lo pelos corredores, aparentemente em direção ao nível 4. Enquanto caminham, tenta extrair mais informações.\n\n\"Então, o Prometeu não é um dispositivo de terraformação?\"\n\n\"É bem mais que isso,\" ele responde. \"Em teoria, deveria fazer o ambiente de um planeta se adaptar às necessidades humanas. Na prática, o processo é extremamente destrutivo. Toda vida nativa é eliminada. É uma máquina de extinção, não de criação.\"\n\nO que você faz?",
-                options: [
-                    { text: "Continuar questionando-o enquanto caminham.", nextSection: "133" },
-                    { text: "Tentar desarmá-lo em um momento oportuno.", nextSection: "134" },
-                    { text: "Levá-lo a uma armadilha em vez do verdadeiro compartimento.", nextSection: "135" }
-                ]
-            },
-            "57": {
-                text: "Vocês lutam ferozmente. Ele é forte e treinado, mas você tem a vantagem inicial. Durante a luta, uma pistola de energia cai de seu coldre. Você consegue afastá-lo o suficiente para alcançar a arma.\n\nApontando para ele, você exige respostas. O homem ri, apesar da situação. \"Atire se quiser, Capitão. Meus companheiros já estão acessando o módulo. Esta nave está condenada de qualquer forma.\"\n\nVocê nocauteia o homem com a coronha da arma e o amarra firmemente usando cabos de emergência. Ele pode ter informações valiosas quando acordar.\n\nUm alarme soa de repente, e a voz robótica anuncia: \"Alerta. Violação de segurança no nível 5. Acesso não autorizado às cápsulas de escape.\"\n\nO que você faz?",
-                options: [
-                    { text: "Ir imediatamente para o nível 5 para verificar as cápsulas de escape.", nextSection: "74" },
-                    { text: "Procurar o compartimento 772B mencionado pelo infiltrado.", nextSection: "75" },
-                    { text: "Acordar o homem e forçá-lo a revelar mais informações.", nextSection: "76" }
-                ]
-            },
-            "58": {
-                text: "Seu ataque surpresa falha. O homem, claramente treinado para situações de combate, esquiva-se com impressionante agilidade e contra-ataca com precisão brutal.\n\nVocê sente uma dor aguda no abdômen - ele conseguiu acertar um golpe especializado em um ponto de pressão. Sua visão escurece momentaneamente enquanto você cai de joelhos.\n\n\"Impulsivo e previsível,\" ele comenta friamente, apontando a arma para sua cabeça. \"Típico da Aliança.\"\n\nQuando sua visão clareia, ele está segurando um injetor contra seu pescoço. \"Não se preocupe, Capitão. Não vou matá-lo... ainda. Você ainda pode ser útil.\"\n\nVocê sente a picada da agulha e uma sensação gelada se espalhando pelo seu corpo. Seus membros ficam pesados, mas você permanece consciente.\n\n\"Agora, vamos encontrar o compartimento 772B juntos, quer você queira ou não.\"",
-                options: [
-                    { text: "Tentar resistir ao sedativo e buscar uma oportunidade de fuga.", nextSection: "142" },
-                    { text: "Fingir cooperação enquanto espera o efeito diminuir.", nextSection: "143" },
-                    { text: "Tentar negociar mesmo em posição de desvantagem.", nextSection: "144" }
-                ]
-            },
-            "69": {
-                text: "Você decide procurar o datapad do Dr. Yamamoto. Vasculhando o laboratório, não o encontra entre os escombros. Considerando o comportamento metódico de Yamamoto, ele provavelmente o escondeu em um local seguro.\n\nNo canto do laboratório, você nota um pequeno cofre pessoal parcialmente ocultado sob uma mesa derrubada. Está trancado com um scanner biométrico.\n\nApós algumas tentativas, você percebe que não conseguirá abri-lo sem a biometria de Yamamoto ou equipamento especializado.\n\nEnquanto pondera suas opções, encontra uma anotação manuscrita presa sob o teclado do terminal principal: \"Lembre-se: segurança no observatório estelar. Constelação de Lyra.\"\n\nO observatório estelar fica no mesmo nível, apenas alguns corredores de distância.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Tentar forçar o cofre usando ferramentas disponíveis no laboratório.", nextSection: "109" },
-                    { text: "Abandonar a busca pelo datapad e ir diretamente ao compartimento 772B.", nextSection: "110" }
-                ]
-            },
-            "70": {
-                text: "Com a localização do compartimento 772B em mãos, você se dirige diretamente para lá. O caminho é desafiador - áreas danificadas, portas de emergência fechadas, e ocasionalmente, sinais de luta recente.\n\nAo chegar ao local, você encontra uma parede aparentemente normal no corredor do nível 4. Seguindo as instruções do arquivo de Yamamoto, você pressiona uma sequência específica de painéis na parede, revelando um scanner oculto.\n\nApós uma verificação biométrica, uma porta camuflada desliza silenciosamente, revelando um corredor curto que termina em uma sala blindada. No centro, há uma estrutura cilíndrica de aproximadamente dois metros de altura - o Módulo Prometeu.\n\nAo entrar na sala, você ouve vozes se aproximando pelo corredor principal. Não há tempo para escapar.\n\nO que você faz?",
-                options: [
-                    { text: "Esconder-se dentro da sala secreta e fechar a porta.", nextSection: "111" },
-                    { text: "Preparar-se para confrontar quem estiver se aproximando.", nextSection: "112" },
-                    { text: "Tentar remover ou destruir o Módulo Prometeu.", nextSection: "113" }
-                ]
-            },
-            "71": {
-                text: "Você decide que a informação é importante demais para manter apenas para si. Ativando o comunicador, você tenta contatar os sobreviventes conhecidos.\n\n\"Atenção a todos os tripulantes. Aqui é o Capitão Reiner. A missão foi comprometida. A nave transporta tecnologia experimental classificada - o Módulo Prometeu. É o verdadeiro alvo dos sabotadores. Estamos lidando com uma operação hostil organizada.\"\n\nApós alguns segundos, Elena responde: \"Prometeu? Capitão, isso explica muita coisa. Petrov conhece o projeto.\"\n\nO Tenente Rodriguez também responde, sua voz tensa: \"Capitão, estamos sitiados no laboratório. Três hostis armados tentando entrar. Precisamos de--\" A transmissão é cortada por sons de explosão.\n\nOutro comunicador se ativa, uma voz que você não reconhece: \"Impressionante, Capitão. Economia de tempo para todos nós. Agora sabemos que você tem a informação que precisamos. Temos controle de várias seções da nave. Sugiro um acordo: sua vida e a dos colonos pela localização exata do módulo.\"\n\nO que você faz?",
-                options: [
-                    { text: "Rejeitar o acordo e organizar os sobreviventes para resistir.", nextSection: "114" },
-                    { text: "Fingir aceitar para ganhar tempo enquanto planeja um contra-ataque.", nextSection: "115" },
-                    { text: "Propor um encontro face a face para negociação.", nextSection: "116" }
-                ]
-            },
-            "94": {
-                text: "\"Interessante, Elena,\" você responde calmamente. \"Sempre suspeitei que havia mais nesta missão do que nos contaram. Continue.\"\n\nSentindo sua aparente receptividade, ela elabora: \"A Aliança não está terraformando planetas para colonização, Capitão. Estão criando armas planetárias. O Prometeu pode reconfigurar um ecossistema inteiro em questão de semanas - eliminando toda vida nativa no processo.\"\n\n\"Nova Terra descobriu a verdade e me enviou para impedir que essa tecnologia seja desenvolvida. Não somos terroristas - estamos tentando evitar um genocídio galático.\"\n\nSua voz muda para um tom mais urgente: \"Os agentes da Aliança estão tentando recuperar o módulo agora. Se o levarem, será usado como arma. Precisamos garantir que isso não aconteça. Você está conosco, Capitão? Ou com aqueles que mentiriam sobre exterminar mundos inteiros?\"\n\nO que você faz?",
-                options: [
-                    { text: "Continuar fingindo aliança para obter mais informações.", nextSection: "212" },
-                    { text: "Revelar que estava testando sua lealdade e confrontá-la.", nextSection: "213" },
-                    { text: "Propor uma terceira alternativa: destruir o Prometeu para que ninguém o tenha.", nextSection: "214" }
-                ]
-            },
-            "95": {
-                text: "\"Basta de meias verdades, Elena,\" você exige firmemente. \"Quem é você realmente? O que Nova Terra quer com o Prometeu? E por que devo acreditar que a Aliança é a vilã nesta história?\"\n\nHá um longo silêncio antes que ela responda, sua voz agora completamente diferente - fria e calculista: \"Impressionante intuição, Capitão. Muito bem, aqui está a verdade: sou Comandante Lyra Voss, Inteligência de Nova Terra.\"\n\n\"O Prometeu não é um dispositivo de terraformação - é uma arma de extinção planetária. A Aliança planeja usá-lo para 'limpar' mundos contestados antes da colonização. Estamos aqui para impedir isso.\"\n\n\"Quanto a Petrov - ele realmente não sabe quem sou. Um peão útil que trabalhou no projeto antes de desenvolver uma consciência. Assim como você, ele acreditou na mentira da terraformação benéfica.\"\n\n\"Agora você tem uma escolha, Capitão. Ajude-nos a recuperar o Prometeu para que possamos destruí-lo, ou fique no caminho e morra com esta nave.\"\n\nO que você faz?",
-                options: [
-                    { text: "Fingir cooperação enquanto planeja detê-la.", nextSection: "215" },
-                    { text: "Recusar diretamente e alertar outros sobreviventes sobre Elena/Lyra.", nextSection: "216" },
-                    { text: "Questionar criticamente as alegações sobre a Aliança e o Prometeu.", nextSection: "217" }
-                ]
-            },
-            "96": {
-                text: "Você decide que não pode confiar em Elena e precisa agir por conta própria. Sem responder, encerra abruptamente a comunicação e bloqueia o canal.\n\nO tempo é essencial - restam apenas 78 minutos até o colapso do núcleo. Usando os esquemas da nave e os dados de consumo energético, você identifica uma anomalia no nível 4 que deve ser o compartimento 772B.\n\nNavegando pelos corredores danificados e dutos de manutenção, você finalmente localiza o que parece ser uma parede comum, mas com sutis diferenças na textura do metal. Após uma busca cuidadosa, encontra um painel de acesso oculto.\n\nAo ativá-lo, uma interface de segurança sofisticada solicita identificação biométrica e um código de acesso de alto nível.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar usar suas credenciais de capitão para acessar o sistema.", nextSection: "97" },
-                    { text: "Tentar hackear o sistema de segurança usando seu conhecimento técnico.", nextSection: "98" },
-                    { text: "Procurar por entradas alternativas ou dutos de manutenção que levem ao compartimento.", nextSection: "218" }
-                ]
-            },
-            "97": {
-                text: "Você decide tentar suas credenciais de capitão. Posicionando sua mão no scanner biométrico, anuncia claramente: \"Capitão Alex Reiner, autorização Alfa-Zero-Nove-Seven.\"\n\nO scanner analisa sua mão, retina e padrão vocal. Após alguns segundos tensos, a interface responde: \"Verificação biométrica confirmada. Capitão Reiner identificado. No entanto, autorização insuficiente para acesso ao Projeto Prometeu. Requer autorização Ômega.\"\n\nUma mensagem adicional aparece: \"Notificação: Protocolo de emergência disponível. Em caso de comprometimento crítico da nave, o capitão pode iniciar Protocolo Crisálida com aprovação secundária de oficial de nível Ômega.\"\n\nVocê nunca ouviu falar deste protocolo antes.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar obter mais informações sobre o Protocolo Crisálida.", nextSection: "219" },
-                    { text: "Tentar hackear o sistema para contornar a necessidade de autorização Ômega.", nextSection: "98" },
-                    { text: "Procurar um oficial com autorização Ômega entre os sobreviventes.", nextSection: "220" }
-                ]
-            },
-            "98": {
-                text: "Você decide tentar hackear o sistema de segurança. Usando seu conhecimento dos protocolos da nave e técnicas de override de emergência, começa a trabalhar no painel de acesso.\n\nO sistema é extremamente sofisticado, com múltiplas camadas de proteção. Após alguns minutos frustrantes, você localiza uma potencial vulnerabilidade - um bypass de manutenção projetado para técnicos em caso de falha do sistema principal.\n\nVocê conecta seu comunicador ao painel e executa uma sequência de comandos de diagnóstico de emergência. O sistema hesita, analisa os comandos, então exibe:\n\n\"Modo de manutenção ativado. Acesso limitado concedido. Funções de segurança permanecem ativas.\"\n\nA porta desliza parcialmente, revelando a entrada do compartimento secreto, mas um segundo campo de força permanece ativo, bloqueando o acesso completo.\n\nAtravés do campo, você vê um espaço laboratorial e, no centro, uma estrutura cilíndrica que deve ser o Módulo Prometeu.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar desativar o campo de força secundário.", nextSection: "221" },
-                    { text: "Examinar o módulo Prometeu através do campo de força.", nextSection: "222" },
-                    { text: "Verificar se há outros controles ou terminais acessíveis neste modo limitado.", nextSection: "223" }
-                ]
-            },
-            "99": {
-                text: "Você decide que precisa encontrar alguém com autorização adequada. O Dr. Yamamoto parecia conhecer o Prometeu, então ele ou seus arquivos podem ter a chave para acessar o compartimento.\n\nConsultando o mapa da nave, você se dirige ao laboratório do Dr. Yamamoto no nível 2. O caminho é perigoso, com seções danificadas e sistemas instáveis, mas você consegue chegar.\n\nAo entrar no laboratório, encontra sinais de busca violenta - equipamentos quebrados, dados espalhados, e evidências de luta. Não há sinal do Dr. Yamamoto, mas você nota uma mensagem discreta arranhada na parte inferior de sua mesa: \"Observatório - Lyra\".\n\nO observatório estelar fica próximo, apenas alguns corredores de distância.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Procurar mais pistas no laboratório antes de sair.", nextSection: "224" },
-                    { text: "Tentar acessar os arquivos privados do Dr. Yamamoto no terminal do laboratório.", nextSection: "225" }
-                ]
-            },
-            "108": {
-                text: "Você segue a pista e dirige-se ao observatório estelar. O caminho é relativamente seguro, embora algumas seções estejam operando com energia de emergência.\n\nAo entrar no observatório, você encontra uma sala circular com enormes janelas dando para o espaço. A estação de trabalho principal está desligada, mas você nota que o projetor holográfico do mapa estelar está ativo, mostrando a constelação de Lyra.\n\nLembrando-se da pista, você examina a projeção. A constelação parece normal à primeira vista, mas então percebe que uma das estrelas está piscando sutilmente - não um comportamento natural da projeção.\n\nAo tocar nesta estrela específica, o projetor emite um bipe suave e um compartimento oculto se abre sob a estação de trabalho. Dentro, você encontra um datapad protegido e uma chave de acesso com o emblema do projeto Prometeu.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o conteúdo do datapad.", nextSection: "242" },
-                    { text: "Pegar a chave de acesso e ir diretamente ao compartimento 772B.", nextSection: "243" },
-                    { text: "Verificar se há mais pistas ocultas no observatório.", nextSection: "244" }
-                ]
-            },
+            // Outras seções da história...
             "final": {
                 text: "À medida que você pilota a nave de fuga através dos destroços da Esperança, olha pela janela uma última vez. A enorme estrutura que foi seu lar por tanto tempo agora se desintegra em uma explosão silenciosa no vácuo do espaço.\n\nNa cabine atrás de você, os sobreviventes que conseguiu resgatar - uma mistura de tripulantes e colonos despertados - observam em silêncio. Alguns choram, outros simplesmente encaram o vazio, processando o trauma e a perda.\n\nO módulo Prometeu está seguro, seja para ser destruído ou entregue às autoridades adequadas, dependendo das escolhas que você fez. A verdade sobre a sabotagem e os impostores veio à tona, embora a um custo terrível.\n\nNo painel de navegação, as coordenadas da estação mais próxima piscam - está a três semanas de distância no espaço normal. Uma viagem longa com recursos limitados, mas há esperança.\n\nEnquanto a nave acelera para longe dos destroços, você reflete sobre as decisões que tomou, as vidas que conseguiu salvar e aquelas que teve que deixar para trás. Algumas escolhas o assombrarão para sempre, outras trarão um senso de dever cumprido.\n\nUma coisa é certa: nada será como antes. E enquanto as estrelas se estendem infinitas à sua frente, você se pergunta o que o futuro reserva para os sobreviventes da Esperança.\n\nFIM DA AVENTURA",
                 options: [
@@ -1232,57 +893,11 @@
         let textScrollTimeout;
         let gameHistory = [];
         let menuOpen = false;
-        
-        // -------------------- VARIÁVEIS DE ÁUDIO --------------------
-        const audioElements = {
-            intro_music: document.getElementById('intro_music'),
-            game_theme: document.getElementById('game_theme'),
-            music1: document.getElementById('music1'),
-            music2: document.getElementById('music2'),
-            music3: document.getElementById('music3')
-        };
-        let currentMusic = null;
+        let audioEnabled = true;
 
         // -------------------- FUNÇÕES DE UTILITÁRIO --------------------
         function getRandomItem(array) {
             return array[Math.floor(Math.random() * array.length)];
-        }
-        
-        function getRandomGameMusic() {
-            const musicKeys = ['game_theme', 'music1', 'music2', 'music3'];
-            return audioElements[musicKeys[Math.floor(Math.random() * musicKeys.length)]];
-        }
-        
-        function playIntroMusic() {
-            if (currentMusic) {
-                currentMusic.pause();
-                currentMusic.currentTime = 0;
-            }
-            
-            currentMusic = audioElements.intro_music;
-            
-            try {
-                currentMusic.volume = 0.5;
-                currentMusic.play().catch(e => console.log("Erro ao reproduzir áudio de introdução:", e));
-            } catch (error) {
-                console.log("Erro ao tocar música de introdução:", error);
-            }
-        }
-        
-        function playRandomMusic() {
-            if (currentMusic) {
-                currentMusic.pause();
-                currentMusic.currentTime = 0;
-            }
-            
-            currentMusic = getRandomGameMusic();
-            
-            try {
-                currentMusic.volume = 0.5;
-                currentMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
-            } catch (error) {
-                console.log("Erro ao trocar música:", error);
-            }
         }
         
         function showScreen(screenId) {
@@ -1295,27 +910,6 @@
             
             // Mostrar a tela solicitada
             document.getElementById(screenId).classList.remove('hidden');
-            
-            // Tocar música adequada dependendo da tela
-            if (screenId === 'start-screen') {
-                playIntroMusic();
-            } else if (screenId === 'intro-screen') {
-                playIntroMusic();
-            } else {
-                playRandomMusic();
-            }
-        }
-            
-            // Esconder todas as telas
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            
-            // Mostrar a tela solicitada
-            document.getElementById(screenId).classList.remove('hidden');
-            
-            // Tocar música aleatória ao mudar de tela
-            playRandomMusic();
         }
 
         function saveGame() {
@@ -1393,16 +987,22 @@
             showScreen('history-screen');
         }
         
-        // -------------------- GERADORES DE ESTRLAS E NAVE --------------------
+        // -------------------- GERADORES DE ESTRELAS --------------------
         function generateStars() {
-            const starsContainer = document.querySelector('.stars');
+            const starsContainer = document.getElementById('stars-container');
+            if (!starsContainer) return;
+            
+            // Limpar estrelas existentes
+            starsContainer.innerHTML = '';
+            
             const numberOfStars = 200;
             
             for (let i = 0; i < numberOfStars; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
-                star.style.width = `${Math.random() * 3}px`;
-                star.style.height = star.style.width;
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.top = `${Math.random() * 100}%`;
                 star.style.animationDelay = `${Math.random() * 2}s`;
@@ -1412,41 +1012,63 @@
         
         // -------------------- HANDLERS DA TELA INICIAL --------------------
         function setupStartScreen() {
-            document.getElementById('start-button').addEventListener('click', function() {
-                showScreen('intro-screen');
-                startIntroAnimation();
-            });
-
-            document.getElementById('continue-button').addEventListener('click', function() {
-                if (!loadGame()) {
-                    alert("Não foi possível carregar o jogo salvo.");
-                }
-            });
-
-            document.getElementById('skip-to-story').addEventListener('click', function() {
-                showScreen('story-screen');
-                loadSection('intro');
-            });
-            
             generateStars();
+            
+            const startButton = document.getElementById('start-button');
+            const continueButton = document.getElementById('continue-button');
+            const skipButton = document.getElementById('skip-to-story');
+            
+            if (startButton) {
+                startButton.addEventListener('click', function() {
+                    showScreen('intro-screen');
+                    startIntroAnimation();
+                });
+            }
+
+            if (continueButton) {
+                continueButton.addEventListener('click', function() {
+                    if (!loadGame()) {
+                        alert("Não foi possível carregar o jogo salvo.");
+                    }
+                });
+            }
+
+            if (skipButton) {
+                skipButton.addEventListener('click', function() {
+                    showScreen('story-screen');
+                    loadSection('intro');
+                });
+            }
         }
         
         // -------------------- HANDLERS DA ANIMAÇÃO INTRODUTÓRIA --------------------
         function startIntroAnimation() {
             const introText = document.getElementById('intro-text');
+            if (!introText) return;
             
             // Configurar a duração da animação baseada no SCROLL_SPEED
             introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
             
             // Configurar botões de controle do prólogo
-            document.getElementById('skip-intro-button').addEventListener('click', function() {
-                clearTimeout(textScrollTimeout);
-                showScreen('story-screen');
-                loadSection('intro');
-            });
+            const skipButton = document.getElementById('skip-intro-button');
+            const pauseButton = document.getElementById('pause-intro');
+            const resumeButton = document.getElementById('resume-intro');
             
-            document.getElementById('pause-intro').addEventListener('click', pauseIntroText);
-            document.getElementById('resume-intro').addEventListener('click', resumeIntroText);
+            if (skipButton) {
+                skipButton.addEventListener('click', function() {
+                    clearTimeout(textScrollTimeout);
+                    showScreen('story-screen');
+                    loadSection('intro');
+                });
+            }
+            
+            if (pauseButton) {
+                pauseButton.addEventListener('click', pauseIntroText);
+            }
+            
+            if (resumeButton) {
+                resumeButton.addEventListener('click', resumeIntroText);
+            }
             
             // Tempo para transição para a história
             textScrollTimeout = setTimeout(() => {
@@ -1457,9 +1079,14 @@
         
         function pauseIntroText() {
             if (!introAnimationPaused) {
-                document.getElementById('intro-text').style.animationPlayState = 'paused';
-                document.getElementById('pause-intro').style.display = 'none';
-                document.getElementById('resume-intro').style.display = 'inline-block';
+                const introText = document.getElementById('intro-text');
+                const pauseButton = document.getElementById('pause-intro');
+                const resumeButton = document.getElementById('resume-intro');
+                
+                if (introText) introText.style.animationPlayState = 'paused';
+                if (pauseButton) pauseButton.style.display = 'none';
+                if (resumeButton) resumeButton.style.display = 'inline-block';
+                
                 introAnimationPaused = true;
                 
                 // Pausar também o timeout para a próxima tela
@@ -1470,20 +1097,17 @@
         function resumeIntroText() {
             if (introAnimationPaused) {
                 const introText = document.getElementById('intro-text');
-                introText.style.animationPlayState = 'running';
-                document.getElementById('resume-intro').style.display = 'none';
-                document.getElementById('pause-intro').style.display = 'inline-block';
+                const pauseButton = document.getElementById('pause-intro');
+                const resumeButton = document.getElementById('resume-intro');
+                
+                if (introText) introText.style.animationPlayState = 'running';
+                if (resumeButton) resumeButton.style.display = 'none';
+                if (pauseButton) pauseButton.style.display = 'inline-block';
+                
                 introAnimationPaused = false;
                 
-                // Recalcular quanto tempo resta baseado na posição atual da animação
-                const animationTime = SCROLL_SPEED;
-                const keyframes = ['translateY(100vh)', 'translateY(-300vh)'];
-                
-                const computedStyle = window.getComputedStyle(introText);
-                const currentTransform = computedStyle.transform || computedStyle.webkitTransform;
-                
                 // Estimativa simplificada do tempo restante
-                const remainingTime = animationTime * 1000 * 0.7; // 70% do tempo total
+                const remainingTime = SCROLL_SPEED * 1000 * 0.7; // 70% do tempo total
                 
                 textScrollTimeout = setTimeout(() => {
                     showScreen('story-screen');
@@ -1513,8 +1137,7 @@
                     ]
                 };
                 
-                currentSection = sectionId;
-                section = storyData[sectionId];
+                return loadSection(sectionId); // Recursão com a nova seção criada
             }
             
             // Adicionar ao histórico
@@ -1532,33 +1155,38 @@
             }
             
             // Seção normal de história
-            document.getElementById('section-id').textContent = `Seção ${sectionId}`;
-            document.getElementById('story-text').innerHTML = section.text.replace(/\n/g, '<br>');
-            
+            const sectionIdElem = document.getElementById('section-id');
+            const storyText = document.getElementById('story-text');
             const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
             
-            if (section.options && section.options.length > 0) {
-                section.options.forEach(option => {
+            if (sectionIdElem) sectionIdElem.textContent = `Seção ${sectionId}`;
+            if (storyText) storyText.innerHTML = section.text.replace(/\n/g, '<br>');
+            
+            if (optionsContainer) {
+                optionsContainer.innerHTML = '';
+                
+                if (section.options && section.options.length > 0) {
+                    section.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.classList.add('option-button');
+                        button.textContent = option.text;
+                        button.addEventListener('click', () => {
+                            console.log(`Clique em opção para seção: ${option.nextSection}`);
+                            loadSection(option.nextSection);
+                        });
+                        optionsContainer.appendChild(button);
+                    });
+                } else {
+                    console.warn(`A seção ${sectionId} não tem opções definidas.`);
+                    // Adicionar opção padrão para avançar para a seção final
                     const button = document.createElement('button');
                     button.classList.add('option-button');
-                    button.textContent = option.text;
+                    button.textContent = "Continuar para o final...";
                     button.addEventListener('click', () => {
-                        console.log(`Clique em opção para seção: ${option.nextSection}`);
-                        loadSection(option.nextSection);
+                        loadSection("final");
                     });
                     optionsContainer.appendChild(button);
-                });
-            } else {
-                console.warn(`A seção ${sectionId} não tem opções definidas.`);
-                // Adicionar opção padrão para avançar para a seção final
-                const button = document.createElement('button');
-                button.classList.add('option-button');
-                button.textContent = "Continuar para o final...";
-                button.addEventListener('click', () => {
-                    loadSection("final");
-                });
-                optionsContainer.appendChild(button);
+                }
             }
             
             showScreen('story-screen');
@@ -1566,33 +1194,52 @@
         
         // -------------------- HANDLERS DE MENU --------------------
         function setupMenu() {
-            document.getElementById('menu-button').addEventListener('click', toggleMenu);
+            const menuButton = document.getElementById('menu-button');
+            const saveGame_btn = document.getElementById('save-game');
+            const loadGame_btn = document.getElementById('load-game');
+            const viewHistory = document.getElementById('view-history');
+            const mainMenu = document.getElementById('main-menu');
+            const backFromHistory = document.getElementById('back-from-history');
             
-            document.getElementById('save-game').addEventListener('click', function() {
-                saveGame();
-                toggleMenu();
-            });
+            if (menuButton) {
+                menuButton.addEventListener('click', toggleMenu);
+            }
             
-            document.getElementById('load-game').addEventListener('click', function() {
-                loadGame();
-                toggleMenu();
-            });
+            if (saveGame_btn) {
+                saveGame_btn.addEventListener('click', function() {
+                    saveGame();
+                    toggleMenu();
+                });
+            }
             
-            document.getElementById('view-history').addEventListener('click', function() {
-                showHistory();
-                toggleMenu();
-            });
+            if (loadGame_btn) {
+                loadGame_btn.addEventListener('click', function() {
+                    loadGame();
+                    toggleMenu();
+                });
+            }
             
-            document.getElementById('main-menu').addEventListener('click', function() {
-                if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
-                    showScreen('start-screen');
-                }
-                toggleMenu();
-            });
+            if (viewHistory) {
+                viewHistory.addEventListener('click', function() {
+                    showHistory();
+                    toggleMenu();
+                });
+            }
+            
+            if (mainMenu) {
+                mainMenu.addEventListener('click', function() {
+                    if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
+                        showScreen('start-screen');
+                    }
+                    toggleMenu();
+                });
+            }
 
-            document.getElementById('back-from-history').addEventListener('click', function() {
-                showScreen('story-screen');
-            });
+            if (backFromHistory) {
+                backFromHistory.addEventListener('click', function() {
+                    showScreen('story-screen');
+                });
+            }
             
             // Fechar menu ao clicar fora dele
             document.addEventListener('click', function(event) {
@@ -1603,27 +1250,47 @@
         }
         
         function toggleMenu() {
+            const menuDropdown = document.getElementById('menu-dropdown');
+            if (!menuDropdown) return;
+            
             menuOpen = !menuOpen;
             
             if (menuOpen) {
-                document.getElementById('menu-dropdown').classList.add('active');
+                menuDropdown.classList.add('active');
             } else {
-                document.getElementById('menu-dropdown').classList.remove('active');
+                menuDropdown.classList.remove('active');
             }
         }
         
         // -------------------- HANDLERS DE COMBATE --------------------
         function setupCombat(section) {
             const combat = section.combatData;
+            if (!combat) return;
+            
+            const combatHeader = document.getElementById('combat-header');
+            const enemyName = document.getElementById('enemy-name');
+            const enemyInfo = document.getElementById('enemy-info');
+            const characterHealth = document.getElementById('character-health');
+            const enemyHealth = document.getElementById('enemy-health');
+            const characterItems = document.getElementById('character-items');
+            const actionsContainer = document.getElementById('combat-actions');
+            const combatLog = document.getElementById('combat-log');
+            
+            // Verificar se todos os elementos existem
+            if (!combatHeader || !enemyName || !enemyInfo || !characterHealth || 
+                !enemyHealth || !characterItems || !actionsContainer || !combatLog) {
+                console.error("Elementos de combate não encontrados");
+                return;
+            }
             
             // Configurar detalhes do combate
-            document.getElementById('combat-header').textContent = "COMBATE";
-            document.getElementById('enemy-name').textContent = combat.enemyName;
-            document.getElementById('enemy-info').textContent = combat.enemyInfo;
+            combatHeader.textContent = "COMBATE";
+            enemyName.textContent = combat.enemyName;
+            enemyInfo.textContent = combat.enemyInfo;
             
             // Restaurar saúde
-            document.getElementById('character-health').style.width = '100%';
-            document.getElementById('enemy-health').style.width = '100%';
+            characterHealth.style.width = '100%';
+            enemyHealth.style.width = '100%';
             
             // Itens aleatórios do jogador
             const randomPlayerItems = [];
@@ -1631,10 +1298,9 @@
                 randomPlayerItems.push(getRandomItem(randomItems));
             }
             
-            document.getElementById('character-items').innerHTML = `Arma: ${getRandomItem(randomWeapons)}<br>Itens: ${randomPlayerItems.join(', ')}`;
+            characterItems.innerHTML = `Arma: ${getRandomItem(randomWeapons)}<br>Itens: ${randomPlayerItems.join(', ')}`;
             
             // Configurar botões de ação
-            const actionsContainer = document.getElementById('combat-actions');
             actionsContainer.innerHTML = '';
             
             const actions = [
@@ -1657,13 +1323,15 @@
             showScreen('combat-screen');
             
             // Texto inicial do combate
-            document.getElementById('combat-log').innerHTML = section.text + '<br>Prepare-se para o combate!';
+            combatLog.innerHTML = section.text + '<br>Prepare-se para o combate!';
         }
         
         function performCombatAction(action, combat) {
             const log = document.getElementById('combat-log');
             const characterHealth = document.getElementById('character-health');
             const enemyHealth = document.getElementById('enemy-health');
+            
+            if (!log || !characterHealth || !enemyHealth) return;
             
             // Valores atuais de saúde
             let playerHealthValue = parseInt(characterHealth.style.width) || 100;
@@ -1752,11 +1420,20 @@
         // -------------------- HANDLERS DE QUEBRA-CABEÇA --------------------
         function setupPuzzle(section) {
             const puzzle = section.puzzleData;
+            if (!puzzle) return;
             
-            document.getElementById('puzzle-header').textContent = puzzle.title;
-            document.getElementById('puzzle-description').innerHTML = puzzle.description.replace(/\n/g, '<br>');
-            
+            const puzzleHeader = document.getElementById('puzzle-header');
+            const puzzleDescription = document.getElementById('puzzle-description');
             const puzzleContent = document.getElementById('puzzle-content');
+            const puzzleOptions = document.getElementById('puzzle-options');
+            
+            if (!puzzleHeader || !puzzleDescription || !puzzleContent || !puzzleOptions) {
+                console.error("Elementos de quebra-cabeça não encontrados");
+                return;
+            }
+            
+            puzzleHeader.textContent = puzzle.title;
+            puzzleDescription.innerHTML = puzzle.description.replace(/\n/g, '<br>');
             puzzleContent.innerHTML = '';
             
             // Adicionar visualização específica para diferentes tipos de quebra-cabeças
@@ -1826,46 +1503,66 @@
                 puzzleContent.appendChild(codePanel);
             }
             
-            const puzzleOptions = document.getElementById('puzzle-options');
             puzzleOptions.innerHTML = '';
             
-            puzzle.options.forEach(option => {
+            if (puzzle.options && puzzle.options.length > 0) {
+                puzzle.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.classList.add('puzzle-button');
+                    button.textContent = option.text;
+                    button.addEventListener('click', () => {
+                        // Efeito visual para feedback da escolha
+                        if (option.correct) {
+                            button.style.backgroundColor = "rgba(0, 100, 0, 0.9)";
+                            button.style.boxShadow = "0 0 15px #00ff00";
+                        } else {
+                            button.style.backgroundColor = "rgba(100, 0, 0, 0.9)";
+                            button.style.boxShadow = "0 0 15px #ff0000";
+                        }
+                        
+                        setTimeout(() => {
+                            loadSection(option.nextSection);
+                        }, 800);
+                    });
+                    puzzleOptions.appendChild(button);
+                });
+            } else {
+                // Opção de fallback
                 const button = document.createElement('button');
                 button.classList.add('puzzle-button');
-                button.textContent = option.text;
+                button.textContent = "Continuar...";
                 button.addEventListener('click', () => {
-                    // Efeito visual para feedback da escolha
-                    if (option.correct) {
-                        button.style.backgroundColor = "rgba(0, 100, 0, 0.9)";
-                        button.style.boxShadow = "0 0 15px #00ff00";
-                    } else {
-                        button.style.backgroundColor = "rgba(100, 0, 0, 0.9)";
-                        button.style.boxShadow = "0 0 15px #ff0000";
-                    }
-                    
-                    setTimeout(() => {
-                        loadSection(option.nextSection);
-                    }, 800);
+                    loadSection("10"); // Voltar para uma seção segura
                 });
                 puzzleOptions.appendChild(button);
-            });
+            }
             
             showScreen('puzzle-screen');
         }
         
         // -------------------- INICIALIZAÇÃO --------------------
         window.onload = function() {
-            // Adicionar as seções de fallback antes de iniciar
-            addFallbackSections();
-            setupStartScreen();
-            setupMenu();
-            playRandomMusic();
-            
-            if (localStorage.getItem(SAVE_KEY)) {
-                document.getElementById('continue-button').disabled = false;
+            try {
+                console.log("Inicializando o jogo...");
+                
+                // Adicionar seções de fallback automaticamente
+                addFallbackSections();
+                
+                // Inicializar interface e eventos
+                setupStartScreen();
+                setupMenu();
+                
+                // Verificar se há um jogo salvo
+                if (localStorage.getItem(SAVE_KEY)) {
+                    const continueButton = document.getElementById('continue-button');
+                    if (continueButton) continueButton.disabled = false;
+                }
+                
+                console.log("Jogo inicializado com sucesso!");
+            } catch (error) {
+                console.error("Erro na inicialização do jogo:", error);
+                alert("Ocorreu um erro ao inicializar o jogo. Verifique o console para mais detalhes.");
             }
-            
-            console.log("Jogo inicializado com sucesso!");
         };
     </script>
 </body>
