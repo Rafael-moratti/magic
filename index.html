@@ -717,24 +717,30 @@
         </div>
     </div>
 
-    <!-- ÁUDIO DO JOGO (Simplificado) -->
-    <audio id="game_theme" loop>
+    <!-- ÁUDIO DO JOGO (Adicionada a quinta música) -->
+    <audio id="main_theme" loop>
         <source src="https://dl.dropboxusercontent.com/s/9a1uxpayvplfxfa/space_main.mp3" type="audio/mp3">
     </audio>
-    <audio id="music1" loop>
+    <audio id="intro_theme" loop>
+        <source src="https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3" type="audio/mp3">
+    </audio>
+    <audio id="map_music1" loop>
         <source src="https://dl.dropboxusercontent.com/s/kvn9sp4xtgo1f92/space_ambient1.mp3" type="audio/mp3">
     </audio>
-    <audio id="music2" loop>
+    <audio id="map_music2" loop>
         <source src="https://dl.dropboxusercontent.com/s/yih4m8c42k3qzjy/space_ambient2.mp3" type="audio/mp3">
     </audio>
-    <audio id="music3" loop>
-        <source src="https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3" type="audio/mp3">
+    <audio id="map_music3" loop>
+        <source src="https://dl.dropboxusercontent.com/s/8jgcpw34gc49xtm/space_ambient3.mp3" type="audio/mp3">
+    </audio>
+    <audio id="map_music4" loop>
+        <source src="https://dl.dropboxusercontent.com/s/e5n9u2h3l8jh7j7/space_ambient4.mp3" type="audio/mp3">
     </audio>
 
     <script>
         // -------------------- CONFIGURAÇÕES DO JOGO --------------------
         const SCROLL_SPEED = 60; // Velocidade do texto rolando em segundos
-        const GAME_VERSION = "1.0.3";
+        const GAME_VERSION = "1.0.4";
         const SAVE_KEY = "despertarEstelar_saveData";
         const DEBUG_MODE = true; // Ativar para ver mensagens de debugging no console
         
@@ -1089,6 +1095,30 @@
                     { text: "Tentar negociar mesmo em posição de desvantagem.", nextSection: "144" }
                 ]
             },
+            "60": {
+                text: "Você tenta rastrear a origem da misteriosa transmissão. Utilizando ferramentas avançadas de diagnóstico da nave, consegue determinar que a mensagem veio de uma pequena nave localizada a 12.000 km, no que parece ser um ponto cego dos sensores principais.\n\nA nave parece estar usando tecnologia de camuflagem avançada, o que explica por que não foi detectada antes. Pelas características da transmissão e do sinal, você estima que há pelo menos mais duas naves semelhantes na área.\n\nIsso confirma suas suspeitas: o incidente não foi acidental, mas uma operação coordenada. Os sabotadores dentro da nave estão trabalhando com uma equipe externa.\n\nO sistema estima que, mantendo o curso atual, as naves misteriosas interceptarão a Esperança em aproximadamente 45 minutos - bem antes do colapso do núcleo.\n\nO que você faz?",
+                options: [
+                    { text: "Tentar estabelecer comunicação com as naves misteriosas.", nextSection: "145" },
+                    { text: "Alertar os sobreviventes sobre a ameaça iminente de abordagem.", nextSection: "146" },
+                    { text: "Procurar o compartimento 772B antes que as naves se aproximem.", nextSection: "37" }
+                ]
+            },
+            "61": {
+                text: "Você acessa os bancos de dados restritos da nave, usando suas credenciais de capitão. Após várias camadas de segurança, encontra informações fragmentadas sobre o Projeto Prometeu.\n\nO Prometeu é descrito como um dispositivo revolucionário de terraformação, capaz de transformar completamente o ecossistema de um planeta em questão de semanas, em vez dos séculos que os métodos convencionais levariam.\n\nNo entanto, há indicações inquietantes nos relatórios técnicos. Várias simulações foram encerradas prematuramente e classificadas como ultra-secretas. Um dos cientistas principais do projeto, Dra. Eliza Kwan, foi oficialmente registrada como \"transferida\" três dias após registrar suas preocupações éticas.\n\nUm relatório final, assinado pelo Alto Conselho da Aliança, autoriza o transporte do \"módulo de demonstração\" a bordo da Esperança, para testes controlados no sistema Kepler-62 \"longe de habitats sensíveis\".\n\nO que você faz?",
+                options: [
+                    { text: "Procurar imediatamente o compartimento 772B.", nextSection: "37" },
+                    { text: "Investigar o que aconteceu com a Dra. Kwan.", nextSection: "147" },
+                    { text: "Verificar a natureza exata dos testes planejados em Kepler-62.", nextSection: "148" }
+                ]
+            },
+            "62": {
+                text: "Decidindo que a prioridade são os colonos, você ignora a mensagem misteriosa e segue para o setor de criogenia. O caminho é difícil, com diversas seções da nave danificadas.\n\nAo se aproximar do setor de criogenia, você nota algo estranho. Dois homens com uniformes da segurança estão parados na entrada, mas seus distintivos parecem ligeiramente diferentes dos padrão.\n\nElaborando um plano, você se aproxima com confiança. \"Status do setor?\" você pergunta, usando seu tom de comando.\n\nUm dos homens responde: \"Tudo seguro, Capitão. Estamos mantendo posição conforme ordens.\" Você nota um leve sotaque, incomum na tripulação padrão.\n\n\"Ordens de quem, exatamente?\" você pergunta, observando suas reações.\n\nOs guardas trocam olhares rápidos. \"Do Comandante Barrett, senhor.\" Problema: não há nenhum Comandante Barrett em sua tripulação.\n\nO que você faz?",
+                options: [
+                    { text: "Confrontar os impostores diretamente.", nextSection: "149" },
+                    { text: "Fingir que está tudo normal e tentar passar por eles.", nextSection: "150" },
+                    { text: "Afastar-se e buscar outra entrada para o setor de criogenia.", nextSection: "151" }
+                ]
+            },
             "69": {
                 text: "Você decide procurar o datapad do Dr. Yamamoto. Vasculhando o laboratório, não o encontra entre os escombros. Considerando o comportamento metódico de Yamamoto, ele provavelmente o escondeu em um local seguro.\n\nNo canto do laboratório, você nota um pequeno cofre pessoal parcialmente ocultado sob uma mesa derrubada. Está trancado com um scanner biométrico.\n\nApós algumas tentativas, você percebe que não conseguirá abri-lo sem a biometria de Yamamoto ou equipamento especializado.\n\nEnquanto pondera suas opções, encontra uma anotação manuscrita presa sob o teclado do terminal principal: \"Lembre-se: segurança no observatório estelar. Constelação de Lyra.\"\n\nO observatório estelar fica no mesmo nível, apenas alguns corredores de distância.\n\nO que você faz?",
                 options: [
@@ -1229,13 +1259,19 @@
         let textScrollTimeout;
         let gameHistory = [];
         let menuOpen = false;
+        let lastPlayedMapMusic = null;
         
         // -------------------- VARIÁVEIS DE ÁUDIO --------------------
         const audioElements = {
-            game_theme: document.getElementById('game_theme'),
-            music1: document.getElementById('music1'),
-            music2: document.getElementById('music2'),
-            music3: document.getElementById('music3')
+            // Músicas para tela inicial e prólogo
+            main_theme: document.getElementById('main_theme'),
+            intro_theme: document.getElementById('intro_theme'),
+            
+            // Músicas para os mapas (gameplay)
+            map_music1: document.getElementById('map_music1'),
+            map_music2: document.getElementById('map_music2'),
+            map_music3: document.getElementById('map_music3'),
+            map_music4: document.getElementById('map_music4')
         };
         let currentMusic = null;
 
@@ -1244,20 +1280,36 @@
             return array[Math.floor(Math.random() * array.length)];
         }
         
-        function getRandomMusic() {
-            const musicKeys = Object.keys(audioElements);
-            return audioElements[musicKeys[Math.floor(Math.random() * musicKeys.length)]];
+        function getRandomMapMusic() {
+            const mapMusicKeys = ['map_music1', 'map_music2', 'map_music3', 'map_music4'];
+            let selectedKey;
+            
+            // Evitar tocar a mesma música duas vezes seguidas
+            do {
+                selectedKey = mapMusicKeys[Math.floor(Math.random() * mapMusicKeys.length)];
+            } while (selectedKey === lastPlayedMapMusic && mapMusicKeys.length > 1);
+            
+            lastPlayedMapMusic = selectedKey;
+            return audioElements[selectedKey];
         }
 
-        function playRandomMusic() {
+        function playMusic(screenType) {
             if (currentMusic) {
                 currentMusic.pause();
                 currentMusic.currentTime = 0;
             }
             
-            currentMusic = getRandomMusic();
-            
             try {
+                // Selecionar música apropriada para cada tipo de tela
+                if (screenType === 'start') {
+                    currentMusic = audioElements.main_theme;
+                } else if (screenType === 'intro') {
+                    currentMusic = audioElements.intro_theme;
+                } else {
+                    // Para todas as outras telas, usar músicas de mapa randomizadas
+                    currentMusic = getRandomMapMusic();
+                }
+                
                 currentMusic.volume = 0.5;
                 currentMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
             } catch (error) {
@@ -1276,8 +1328,15 @@
             // Mostrar a tela solicitada
             document.getElementById(screenId).classList.remove('hidden');
             
-            // Tocar música aleatória ao mudar de tela
-            playRandomMusic();
+            // Tocar música apropriada para cada tela
+            if (screenId === 'start-screen') {
+                playMusic('start');
+            } else if (screenId === 'intro-screen') {
+                playMusic('intro');
+            } else {
+                // Para telas de jogo (história, combate, quebra-cabeça)
+                playMusic('game');
+            }
         }
 
         function saveGame() {
@@ -1822,7 +1881,7 @@
             
             setupStartScreen();
             setupMenu();
-            playRandomMusic();
+            playMusic('start');
             
             if (localStorage.getItem(SAVE_KEY)) {
                 document.getElementById('continue-button').disabled = false;
