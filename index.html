@@ -1262,18 +1262,13 @@
         let lastPlayedMapMusic = null;
         
         // -------------------- VARIÁVEIS DE ÁUDIO --------------------
-        const audioElements = {
-            // Músicas para tela inicial e prólogo
-            main_theme: document.getElementById('main_theme'),
-            intro_theme: document.getElementById('intro_theme'),
-            
-            // Músicas para os mapas (gameplay)
-            map_music1: document.getElementById('map_music1'),
-            map_music2: document.getElementById('map_music2'),
-            map_music3: document.getElementById('map_music3'),
-            map_music4: document.getElementById('map_music4')
-        };
-        let currentMusic = null;
+        <audio id="intro-music" loop>
+            <source src="musica/intro_theme.mp3" type="audio/mpeg">
+        </audio>
+        
+        <audio id="game-music" loop>
+            <source src="musica/music1.mp3" type="audio/mpeg">
+        </audio>
 
         // -------------------- FUNÇÕES DE UTILITÁRIO --------------------
         function getRandomItem(array) {
