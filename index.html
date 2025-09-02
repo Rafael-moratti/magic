@@ -1,1889 +1,961 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DESPERTAR ESTELAR: Ecos Do Despertar</title>
+    <title>Místico Esotérico | Portal de Conhecimento Ancestral</title>
     <style>
+        :root {
+            --primary: #2e0d4a;
+            --secondary: #8a4fff;
+            --accent: #ff7f50;
+            --light: #f5f0ff;
+            --dark: #0d0221;
+            --text: #333;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background-color: #000;
-            color: #00ff00;
-            overflow: hidden;
-            touch-action: manipulation;
-            height: 100vh;
-            width: 100vw;
+            background-image: 
+                radial-gradient(circle at 100% 50%, rgba(90, 20, 120, 0.3) 20%, transparent 50%),
+                radial-gradient(circle at 0% 80%, rgba(130, 70, 190, 0.2) 30%, transparent 60%);
+            color: var(--light);
+            line-height: 1.6;
         }
-
-        /* TELAS PRINCIPAIS */
-        .screen {
-            position: absolute;
-            height: 100vh;
-            width: 100vw;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* TELA INICIAL */
-        #start-screen {
-            background-color: #000;
-            z-index: 10;
-        }
-
-        .stars {
-            position: absolute;
+        
+        .container {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-
-        .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            animation: twinkle 2s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-            letter-spacing: 3px;
-            animation: pulse 3s infinite;
-            max-width: 90%;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 5;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                text-shadow: 0 0 10px #00ff00;
-            }
-            50% {
-                text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
-            }
-        }
-
-        .start-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-            z-index: 5;
-        }
-
-        .start-button {
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            width: 250px;
-            text-align: center;
-        }
-
-        .start-button:hover, .start-button:active {
-            background-color: #00ff00;
-            color: #000;
-            box-shadow: 0 0 20px #00ff00;
-        }
-
-        /* Animação do Satélite */
-        .satellite {
-            position: absolute;
-            width: 80px;
-            height: 40px;
-            animation: orbitPlanet 20s linear infinite;
-            opacity: 0.8;
-            z-index: 3;
-        }
-
-        @keyframes orbitPlanet {
-            0% {
-                transform: translate(-100px, 200px);
-            }
-            25% {
-                transform: translate(calc(100vw - 100px), 100px);
-            }
-            50% {
-                transform: translate(calc(100vw + 100px), 300px);
-            }
-            75% {
-                transform: translate(100px, 400px);
-            }
-            100% {
-                transform: translate(-100px, 200px);
-            }
-        }
-
-        /* Animação do Planeta */
-        .planet {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #0077ff, #000066 60%);
-            box-shadow: 0 0 50px rgba(0, 119, 255, 0.4);
-            z-index: 1;
-            top: 70%;
-            left: 70%;
-            transform: translate(-50%, -50%);
-        }
-
-        /* TELA DE INTRO (TEXTO ROLANDO) */
-        #intro-screen {
-            justify-content: flex-start;
-            perspective: 400px;
-            background-color: #000;
-        }
-
-        .intro-text {
-            transform-origin: center bottom;
-            transform: rotateX(25deg) translateY(100vh);
-            font-size: 1.8rem;
-            line-height: 1.5;
-            text-align: center;
-            max-width: 80%;
-            animation: scrollUp 60s linear forwards;
-            animation-play-state: running;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #ffff99;
-            text-shadow: 0 0 10px #ffff00;
-        }
-
-        @keyframes scrollUp {
-            from {
-                transform: rotateX(25deg) translateY(100vh);
-            }
-            to {
-                transform: rotateX(25deg) translateY(-300vh);
-            }
-        }
-
-        .skip-intro {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        .skip-intro:hover {
-            background-color: rgba(0, 50, 0, 0.9);
-        }
-
-        .intro-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-
-        .intro-control {
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .intro-control:hover {
-            background-color: rgba(0, 50, 0, 0.9);
-        }
-
-        /* TELA DE HISTÓRIA */
-        #story-screen {
-            justify-content: flex-start;
-            overflow-y: auto;
-            background-color: #000;
-        }
-
-        .story-container {
+        
+        header {
+            background-color: rgba(12, 5, 20, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(138, 79, 255, 0.3);
+            position: fixed;
             width: 100%;
-            max-width: 800px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 20px;
-            position: relative;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
-
-        .story-text {
-            font-size: 1.2rem;
-            line-height: 1.5;
-            margin-bottom: 2rem;
-            text-align: justify;
-            animation: fadeIn 2s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .story-id {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 1rem;
-            color: #888;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: auto;
-        }
-
-        .option-button {
-            padding: 15px;
-            background-color: rgba(0, 50, 0, 0.7);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-
-        .option-button:hover, .option-button:active {
-            background-color: rgba(0, 80, 0, 0.9);
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        .game-menu {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 100;
-        }
-
-        .menu-button {
-            padding: 8px 15px;
-            background-color: rgba(0, 30, 0, 0.8);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .menu-button:hover {
-            background-color: rgba(0, 60, 0, 0.9);
-        }
-
-        .menu-dropdown {
-            position: absolute;
-            top: 40px;
-            left: 0;
-            background-color: rgba(0, 20, 0, 0.9);
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            padding: 10px;
-            display: none;
-        }
-
-        .menu-dropdown.active {
-            display: block;
-        }
-
-        .menu-item {
-            padding: 8px 15px;
-            color: #00ff00;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .menu-item:hover {
-            background-color: rgba(0, 80, 0, 0.7);
-        }
-
-        /* TELA DE COMBATE */
-        #combat-screen {
-            background-color: rgba(50, 0, 0, 0.8);
-        }
-
-        .combat-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .combat-header {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #ff3333;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px #ff0000;
-        }
-
-        .combat-area {
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .combat-character, .combat-enemy {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #666;
-            border-radius: 10px;
-            padding: 15px;
-            width: 48%;
-            display: flex;
-            flex-direction: column;
             align-items: center;
+            padding: 15px 0;
         }
-
-        .health-bar {
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #c288ff, #ff7f50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
             width: 100%;
-            height: 20px;
-            background-color: #333;
-            border-radius: 10px;
-            margin: 10px 0;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), 
+                        url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='stars' patternUnits='userSpaceOnUse' width='200' height='200'%3E%3Cg fill='%238a4fff' fill-opacity='0.2'%3E%3Ccircle cx='10' cy='10' r='1' /%3E%3Ccircle cx='40' cy='50' r='1.5' /%3E%3Ccircle cx='90' cy='30' r='1' /%3E%3Ccircle cx='120' cy='70' r='2' /%3E%3Ccircle cx='170' cy='130' r='1' /%3E%3Ccircle cx='190' cy='180' r='1.5' /%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23stars)' /%3E%3C/svg%3E");
+            position: relative;
             overflow: hidden;
         }
-
-        .health-fill {
-            height: 100%;
-            background-color: #ff3333;
-            width: 100%;
-            transition: width 0.5s;
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 70%);
+            z-index: -1;
         }
-
-        .combat-log {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #666;
-            border-radius: 10px;
-            padding: 10px;
-            height: 150px;
-            overflow-y: auto;
+        
+        .hero h2 {
+            font-size: 3rem;
             margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-
-        .combat-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .combat-button {
-            padding: 10px 20px;
-            background-color: rgba(100, 0, 0, 0.7);
             color: white;
-            border: 1px solid #ff3333;
-            border-radius: 5px;
+            text-shadow: 0 0 10px rgba(138, 79, 255, 0.7);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none;
             cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(138, 79, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #9b6dff, #5727a3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .categories {
+            padding: 80px 0;
+            background-color: rgba(15, 6, 26, 0.95);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, rgba(30, 10, 60, 0.6), rgba(20, 5, 40, 0.8));
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            border: 1px solid rgba(138, 79, 255, 0.1);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(138, 79, 255, 0.2);
+            border-color: rgba(138, 79, 255, 0.3);
+        }
+        
+        .card-img {
+            height: 200px;
+            width: 100%;
+            background: linear-gradient(to bottom, rgba(46, 13, 74, 0.6), rgba(46, 13, 74, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 48px;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .card-link {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .card-link::after {
+            content: '→';
+            margin-left: 5px;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        
+        .card-link:hover {
+            color: #ff9f70;
+        }
+        
+        .card-link:hover::after {
+            transform: translateX(5px);
+        }
+        
+        .featured {
+            padding: 80px 0;
+            background-color: rgba(10, 4, 18, 0.98);
+        }
+        
+        .featured-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            align-items: center;
+            background: linear-gradient(145deg, rgba(25, 8, 50, 0.6), rgba(15, 3, 30, 0.8));
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(138, 79, 255, 0.1);
+        }
+        
+        .featured-img {
+            width: 40%;
+            min-height: 300px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+        }
+        
+        .featured-content {
+            padding: 30px;
+            width: 60%;
+        }
+        
+        .featured-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .featured-content p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
             font-size: 1rem;
         }
-
-        .combat-button:hover, .combat-button:active {
-            background-color: rgba(150, 0, 0, 0.9);
-            box-shadow: 0 0 10px #ff3333;
-        }
-
-        /* TELA DE QUEBRA-CABEÇA */
-        #puzzle-screen {
-            background-color: rgba(0, 0, 50, 0.8);
-        }
-
-        .puzzle-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .puzzle-header {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #33ccff;
+        
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
             margin-bottom: 20px;
-            text-shadow: 0 0 10px #33ccff;
         }
-
-        .puzzle-description {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: #eee;
+        
+        .testimonials {
+            padding: 80px 0;
+            background-color: rgba(15, 6, 26, 0.95);
         }
-
-        .puzzle-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
         }
-
-        .puzzle-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .puzzle-button {
-            padding: 15px 30px;
-            background-color: rgba(0, 0, 100, 0.7);
-            color: white;
-            border: 1px solid #33ccff;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .puzzle-button:hover, .puzzle-button:active {
-            background-color: rgba(0, 0, 150, 0.9);
-            box-shadow: 0 0 10px #33ccff;
-        }
-
-        #history-screen {
-            justify-content: flex-start;
-            overflow-y: auto;
-        }
-
-        .history-container {
-            width: 100%;
-            max-width: 800px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            overflow-y: auto;
-            padding: 20px;
+        
+        .testimonial {
+            background: linear-gradient(145deg, rgba(30, 10, 60, 0.6), rgba(20, 5, 40, 0.8));
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(138, 79, 255, 0.1);
             position: relative;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 10px;
         }
-
-        .history-title {
-            font-size: 1.8rem;
-            text-align: center;
+        
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(138, 79, 255, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial p {
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 20px;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
+            font-style: italic;
         }
-
-        .history-entry {
-            padding: 10px;
-            background-color: rgba(0, 30, 0, 0.5);
-            border-radius: 5px;
-            border-left: 3px solid #00ff00;
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .author-info h4 {
+            color: white;
+            font-size: 1.1rem;
             margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin: 0;
+            font-style: normal;
+        }
+        
+        .newsletter {
+            padding: 80px 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                        url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='stars2' patternUnits='userSpaceOnUse' width='200' height='200'%3E%3Cg fill='%238a4fff' fill-opacity='0.2'%3E%3Ccircle cx='10' cy='10' r='1' /%3E%3Ccircle cx='40' cy='50' r='1.5' /%3E%3Ccircle cx='90' cy='30' r='1' /%3E%3Ccircle cx='120' cy='70' r='2' /%3E%3Ccircle cx='170' cy='130' r='1' /%3E%3Ccircle cx='190' cy='180' r='1.5' /%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23stars2)' /%3E%3C/svg%3E");
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(138, 79, 255, 0.3) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .newsletter-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .newsletter h2 {
+            margin-bottom: 20px;
+        }
+        
+        .newsletter p {
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .newsletter-form button {
+            padding: 0 30px;
+            border-radius: 50px;
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            color: white;
+            font-weight: 600;
+            border: none;
             cursor: pointer;
             transition: all 0.3s;
         }
-
-        .history-entry:hover {
-            background-color: rgba(0, 60, 0, 0.7);
+        
+        .newsletter-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #9b6dff, #ff9f70);
         }
-
-        .back-button {
-            padding: 10px 20px;
-            background-color: rgba(0, 30, 0, 0.7);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-            cursor: pointer;
-            align-self: center;
-            margin-top: 20px;
+        
+        footer {
+            background-color: rgba(5, 2, 10, 0.98);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(138, 79, 255, 0.2);
         }
-
-        .back-button:hover {
-            background-color: rgba(0, 60, 0, 0.9);
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
         }
-
-        /* RESPONSIVIDADE */
-        @media (max-width: 768px) {
-            .title {
-                font-size: 1.8rem;
-            }
-            
-            .intro-text {
-                font-size: 1.2rem;
-            }
-            
-            .story-text {
-                font-size: 1rem;
-            }
-            
-            .combat-area {
+        
+        .footer-column h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-column p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .featured-item {
                 flex-direction: column;
             }
             
-            .combat-character, .combat-enemy {
+            .featured-img, .featured-content {
                 width: 100%;
             }
+            
+            .featured-img {
+                min-height: 200px;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
         }
-
-        @media (max-width: 480px) {
-            .title {
-                font-size: 1.5rem;
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
             }
             
-            .start-button {
-                padding: 10px 30px;
-                font-size: 1.2rem;
+            nav ul {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(12, 5, 20, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.4s;
+                pointer-events: none;
+                backdrop-filter: blur(10px);
             }
             
-            .intro-text {
+            nav ul.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
                 font-size: 1rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form button {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .logo h1 {
+                font-size: 20px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- TELA INICIAL -->
-    <div id="start-screen" class="screen">
-        <div class="stars"></div>
-        <div class="planet"></div>
-        <div class="satellite">
-            <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                <rect x="30" y="15" width="40" height="20" fill="#888" stroke="#aaa" stroke-width="1"/>
-                <rect x="10" y="20" width="20" height="10" fill="#666" stroke="#aaa" stroke-width="1"/>
-                <rect x="70" y="20" width="20" height="10" fill="#666" stroke="#aaa" stroke-width="1"/>
-                <rect x="40" y="5" width="20" height="10" fill="#555" stroke="#aaa" stroke-width="1"/>
-                <rect x="45" y="0" width="10" height="5" fill="#33ccff" stroke="#00ffff" stroke-width="1"/>
-                <rect x="45" y="35" width="10" height="5" fill="#33ccff" stroke="#00ffff" stroke-width="1"/>
-            </svg>
-        </div>
-        <h1 class="title">DESPERTAR ESTELAR:<br>FUGA OU SALVAÇÃO</h1>
-        <div class="start-buttons">
-            <button class="start-button" id="start-button">Iniciar</button>
-            <button class="start-button" id="continue-button" disabled>Continuar</button>
-            <button class="start-button" id="skip-to-story">Pular Prólogo</button>
-        </div>
-    </div>
-
-    <!-- TELA DE INTRODUÇÃO (TEXTO ROLANDO) -->
-    <div id="intro-screen" class="screen hidden">
-        <div class="intro-text" id="intro-text">
-            <p>Em um futuro distante, onde a humanidade conquistou as estrelas...</p>
-            <br>
-            <p>A nave colonial Esperança viaja pelos confins do espaço, transportando 200 colonos em criossono para o sistema Kepler-62.</p>
-            <br>
-            <p>Sua missão: estabelecer a primeira colônia humana permanente fora do Sistema Solar.</p>
-            <br>
-            <p>O que deveria ser apenas mais um salto hiperespacial rotineiro se transforma em uma luta desesperada pela sobrevivência.</p>
-            <br>
-            <p>Quando algo dá terrivelmente errado...</p>
-            <br>
-            <p>Capitão Alex Reiner acorda em uma nave danificada, com sistemas falhando e um mistério mortal por resolver.</p>
-            <br>
-            <p>Salvar os colonos ou salvar a si mesmo?</p>
-            <br>
-            <p>A escolha está em suas mãos...</p>
-        </div>
-        <button class="skip-intro" id="skip-intro-button">Pular Introdução</button>
-        <div class="intro-controls">
-            <button class="intro-control" id="pause-intro">Pausar</button>
-            <button class="intro-control" id="resume-intro" style="display: none;">Continuar</button>
-        </div>
-    </div>
-
-    <!-- TELA DE HISTÓRIA -->
-    <div id="story-screen" class="screen hidden">
-        <div class="game-menu">
-            <button class="menu-button" id="menu-button">Menu</button>
-            <div class="menu-dropdown" id="menu-dropdown">
-                <div class="menu-item" id="save-game">Salvar Jogo</div>
-                <div class="menu-item" id="load-game">Carregar Jogo</div>
-                <div class="menu-item" id="view-history">Ver Histórico</div>
-                <div class="menu-item" id="main-menu">Menu Principal</div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">✧</span>
+                    <h1>Místico Esotérico</h1>
+                </div>
+                <div class="mobile-menu">☰</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#tarot">Tarot</a></li>
+                        <li><a href="#wicca">Wicca</a></li>
+                        <li><a href="#magia">Magia</a></li>
+                        <li><a href="#astrologia">Astrologia</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
-        <div class="story-container" id="story-container">
-            <span class="story-id" id="section-id"></span>
-            <div class="story-text" id="story-text"></div>
-            <div class="options-container" id="options-container"></div>
-        </div>
-    </div>
+    </header>
 
-    <!-- TELA DE HISTÓRICO -->
-    <div id="history-screen" class="screen hidden">
-        <div class="history-container" id="history-container">
-            <h2 class="history-title">Histórico da Jornada</h2>
-            <div id="history-entries"></div>
-            <button class="back-button" id="back-from-history">Voltar à História</button>
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Descubra os Mistérios do Universo</h2>
+            <p>Sua jornada de autodescoberta e conexão com as energias ancestrais começa aqui. Temos os melhores produtos esotéricos selecionados para despertar sua espiritualidade.</p>
+            <div class="cta-buttons">
+                <a href="#produtos" class="btn btn-primary">Explorar Produtos</a>
+                <a href="#consultas" class="btn btn-secondary">Agendar Consulta</a>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- TELA DE COMBATE -->
-    <div id="combat-screen" class="screen hidden">
-        <div class="combat-container">
-            <h2 class="combat-header" id="combat-header">COMBATE</h2>
-            <div class="combat-area">
-                <div class="combat-character">
-                    <h3 id="character-name">Capitão Reiner</h3>
-                    <div class="health-bar">
-                        <div class="health-fill" id="character-health"></div>
+    <section class="categories" id="categorias">
+        <div class="container">
+            <h2 class="section-title">Categorias Místicas</h2>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-img">♣</div>
+                    <div class="card-content">
+                        <h3>Tarot & Oráculos</h3>
+                        <p>Descubra baralhos exclusivos e guias de interpretação para suas leituras divinatórias.</p>
+                        <a href="#tarot" class="card-link">Explorar</a>
                     </div>
-                    <div id="character-items">Arma: Pistola de Energia</div>
                 </div>
-                <div class="combat-enemy">
-                    <h3 id="enemy-name">Inimigo</h3>
-                    <div class="health-bar">
-                        <div class="health-fill" id="enemy-health"></div>
+                
+                <div class="card">
+                    <div class="card-img">☽</div>
+                    <div class="card-content">
+                        <h3>Rituais Wiccanos</h3>
+                        <p>Ferramentas e ingredientes para seus rituais sagrados e celebrações dos sabás.</p>
+                        <a href="#wicca" class="card-link">Explorar</a>
                     </div>
-                    <div id="enemy-info"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">⚜</div>
+                    <div class="card-content">
+                        <h3>Cristais & Pedras</h3>
+                        <p>Minerais energéticos para cura, proteção e amplificação das suas intenções mágicas.</p>
+                        <a href="#cristais" class="card-link">Explorar</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">✧</div>
+                    <div class="card-content">
+                        <h3>Astrologia</h3>
+                        <p>Mapas astrais personalizados e ferramentas para compreender a influência dos astros.</p>
+                        <a href="#astrologia" class="card-link">Explorar</a>
+                    </div>
                 </div>
             </div>
-            <div class="combat-log" id="combat-log">
-                Prepare-se para o combate!
+        </div>
+    </section>
+
+    <section class="featured" id="produtos">
+        <div class="container">
+            <h2 class="section-title">Produtos em Destaque</h2>
+            
+            <div class="featured-item">
+                <div class="featured-img">🔮</div>
+                <div class="featured-content">
+                    <h3>Baralho Tarot Místico Ancestral</h3>
+                    <p>Este baralho exclusivo contém 78 cartas belamente ilustradas que conectam o leitor com sabedorias ancestrais. Acompanha guia de interpretação detalhado e bolsa de veludo para armazenamento.</p>
+                    <div class="price">R$ 159,90</div>
+                    <a href="#comprar" class="btn btn-primary">Comprar Agora</a>
+                </div>
             </div>
-            <div class="combat-actions" id="combat-actions">
-                <!-- Botões serão adicionados via JavaScript -->
+            
+            <div class="featured-item">
+                <div class="featured-img">✨</div>
+                <div class="featured-content">
+                    <h3>Kit Completo para Ritual da Lua Cheia</h3>
+                    <p>Tudo que você precisa para realizar seu ritual de lua cheia: velas aromáticas, incensos naturais, cristais energizados, ervas sagradas e um guia passo a passo com diversas intenções mágicas.</p>
+                    <div class="price">R$ 227,50</div>
+                    <a href="#comprar" class="btn btn-primary">Comprar Agora</a>
+                </div>
+            </div>
+            
+            <div class="featured-item">
+                <div class="featured-img">📚</div>
+                <div class="featured-content">
+                    <h3>Grimório de Ervas Mágicas - Edição Exclusiva</h3>
+                    <p>Enciclopédia completa com mais de 200 ervas mágicas, suas propriedades esotéricas, correspondências planetárias e usos em feitiços. Capa dura artesanal com detalhes em relevo dourado.</p>
+                    <div class="price">R$ 189,00</div>
+                    <a href="#comprar" class="btn btn-primary">Comprar Agora</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- TELA DE QUEBRA-CABEÇA -->
-    <div id="puzzle-screen" class="screen hidden">
-        <div class="puzzle-container">
-            <h2 class="puzzle-header" id="puzzle-header">QUEBRA-CABEÇA</h2>
-            <p class="puzzle-description" id="puzzle-description"></p>
-            <div class="puzzle-content" id="puzzle-content">
-                <!-- Conteúdo do quebra-cabeça será adicionado via JavaScript -->
-            </div>
-            <div class="puzzle-options" id="puzzle-options">
-                <!-- Opções serão adicionadas via JavaScript -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">O Que Dizem Nossos Clientes</h2>
+            
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>O baralho de tarot que comprei aqui superou todas as minhas expectativas! A energia que emana das cartas é incrível e as leituras ficaram muito mais precisas.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">LM</div>
+                            <div class="author-info">
+                                <h4>Luna Moreira</h4>
+                                <p>Taroóloga</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Encontrei no Místico Esotérico todos os materiais que precisava para meus rituais. A qualidade é excepcional e a entrega foi super rápida!</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">RF</div>
+                            <div class="author-info">
+                                <h4>Raul Flores</h4>
+                                <p>Praticante de Wicca</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Os cristais são simplesmente maravilhosos, com uma energia única. O atendimento foi excelente e me ajudaram a escolher as pedras ideais para o meu propósito.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">IS</div>
+                            <div class="author-info">
+                                <h4>Iara Silva</h4>
+                                <p>Terapeuta Holística</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- ÁUDIO DO JOGO (Adicionada a quinta música) -->
-    <audio id="main_theme" loop>
-        <source src="https://dl.dropboxusercontent.com/s/9a1uxpayvplfxfa/space_main.mp3" type="audio/mp3">
-    </audio>
-    <audio id="intro_theme" loop>
-        <source src="https://dl.dropboxusercontent.com/s/rtbigb8l6qhfxmj/space_intro.mp3" type="audio/mp3">
-    </audio>
-    <audio id="map_music1" loop>
-        <source src="https://dl.dropboxusercontent.com/s/kvn9sp4xtgo1f92/space_ambient1.mp3" type="audio/mp3">
-    </audio>
-    <audio id="map_music2" loop>
-        <source src="https://dl.dropboxusercontent.com/s/yih4m8c42k3qzjy/space_ambient2.mp3" type="audio/mp3">
-    </audio>
-    <audio id="map_music3" loop>
-        <source src="https://dl.dropboxusercontent.com/s/8jgcpw34gc49xtm/space_ambient3.mp3" type="audio/mp3">
-    </audio>
-    <audio id="map_music4" loop>
-        <source src="https://dl.dropboxusercontent.com/s/e5n9u2h3l8jh7j7/space_ambient4.mp3" type="audio/mp3">
-    </audio>
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2 class="section-title">Receba Rituais Exclusivos</h2>
+                <p>Inscreva-se em nossa newsletter e receba gratuitamente guias de rituais, calendário lunar e dicas esotéricas diretamente no seu email.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Seu melhor email..." required>
+                    <button type="submit" class="btn">Inscrever</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Sobre Nós</h3>
+                    <p>O Místico Esotérico é um portal dedicado ao conhecimento ancestral e produtos selecionados para sua jornada espiritual. Trabalhamos apenas com fornecedores éticos e sustentáveis.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">f</a>
+                        <a href="#" aria-label="Instagram">I</a>
+                        <a href="#" aria-label="Pinterest">P</a>
+                        <a href="#" aria-label="YouTube">Y</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Página Inicial</a></li>
+                        <li><a href="#produtos">Produtos</a></li>
+                        <li><a href="#blog">Blog Místico</a></li>
+                        <li><a href="#consultas">Consultas Online</a></li>
+                        <li><a href="#sobre">Sobre Nós</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categorias</h3>
+                    <ul class="footer-links">
+                        <li><a href="#tarot">Tarot & Oráculos</a></li>
+                        <li><a href="#wicca">Rituais & Magia</a></li>
+                        <li><a href="#cristais">Cristais & Pedras</a></li>
+                        <li><a href="#astrologia">Astrologia</a></li>
+                        <li><a href="#incensos">Incensos & Defumações</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <p>Email: contato@misticoesoterico.com</p>
+                    <p>WhatsApp: (11) 99999-9999</p>
+                    <p>Horário: Segunda a Sexta, 9h às 18h</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Místico Esotérico - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // -------------------- CONFIGURAÇÕES DO JOGO --------------------
-        const SCROLL_SPEED = 60; // Velocidade do texto rolando em segundos
-        const GAME_VERSION = "1.0.4";
-        const SAVE_KEY = "despertarEstelar_saveData";
-        const DEBUG_MODE = true; // Ativar para ver mensagens de debugging no console
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('active');
+        });
         
-        // -------------------- DADOS DO JOGO --------------------
-        // Definição das seções da história
-        const storyData = {
-            "intro": {
-                text: "Seus olhos se abrem com dificuldade, a visão turva tentando se adaptar à fraca iluminação vermelha de emergência. Sua cabeça lateja como se tivesse sido atingida por um meteoro. As memórias retornam aos poucos: você é o Capitão Alex Reiner da nave colonial Esperança, transportando 200 colonos em criossono para o sistema Kepler-62. O último salto hiperespacial deveria ter sido rotineiro, mas algo deu muito errado.\n\nO painel de controle à sua frente pisca com dezenas de alertas. Uma voz robótica anuncia friamente: \"Falha crítica no núcleo. Colapso estrutural em 120 minutos. Evacuação recomendada.\"\n\nVocê se levanta cambaleante da cadeira do piloto e percebe que está sozinho na ponte. A tripulação deveria estar aqui. Suas opções são limitadas e o tempo, precioso.\n\nO que você faz?",
-                options: [
-                    { text: "Verificar o sistema de diagnóstico para entender o que aconteceu.", nextSection: "10" },
-                    { text: "Ir imediatamente ao setor de criogenia para verificar os passageiros.", nextSection: "20" },
-                    { text: "Dirigir-se à sala de comunicações para enviar um pedido de socorro.", nextSection: "30" }
-                ]
-            },
-            "10": {
-                text: "O sistema de diagnóstico está parcialmente operacional. Seus dedos deslizam pelo painel holográfico enquanto você navega pelos relatórios técnicos. A situação é pior do que imaginava: durante o salto, uma anomalia quântica causou uma sobrecarga no núcleo de fusão. O sistema de contenção está falhando e o colapso é inevitável.\n\nAs câmeras de segurança mostram vários setores já comprometidos. O setor oeste está completamente lacrado devido à descompressão. No relatório da tripulação, descobre que dos 15 tripulantes, apenas 8 estão vivos, espalhados pela nave e alguns feridos. Os 200 colonos em criossono estão em risco crítico - o sistema de suporte vital está operando com energia de emergência.\n\nUm detalhe chama sua atenção: há apenas 2 cápsulas de escape operacionais, cada uma com capacidade para 50 pessoas.\n\nO que você faz?",
-                options: [
-                    { text: "Acessar o mapa da nave para planejar uma rota de resgate.", nextSection: "11" },
-                    { text: "Verificar o sistema de comunicação interna para contatar sobreviventes.", nextSection: "12" },
-                    { text: "Examinar o registro do salto para entender melhor a anomalia.", nextSection: "13" }
-                ]
-            },
-            "11": {
-                text: "O mapa holográfico da nave surge diante de você. A Esperança tem 5 níveis principais, com você atualmente na ponte (nível 1). O setor de criogenia está no nível 3, as cápsulas de escape no nível 5, e a sala do reator no nível 4.\n\nRotas diretas entre níveis estão bloqueadas em vários pontos. Será necessário um desvio pelo sistema de manutenção para alcançar qualquer setor crucial.\n\nEnquanto analisa as opções, uma nova mensagem aparece no sistema: \"Detectada atividade não autorizada no setor de segurança. Protocolo de quarentena ativado.\"\n\nIsso não estava no diagnóstico inicial. Alguém ou algo está mexendo nos sistemas de segurança.\n\nO que você faz?",
-                options: [
-                    { text: "Investigar a atividade suspeita no setor de segurança.", nextSection: "14" },
-                    { text: "Ignorar o alerta e seguir para o setor de criogenia.", nextSection: "20" },
-                    { text: "Ativar os protocolos de emergência que darão mais tempo antes do colapso.", nextSection: "15" }
-                ]
-            },
-            "12": {
-                text: "Você ativa o sistema de comunicação interna. \"Aqui é o Capitão Reiner. Alguém na escuta?\"\n\nApós alguns segundos de estática, uma voz feminina responde: \"Capitão? Graças a Deus! É Elena Vasquez, engenheira-chefe. Estou presa na sala de máquinas auxiliar com o Dr. Petrov. Ele está ferido.\"\n\nOutra voz corta a transmissão: \"Capitão, aqui é Tenente Rodriguez. Estou com três outros tripulantes no laboratório. Tentamos acessar o setor de criogenia, mas o sistema está em lockdown.\"\n\nUma terceira voz, distorcida e entrecortada: \"...sabotagem...não confie...eles querem...\" A transmissão é cortada abruptamente.\n\nO que você faz?",
-                options: [
-                    { text: "Pedir mais informações à Engenheira Vasquez.", nextSection: "16" },
-                    { text: "Solicitar um relatório detalhado ao Tenente Rodriguez.", nextSection: "17" },
-                    { text: "Tentar restaurar a última transmissão cortada.", nextSection: "18" }
-                ]
-            },
-            "13": {
-                text: "Os registros do salto são confusos. Algo interferiu com os cálculos quânticos no momento exato da transição. A assinatura energética não parece natural -- os padrões sugerem uma interferência deliberada.\n\nUma entrada do diário de bordo, datada de apenas 12 horas antes do salto, chama sua atenção. É do Oficial de Ciências, Dr. Yamamoto: \"Descobri algo preocupante nos dados de longa distância. Preciso falar com o Capitão imediatamente. Se minhas suspeitas estiverem corretas, não estamos sozinhos nesta missão.\"\n\nAo verificar os registros de acesso, você descobre que alguém entrou na sala de controle do salto três minutos antes da inicialização, usando as credenciais do Oficial de Segurança Chen.\n\nO que você faz?",
-                options: [
-                    { text: "Verificar as câmeras de segurança para ver quem entrou na sala de controle.", nextSection: "19" },
-                    { text: "Procurar o Oficial de Segurança Chen pela nave.", nextSection: "21" },
-                    { text: "Investigar o último local conhecido do Dr. Yamamoto.", nextSection: "22" }
-                ]
-            },
-            "14": {
-                text: "Você navega pelos corredores parcialmente iluminados em direção ao setor de segurança. A gravidade artificial oscila, fazendo com que às vezes seus passos sejam mais leves ou mais pesados.\n\nAo chegar ao setor de segurança, encontra a porta entreaberta. Dentro, vê um homem debruçado sobre o console principal. Ele não está usando uniforme da tripulação.\n\nAo perceber sua presença, ele se vira rapidamente. É um rosto que você não reconhece. \"Capitão,\" ele diz com um sorriso tenso. \"Que bom que está vivo. Estou tentando restaurar os protocolos de segurança.\"\n\nSeu instinto diz que algo está errado. Ele está usando um distintivo de autorização de nível superior que nem mesmo você possui.\n\nO que você faz?",
-                options: [
-                    { text: "Confrontá-lo diretamente sobre sua identidade.", nextSection: "23" },
-                    { text: "Fingir que acredita nele e pedir mais informações.", nextSection: "24" },
-                    { text: "Atacá-lo imediatamente, considerando-o uma ameaça.", nextSection: "25" }
-                ]
-            },
-            "15": {
-                text: "Você acessa os protocolos de emergência, redirecionando energia dos sistemas não essenciais para reforçar a contenção do núcleo. O sistema informa que isso pode dar à nave mais 30 minutos antes do colapso total.\n\nDurante o processo, você descobre uma sequência de comandos recentemente introduzida no sistema. Alguém programou o desligamento dos suportes de vida no setor de criogenia para daqui a 15 minutos.",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: CÓDIGO DE SEGURANÇA",
-                    description: "Para cancelar esta sequência, você precisa resolver o código de segurança. O sistema fornece a seguinte dica:\n\n\"Eu sou o que resta quando tudo falha. Meu primeiro dígito é o número de planetas habitáveis no sistema Kepler-62. Meu segundo dígito é o número de cápsulas de escape funcionais. Meu terceiro dígito é o número de níveis da nave Esperança. Meu último dígito é o valor de X na equação: 3X + 7 = 22.\"",
-                    options: [
-                        { text: "2255", nextSection: "26", correct: true },
-                        { text: "2250", nextSection: "27", correct: false },
-                        { text: "2505", nextSection: "28", correct: false }
-                    ]
-                }
-            },
-            "16": {
-                text: "\"Capitão,\" a voz de Elena soa ansiosa, \"algo muito estranho aconteceu antes do salto. O Dr. Petrov detectou uma transmissão não autorizada saindo da nave, mas quando fomos investigar, houve uma explosão no corredor J. Petrov acha que foi deliberado.\"\n\n\"Conseguimos acessar brevemente os registros de segurança. Havia passageiros não listados embarcados em Marte. Três deles. Não estão nos registros oficiais.\"\n\nPetrov tosse ao fundo antes de falar: \"Capitão, suspeitamos que sejam agentes de Nova Terra. A colônia em Kepler-62 representa uma vantagem estratégica que eles não queriam que a Aliança obtivesse.\"\n\n\"Precisamos chegar até você,\" diz Elena, \"mas os corredores entre nós estão bloqueados. Há uma forma de nos ajudar a passar pelo sistema de manutenção?\"\n\nO que você faz?",
-                options: [
-                    { text: "Ajudar Elena e Petrov a navegar pelos dutos de manutenção.", nextSection: "29" },
-                    { text: "Pedir que permaneçam onde estão enquanto você verifica a informação sobre os passageiros não listados.", nextSection: "31" },
-                    { text: "Instruí-los a tentar alcançar as cápsulas de escape e encontrar você lá.", nextSection: "32" }
-                ]
-            },
-            "17": {
-                text: "\"Capitão,\" o Tenente Rodriguez responde com voz firme, \"a situação é crítica. Estou com os oficiais Kowalski, Takahashi e Lin. Tentamos acessar o setor de criogenia, mas alguém alterou os códigos de segurança.\"\n\n\"Descobrimos algo perturbador nos laboratórios. Os dados da missão foram alterados. As coordenadas do salto foram manipuladas para nos levar a este setor específico do espaço. Não foi um acidente.\"\n\n\"Takahashi identificou três assinaturas biométricas não registradas movendo-se pela nave pouco antes do salto. Suspeitamos que são sabotadores.\"\n\nEnquanto ele fala, você ouve um ruído metálico ao fundo, seguido por gritos. A comunicação fica cheia de estática. A última coisa que ouve é: \"Eles estão aqui! Corra para o--\" antes de ser cortada.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar restabelecer contato com o grupo de Rodriguez.", nextSection: "33" },
-                    { text: "Dirigir-se ao laboratório para verificar o que aconteceu.", nextSection: "34" },
-                    { text: "Alertar Elena e Petrov sobre o possível perigo.", nextSection: "35" }
-                ]
-            },
-            "18": {
-                text: "Você utiliza ferramentas avançadas de análise de áudio para reconstruir a transmissão cortada. Depois de alguns ajustes, consegue recuperar parte da mensagem:\n\n\"...sabotagem confirmada. Não confie na Vasquez. Eles querem os dados do projeto Prometeu. Os passageiros são apenas disfarce. O verdadeiro objetivo é o módulo secreto. Capitão, você precisa acessar o compartimento 772B antes que eles destruam...\"\n\nA mensagem termina aí. Não há identificação de quem a enviou.\n\nVocê verifica rapidamente sua base de dados pessoal. O projeto Prometeu está classificado como ultra-secreto, algo que apenas capitães de alto escalão deveriam conhecer. Envolve tecnologia de terraformação revolucionária.\n\nO compartimento 772B não aparece em nenhum mapa oficial da nave.\n\nO que você faz?",
-                options: [
-                    { text: "Confrontar Elena Vasquez sobre a mensagem.", nextSection: "36" },
-                    { text: "Procurar o misterioso compartimento 772B.", nextSection: "37" },
-                    { text: "Ignorar a mensagem, considerando-a uma possível armadilha.", nextSection: "38" }
-                ]
-            },
-            "19": {
-                text: "As gravações de segurança mostram uma figura encapuzada entrando na sala de controle do salto. A pessoa move-se com precisão, conhecendo exatamente para onde ir. Ela insere um dispositivo no console principal, digita uma sequência de comandos e sai rapidamente.\n\nO ângulo da câmera não permite ver o rosto, mas você nota um detalhe perturbador: a pessoa usa um bracelete médico idêntico ao da Dra. Yasmin Khoury, a médica-chefe da nave.\n\nConsultando o sistema de localização da tripulação, você descobre que o último registro da Dra. Khoury a coloca no laboratório médico, aproximadamente 20 minutos antes do salto. Não há registros após isso.\n\nO que você faz?",
-                options: [
-                    { text: "Ir ao laboratório médico investigar o paradeiro da Dra. Khoury.", nextSection: "39" },
-                    { text: "Alertar os sobreviventes sobre uma possível impostora.", nextSection: "40" },
-                    { text: "Verificar as credenciais e histórico da Dra. Khoury no banco de dados da nave.", nextSection: "41" }
-                ]
-            },
-            "20": {
-                text: "O caminho para o setor de criogenia é mais difícil do que esperava. Portas de emergência bloqueiam as rotas principais, forçando-o a navegar por corredores de manutenção estreitos e mal iluminados.\n\nAo chegar à entrada do setor de criogenia, você encontra a porta principal selada. O painel de acesso está danificado, mas ainda funcional. Para abri-lo, precisará resolver um quebra-cabeça de roteamento de energia.",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: ROTEAMENTO DE ENERGIA",
-                    description: "O painel mostra um diagrama com 5 nós de energia (A, B, C, D, E) e 6 caminhos possíveis. Você precisa fazer a energia fluir da fonte ao destino sem sobrecarregar nenhum nó. Cada nó pode suportar apenas duas conexões ativas.",
-                    options: [
-                        { text: "Conectar A-B-E-D", nextSection: "42", correct: false },
-                        { text: "Conectar A-C-B-D", nextSection: "43", correct: true },
-                        { text: "Conectar A-C-E-D", nextSection: "44", correct: false }
-                    ]
-                }
-            },
-            "21": {
-                text: "Você consulta o sistema de localização para encontrar o Oficial Chen. Seu último registro o coloca no Armamento, duas horas antes do salto. Nenhuma atividade desde então.\n\nO caminho para o Armamento está parcialmente bloqueado por destroços. Você navega com dificuldade, passando por corredores que mostram sinais claros de luta - marcas de tiros nas paredes, manchas de sangue no chão.\n\nAo chegar ao Armamento, encontra a porta arrombada. Dentro, o corpo do Oficial Chen está caído próximo ao arsenal. A maioria das armas desapareceu. Ele tem um mensageiro pessoal na mão, travado com segurança biométrica.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar desbloquear o mensageiro usando o reconhecimento biométrico de Chen.", nextSection: "45" },
-                    { text: "Procurar outras pistas no Armamento.", nextSection: "46" },
-                    { text: "Pegar qualquer arma restante e continuar sua missão.", nextSection: "47" }
-                ]
-            },
-            "22": {
-                text: "O laboratório do Dr. Yamamoto está localizado no nível 2, próximo aos observatórios. Você segue por corredores cada vez mais escuros, com a energia falhando em seções inteiras.\n\nA porta do laboratório está entreaberta. Dentro, encontra um caos de equipamentos quebrados e papéis espalhados. Houve claramente uma busca violenta.\n\nNo centro da sala, um holograma está pausado, mostrando uma estranha estrutura orbital próxima ao ponto de saída do salto hiperespacial. Parece artificial, definitivamente não natural.\n\nNo terminal principal, protegido por uma sequência de segurança, há um arquivo marcado como \"URGENTE - CAPITÃO\".",
-                options: [],
-                type: "puzzle",
-                puzzleData: {
-                    title: "QUEBRA-CABEÇA: SEQUÊNCIA NUMÉRICA",
-                    description: "Para acessar o arquivo, você precisa resolver a sequência:\n8, 27, ?, 125, 216\n\nQual número falta?",
-                    options: [
-                        { text: "64", nextSection: "48", correct: true },
-                        { text: "36", nextSection: "49", correct: false },
-                        { text: "81", nextSection: "50", correct: false }
-                    ]
-                }
-            },
-            "23": {
-                text: "\"Quem é você realmente?\" você pergunta, mantendo distância. \"Esse distintivo não está autorizado nem mesmo para mim.\"\n\nO homem congela por um momento, então seu comportamento muda completamente. Ele se endireita e sorri com confiança.\n\n\"Perspicaz, Capitão. Teria sido mais fácil se você simplesmente corresse para as cápsulas como previsto.\" Ele não parece preocupado com sua presença. \"Meu nome não importa. Represento pessoas que têm grande interesse no que esta nave transporta.\"\n\n\"O salto foi apenas parcialmente sabotado. Não queríamos destruir a nave, apenas desviá-la para este setor para que meus associados pudessem recuperar o módulo Prometeu. Os colonos são apenas... cobertura conveniente.\"\n\nEle saca uma arma. \"Agora, temos aproximadamente 90 minutos antes que esta nave se desintegre. Você pode cooperar e me levar ao compartimento 772B, ou posso encontrá-lo sozinho depois de eliminar você.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar negociar para ganhar tempo.", nextSection: "51" },
-                    { text: "Atacar imediatamente, aproveitando sua proximidade.", nextSection: "52" },
-                    { text: "Fingir cooperação para descobrir mais sobre seus planos.", nextSection: "53" }
-                ]
-            },
-            "24": {
-                text: "\"Entendo,\" você diz, tentando parecer aliviado. \"Que bom que alguém está trabalhando nisso. Qual é a situação atual dos sistemas?\"\n\nO homem parece relaxar um pouco, voltando sua atenção ao console. \"Estou tentando restabelecer o controle após o... incidente. Alguns membros da tripulação estão complicando as coisas. Especialmente aqueles no laboratório.\"\n\nEnquanto ele fala, você nota algo estranho - ele está inserindo comandos para desativar os sistemas de suporte vital em várias seções da nave.\n\n\"O Diretor ficará satisfeito por você ter sobrevivido, Capitão,\" ele continua. \"Quase pensamos que tínhamos perdido você junto com os outros na ponte.\"\n\nVocê não estava sozinho na ponte quando acordou? E qual diretor?\n\nO que você faz?",
-                options: [
-                    { text: "Continuar o disfarce, tentando obter mais informações.", nextSection: "54" },
-                    { text: "Procurar uma arma ou objeto para neutralizá-lo.", nextSection: "55" },
-                    { text: "Ativar discretamente o alarme de segurança no seu comunicador.", nextSection: "56" }
-                ]
-            },
-            "25": {
-                type: "combat",
-                text: "Sem hesitar, você avança contra o desconhecido. O elemento surpresa funciona a seu favor - ele não espera um ataque frontal.",
-                combatData: {
-                    enemyName: "Sabotador Desconhecido",
-                    enemyInfo: "Armado com pistola de energia",
-                    playerHealth: 100,
-                    enemyHealth: 80,
-                    playerItems: ["Ferramenta de reparo", "Comunicador de emergência", "Kit médico básico"],
-                    outcomes: [
-                        { result: "victory", nextSection: "57" },
-                        { result: "defeat", nextSection: "58" }
-                    ]
-                }
-            },
-            "26": {
-                text: "Você insere o código 2255. O painel acende verde: \"Código correto. Sequência cancelada. Sistemas de suporte vital no setor de criogenia estabilizados.\"\n\nVocê suspira aliviado. Os colonos estão temporariamente seguros, mas o tempo continua correndo para o colapso do núcleo.\n\nEnquanto avalia suas próximas opções, uma nova mensagem surge no console: \"Transmissão recebida. Origem: desconhecida.\"\n\nAo abrir a mensagem, você vê coordenadas espaciais e uma mensagem críptica: \"A Prometeu está comprometida. Rendezvous em Delta-9. Elimine testemunhas.\"\n\nA mensagem claramente não era destinada a você.\n\nO que você faz?",
-                options: [
-                    { text: "Rastrear a origem da transmissão.", nextSection: "60" },
-                    { text: "Investigar o que é \"Prometeu\" nos bancos de dados da nave.", nextSection: "61" },
-                    { text: "Ignorar a mensagem e seguir para o setor de criogenia.", nextSection: "62" }
-                ]
-            },
-            "27": {
-                text: "Você insere o código 2250. O sistema pisca vermelho: \"Código incorreto. Uma tentativa restante.\"\n\nReanalisando o quebra-cabeça com atenção: o sistema Kepler-62 tem 2 planetas habitáveis confirmados, existem 2 cápsulas de escape funcionais, a nave tem 5 níveis, e resolvendo 3X + 7 = 22, temos X = 5.\n\nSua última chance:",
-                options: [
-                    { text: "Inserir o código 2255.", nextSection: "26" },
-                    { text: "Inserir o código 2505.", nextSection: "28" }
-                ]
-            },
-            "28": {
-                text: "Você insere o código 2505. O sistema pisca vermelho: \"Código incorreto. Acesso bloqueado. Alerta enviado à segurança.\"\n\nVocê tenta contornar o bloqueio, mas sem sucesso. Agora está preso, e o tempo está acabando. Você precisará encontrar outra forma de salvar os colonos.\n\nEnquanto pondera suas opções, ouve passos se aproximando pelo corredor. Alguém vem verificar o alerta de segurança.\n\nO que você faz?",
-                options: [
-                    { text: "Esconder-se e observar quem vem investigar.", nextSection: "63" },
-                    { text: "Preparar-se para confrontar quem vier.", nextSection: "64" },
-                    { text: "Fugir e buscar outro caminho para o setor de criogenia.", nextSection: "65" }
-                ]
-            },
-            "29": {
-                text: "Você acessa o sistema de manutenção e estabelece comunicação com Elena e Petrov. Usando o mapa da nave, você os guia através dos dutos de serviço.\n\n\"Há uma passagem de manutenção a dez metros à sua direita,\" você instrui. \"Isso levará vocês ao elevador de carga secundário, que ainda está operacional.\"\n\nEnquanto os guia, Elena compartilha mais informações: \"Antes do salto, interceptamos uma transmissão codificada. Petrov conseguiu decifrar parte dela - mencionava algo chamado 'Projeto Prometeu' e um 'módulo de contenção'. Você sabe do que se trata, Capitão?\"\n\nAntes que você possa responder, ouve sons de luta e gritos. A comunicação fica fragmentada.\n\nElena: \"Eles nos encontraram! São--\" A transmissão é cortada.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar restabelecer contato com Elena e Petrov.", nextSection: "66" },
-                    { text: "Dirigir-se ao local onde estavam para ajudá-los.", nextSection: "67" },
-                    { text: "Continuar sua missão, presumindo que foram capturados.", nextSection: "68" }
-                ]
-            },
-            "30": {
-                text: "Você se dirige rapidamente à sala de comunicações, atravessando corredores instáveis. No caminho, encontra evidências de conflito - marcas de queimaduras nas paredes, objetos espalhados, como se houvesse uma luta recente.\n\nAo chegar à sala de comunicações, encontra um técnico ferido - Oficial Yusuf - trabalhando no console de transmissão. Ele se vira ao ouvir você entrar, visivelmente aliviado.\n\n\"Capitão! Graças a Deus você está vivo. Tentei estabelecer contato com qualquer nave na proximidade, mas algo está bloqueando nossas transmissões de longo alcance.\"\n\nYusuf aponta para um monitor mostrando dados de comunicação. \"Há uma interferência artificial cobrindo todas as frequências principais. Não é natural - alguém não quer que peçamos ajuda.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar contornar a interferência para enviar um sinal de socorro.", nextSection: "77" },
-                    { text: "Perguntar a Yusuf o que ele sabe sobre o incidente.", nextSection: "78" },
-                    { text: "Verificar os registros de comunicação anteriores ao salto.", nextSection: "79" }
-                ]
-            },
-            "36": {
-                text: "Você reestabelece contato com Elena Vasquez. Desta vez, sua voz é fria e calculada: \"Engenheira Vasquez, acabo de interceptar uma mensagem muito interessante sobre você. Algo sobre não confiar em você e o Projeto Prometeu. Gostaria de explicar?\"\n\nO silêncio que segue é perturbador. Finalmente, Elena responde, sua voz completamente diferente - sem o nervosismo anterior, apenas eficiência clínica:\n\n\"Impressionante, Capitão. Esperava ter mais tempo antes que descobrisse. Sim, tenho interesse no Prometeu, mas não sou sua inimiga. A verdade é mais complexa.\"\n\n\"Nova Terra não é o que pensam. Descobrimos que a Aliança planeja usar o Prometeu como arma, não como ferramenta de terraformação. Estou aqui para impedir isso.\"\n\n\"Petrov não sabe minha verdadeira identidade. Ele é apenas um peão, assim como você seria. Mas agora precisamos colaborar ou todos morreremos.\"\n\nO que você faz?",
-                options: [
-                    { text: "Fingir acreditar nela para obter mais informações.", nextSection: "94" },
-                    { text: "Confrontá-la abertamente, exigindo toda a verdade.", nextSection: "95" },
-                    { text: "Encerrar a comunicação e procurar o compartimento 772B sozinho.", nextSection: "96" }
-                ]
-            },
-            "37": {
-                text: "Decidido a encontrar o misterioso compartimento 772B, você consulta os esquemas detalhados da nave. Curiosamente, esta seção não aparece em nenhum mapa oficial, mas cruzando informações de consumo de energia e rotas de manutenção, você identifica uma anomalia.\n\nHá um espaço não contabilizado entre o armazém principal e o setor de pesquisa no nível 4. Seguindo seu instinto, você se dirige para lá.\n\nO caminho é perigoso - várias seções sofreram danos estruturais. Ao chegar ao local aproximado, você encontra apenas uma parede lisa sem entradas visíveis. No entanto, seu scanner detecta um campo energético anômalo.\n\nExaminando mais detalhadamente, você percebe um pequeno painel oculto. Ao ativá-lo, uma interface de segurança solicita credenciais de nível máximo e uma sequência biométrica.",
-                options: [
-                    { text: "Tentar usar suas credenciais de capitão.", nextSection: "97" },
-                    { text: "Tentar contornar o sistema de segurança hackeando-o.", nextSection: "98" },
-                    { text: "Procurar alguém com autorização adequada, como o Dr. Yamamoto.", nextSection: "99" }
-                ]
-            },
-            "38": {
-                text: "Você decide ignorar a mensagem enigmática. Poderia ser uma armadilha para desviá-lo de sua missão principal: salvar os colonos e a tripulação restante.\n\nO núcleo continua em deterioração e o tempo é essencial. Consultando o mapa da nave, você traça a rota mais eficiente para o setor de criogenia, onde os 200 colonos permanecem vulneráveis em sono profundo.\n\nNo caminho, seu comunicador capta uma transmissão fragmentada - são coordenadas espaciais seguidas por uma contagem regressiva. Algo vai acontecer em menos de 60 minutos, além do colapso previsto da nave.\n\nReferências ao \"Prometeu\" continuam surgindo. Seja lá o que for, parece central neste mistério.\n\nO que você faz?",
-                options: [
-                    { text: "Manter o curso para o setor de criogenia, ignorando as distrações.", nextSection: "20" },
-                    { text: "Investigar as coordenadas espaciais recebidas.", nextSection: "100" },
-                    { text: "Reconsiderar e procurar informações sobre o Projeto Prometeu nos bancos de dados da nave.", nextSection: "101" }
-                ]
-            },
-            "39": {
-                text: "Você segue rapidamente para o laboratório médico no nível 2. A porta está entreaberta, as luzes piscam erraticamente, revelando momentaneamente a desordem interior.\n\nEntrando com cautela, você encontra o laboratório revirado - equipamentos quebrados, armários abertos, dados médicos espalhados. Há manchas de sangue no chão, formando um rastro em direção a uma porta lateral.\n\nSeguindo o rastro, você chega a uma pequena sala de armazenamento. Ali, encontra o corpo da Dra. Khoury. Ela foi morta por um ferimento preciso na base do crânio - trabalho profissional, não um ataque de pânico ou acidente.\n\nEm sua mão, ela ainda segura firmemente um dispositivo de armazenamento de dados. Seu rosto congelado numa expressão de determinação, não de medo.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o dispositivo de armazenamento de dados.", nextSection: "105" },
-                    { text: "Verificar os registros médicos da tripulação por qualquer anomalia.", nextSection: "106" },
-                    { text: "Procurar o bracelete médico que viu na gravação de segurança.", nextSection: "107" }
-                ]
-            },
-            "42": {
-                text: "Você tenta conectar A-B-E-D. O painel pisca vermelho e exibe uma mensagem de erro: \"Caminho sobrecarregado. O nó 'B' excede a capacidade máxima de conexões. Tentativa falhou.\"\n\nEssa não era a solução correta. O nó B ficaria com 3 conexões, excedendo o limite de 2 por nó.\n\nVocê precisa tentar outra configuração.",
-                options: [
-                    { text: "Tentar conectar A-C-B-D", nextSection: "43", correct: true },
-                    { text: "Tentar conectar A-C-E-D", nextSection: "44", correct: false }
-                ]
-            },
-            "43": {
-                text: "Você conecta A-C-B-D. O painel acende verde e a porta se abre com um silvo hidráulico. \"Acesso concedido ao setor de criogenia.\"\n\nAo entrar, você se depara com um vasto salão onde 200 cápsulas de criossono estão alinhadas em fileiras organizadas. Luzes de status piscam em várias delas - nem todas em verde.\n\nUm rápido diagnóstico confirma seu temor: 30 cápsulas estão em estado crítico, com falhas nos sistemas de suporte vital. Em aproximadamente 25 minutos, esses colonos começarão a sofrer danos cerebrais irreversíveis.\n\nNo centro da sala, você encontra dois tripulantes - o Oficial Médico Rivera e a Técnica de Sistemas Zhang. Eles parecem aliviados ao vê-lo.\n\n\"Capitão!\" exclama Rivera. \"Graças a Deus. Estamos tentando estabilizar as cápsulas críticas, mas o sistema principal está bloqueado.\"\n\nO que você faz?",
-                options: [
-                    { text: "Ajudar Rivera e Zhang a estabilizar as cápsulas críticas.", nextSection: "102" },
-                    { text: "Questionar Rivera e Zhang sobre o que aconteceu durante o salto.", nextSection: "103" },
-                    { text: "Informá-los sobre a sabotagem e pedir que ajudem na evacuação.", nextSection: "104" }
-                ]
-            },
-            "44": {
-                text: "Você tenta conectar A-C-E-D. O painel pisca vermelho e exibe uma mensagem de erro: \"Caminho instável. Fluxo de energia incompatível com nós selecionados. Tentativa falhou.\"\n\nEssa configuração não funciona devido à incompatibilidade entre os nós C e E neste sistema específico.\n\nVocê precisa tentar outra configuração.",
-                options: [
-                    { text: "Tentar conectar A-B-E-D", nextSection: "42", correct: false },
-                    { text: "Tentar conectar A-C-B-D", nextSection: "43", correct: true }
-                ]
-            },
-            "45": {
-                text: "Você hesita, mas decide usar o reconhecimento biométrico do Oficial Chen para desbloquear seu mensageiro. Com cuidado, posiciona o olho aberto do oficial falecido diante do scanner.\n\nApós alguns segundos tensos, o dispositivo emite um bipe de confirmação e desbloqueio. A última mensagem recebida por Chen aparece na tela:\n\n\"Alerta de segurança nível 1. Detectados três indivíduos não autorizados na sala de controle de salto. Credenciais falsificadas detectadas. A verificação de segurança segunda foi iniciada, mas interrompida por comando administrativo da Dra. Khoury. Investigação imediata necessária.\"\n\nEsta mensagem foi enviada apenas 30 minutos antes do salto. Chen deve ter se dirigido imediatamente ao armamento para se preparar, mas foi emboscado aqui.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o resto das mensagens no dispositivo.", nextSection: "126" },
-                    { text: "Procurar outras pistas no Armamento.", nextSection: "46" },
-                    { text: "Pegar qualquer arma restante e continuar sua missão.", nextSection: "47" }
-                ]
-            },
-            "46": {
-                text: "Você decide investigar o Armamento mais detalhadamente. A sala mostra sinais de uma luta intensa - prateleiras tombadas, marcas de disparos nas paredes, e diversos equipamentos destruídos.\n\nNo terminal de segurança, você encontra o registro de acesso. O último mostra que o Oficial Chen entrou 15 minutos antes do salto, seguido por três outros acessos usando credenciais administrativas - todas da Dra. Khoury, o que é extremamente incomum.\n\nEm um compartimento parcialmente oculto sob o balcão principal, você encontra algo que os intrusos não descobriram: uma maleta de segurança. Dentro dela há um rifle de pulso de alta potência e um comunicador de emergência independente.\n\nO comunicador contém uma mensagem de Chen: \"Yamamoto tinha razão. Infiltração confirmada. Compartimento 772B comprometido. Protocolo Ômega iniciado.\"\n\nO que você faz?",
-                options: [
-                    { text: "Tentar entender o que é o Protocolo Ômega.", nextSection: "127" },
-                    { text: "Pegar o rifle e comunicador e procurar o Dr. Yamamoto.", nextSection: "22" },
-                    { text: "Pegar o equipamento e ir diretamente ao compartimento 772B.", nextSection: "37" }
-                ]
-            },
-            "47": {
-                text: "Com determinação, você busca por armas restantes no armamento. A maioria das armas de mão desapareceu, mas você descobre um compartimento secreto que aparentemente os sabotadores não encontraram.\n\nDentro, há um rifle de pulso, duas granadas de choque e um escudo de energia pessoal - equipamento de elite, normalmente reservado para situações de extrema emergência. Há também um pequeno kit médico.\n\nEquipado e mais confiante, você decide seu próximo passo. O tempo continua correndo - o sistema da nave anuncia que restam apenas 85 minutos até o colapso total do núcleo.\n\nO que você faz?",
-                options: [
-                    { text: "Ir ao setor de criogenia para salvar os colonos.", nextSection: "20" },
-                    { text: "Procurar pelo compartimento 772B mencionado nas conversas.", nextSection: "37" },
-                    { text: "Tentar localizar sobreviventes da tripulação para formar um grupo.", nextSection: "128" }
-                ]
-            },
-            "48": {
-                text: "Você insere \"64\" e o terminal acende em verde. \"Acesso concedido.\"\n\nO arquivo se abre, revelando um relatório urgente do Dr. Yamamoto, acompanhado de imagens e dados:\n\n\"Capitão, se estiver lendo isto, é porque minhas suspeitas se confirmaram. A anomalia que detectei não é natural - é uma estação de interceptação camuflada. Alguém sabia nossa rota e preparou uma armadilha.\n\nMais perturbador ainda é que o sinal emitido pela estação contém códigos que apenas pessoal da Aliança conheceria. Isso significa que temos um ou mais traidores a bordo.\n\nO verdadeiro propósito desta missão não é colonização. A nave transporta um dispositivo experimental de terraformação chamado 'Módulo Prometeu' no compartimento secreto 772B. Apenas o comando de alto escalão da Aliança sabe disso.\n\nSuspeito que o ataque iminente seja para roubar esta tecnologia. Se eu estiver correto, nosso salto será sabotado para nos desviar para o setor Delta-9, onde seremos abordados.\n\nTransferi a localização exata do módulo e o código de ativação para meu datapad pessoal. Encontre-o e proteja o módulo a todo custo. Se cair em mãos erradas, pode se tornar uma arma devastadora.\"\n\nJunto ao arquivo há uma imagem do compartimento 772B e sua localização precisa na nave.\n\nO que você faz?",
-                options: [
-                    { text: "Procurar o datapad do Dr. Yamamoto.", nextSection: "69" },
-                    { text: "Ir diretamente ao compartimento 772B.", nextSection: "70" },
-                    { text: "Alertar outros sobreviventes sobre a verdadeira natureza da missão.", nextSection: "71" }
-                ]
-            },
-            "49": {
-                text: "Você insere \"36\" na sequência. O terminal pisca vermelho: \"Sequência incorreta. Acesso negado.\"\n\nAnalisando novamente os números 8, 27, ?, 125, 216, você percebe que há um padrão matemático. Cada número é um cubo perfeito: 2³=8, 3³=27, 5³=125, 6³=216. O número que falta deve ser 4³, que é 64.\n\nVocê tem uma última tentativa:",
-                options: [
-                    { text: "Inserir 64", nextSection: "48" },
-                    { text: "Inserir 81", nextSection: "50" }
-                ]
-            },
-            "50": {
-                text: "Você insere \"81\" na sequência. O terminal pisca vermelho: \"Sequência incorreta. Acesso negado. Sistema bloqueado.\"\n\nFracassou na tentativa de acessar o arquivo do Dr. Yamamoto. O terminal agora está bloqueado, e um alarme silencioso provavelmente foi ativado.\n\nEnquanto considera suas opções, você nota uma pequena anotação escrita à mão sob o teclado: \"Em caso de falha, verificar observatório estelar, constelação de Lyra.\" É a caligrafia de Yamamoto.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Procurar mais pistas no próprio laboratório.", nextSection: "129" },
-                    { text: "Abandonar a busca e seguir para o setor de criogenia.", nextSection: "20" }
-                ]
-            },
-            "51": {
-                text: "\"Espere,\" você diz, mantendo a calma apesar do coração acelerado. \"Se é o Módulo Prometeu que você quer, podemos trabalhar juntos. Eu também preciso acessá-lo.\"\n\nO homem estreita os olhos, a arma ainda apontada para você. \"Continue...\"\n\n\"Sou o capitão. Tenho acesso a áreas restritas. Posso levá-lo ao compartimento, mas preciso de informações. Como você sabe sobre o Prometeu? Quem é o 'Diretor' que mencionou?\"\n\nEle considera por um momento. \"Informação por informação, Capitão. O Diretor é o líder da Divisão de Operações Especiais da Nova Terra. Quanto ao Prometeu... digamos que a Aliança criou algo muito mais perigoso do que terraformação.\"\n\nSua história parece coincidir com as pistas que você encontrou. Mas você ainda não confia nele completamente.\n\nO que você faz?",
-                options: [
-                    { text: "Continuar a negociação, tentando obter mais informações.", nextSection: "130" },
-                    { text: "Fingir cooperação enquanto procura uma oportunidade de subjugá-lo.", nextSection: "131" },
-                    { text: "Propor uma aliança genuína para investigar o módulo juntos.", nextSection: "132" }
-                ]
-            },
-            "52": {
-                type: "combat",
-                text: "Você decide atacar antes que ele possa usar a arma. Lançando-se para frente, tenta desarmá-lo em um movimento rápido.",
-                combatData: {
-                    enemyName: "Agente Infiltrado",
-                    enemyInfo: "Treinamento avançado em combate",
-                    playerHealth: 100,
-                    enemyHealth: 90,
-                    playerItems: ["Canivete de emergência", "Fragmento metálico", "Cilindro de oxigênio portátil"],
-                    outcomes: [
-                        { result: "victory", nextSection: "72" },
-                        { result: "defeat", nextSection: "73" }
-                    ]
-                }
-            },
-            "53": {
-                text: "\"Tudo bem,\" você diz, levantando as mãos em sinal de rendição. \"Não precisa de violência. Posso levá-lo ao compartimento 772B. Também quero sobreviver a isso.\"\n\nO homem parece surpreso com sua cooperação, mas mantém a arma apontada. \"Sábia decisão, Capitão. Lidere o caminho, mas sem truques.\"\n\nVocê começa a guiá-lo pelos corredores, aparentemente em direção ao nível 4. Enquanto caminham, tenta extrair mais informações.\n\n\"Então, o Prometeu não é um dispositivo de terraformação?\"\n\n\"É bem mais que isso,\" ele responde. \"Em teoria, deveria fazer o ambiente de um planeta se adaptar às necessidades humanas. Na prática, o processo é extremamente destrutivo. Toda vida nativa é eliminada. É uma máquina de extinção, não de criação.\"\n\nO que você faz?",
-                options: [
-                    { text: "Continuar questionando-o enquanto caminham.", nextSection: "133" },
-                    { text: "Tentar desarmá-lo em um momento oportuno.", nextSection: "134" },
-                    { text: "Levá-lo a uma armadilha em vez do verdadeiro compartimento.", nextSection: "135" }
-                ]
-            },
-            "57": {
-                text: "Vocês lutam ferozmente. Ele é forte e treinado, mas você tem a vantagem inicial. Durante a luta, uma pistola de energia cai de seu coldre. Você consegue afastá-lo o suficiente para alcançar a arma.\n\nApontando para ele, você exige respostas. O homem ri, apesar da situação. \"Atire se quiser, Capitão. Meus companheiros já estão acessando o módulo. Esta nave está condenada de qualquer forma.\"\n\nVocê nocauteia o homem com a coronha da arma e o amarra firmemente usando cabos de emergência. Ele pode ter informações valiosas quando acordar.\n\nUm alarme soa de repente, e a voz robótica anuncia: \"Alerta. Violação de segurança no nível 5. Acesso não autorizado às cápsulas de escape.\"\n\nO que você faz?",
-                options: [
-                    { text: "Ir imediatamente para o nível 5 para verificar as cápsulas de escape.", nextSection: "74" },
-                    { text: "Procurar o compartimento 772B mencionado pelo infiltrado.", nextSection: "75" },
-                    { text: "Acordar o homem e forçá-lo a revelar mais informações.", nextSection: "76" }
-                ]
-            },
-            "58": {
-                text: "Seu ataque surpresa falha. O homem, claramente treinado para situações de combate, esquiva-se com impressionante agilidade e contra-ataca com precisão brutal.\n\nVocê sente uma dor aguda no abdômen - ele conseguiu acertar um golpe especializado em um ponto de pressão. Sua visão escurece momentaneamente enquanto você cai de joelhos.\n\n\"Impulsivo e previsível,\" ele comenta friamente, apontando a arma para sua cabeça. \"Típico da Aliança.\"\n\nQuando sua visão clareia, ele está segurando um injetor contra seu pescoço. \"Não se preocupe, Capitão. Não vou matá-lo... ainda. Você ainda pode ser útil.\"\n\nVocê sente a picada da agulha e uma sensação gelada se espalhando pelo seu corpo. Seus membros ficam pesados, mas você permanece consciente.\n\n\"Agora, vamos encontrar o compartimento 772B juntos, quer você queira ou não.\"",
-                options: [
-                    { text: "Tentar resistir ao sedativo e buscar uma oportunidade de fuga.", nextSection: "142" },
-                    { text: "Fingir cooperação enquanto espera o efeito diminuir.", nextSection: "143" },
-                    { text: "Tentar negociar mesmo em posição de desvantagem.", nextSection: "144" }
-                ]
-            },
-            "60": {
-                text: "Você tenta rastrear a origem da misteriosa transmissão. Utilizando ferramentas avançadas de diagnóstico da nave, consegue determinar que a mensagem veio de uma pequena nave localizada a 12.000 km, no que parece ser um ponto cego dos sensores principais.\n\nA nave parece estar usando tecnologia de camuflagem avançada, o que explica por que não foi detectada antes. Pelas características da transmissão e do sinal, você estima que há pelo menos mais duas naves semelhantes na área.\n\nIsso confirma suas suspeitas: o incidente não foi acidental, mas uma operação coordenada. Os sabotadores dentro da nave estão trabalhando com uma equipe externa.\n\nO sistema estima que, mantendo o curso atual, as naves misteriosas interceptarão a Esperança em aproximadamente 45 minutos - bem antes do colapso do núcleo.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar estabelecer comunicação com as naves misteriosas.", nextSection: "145" },
-                    { text: "Alertar os sobreviventes sobre a ameaça iminente de abordagem.", nextSection: "146" },
-                    { text: "Procurar o compartimento 772B antes que as naves se aproximem.", nextSection: "37" }
-                ]
-            },
-            "61": {
-                text: "Você acessa os bancos de dados restritos da nave, usando suas credenciais de capitão. Após várias camadas de segurança, encontra informações fragmentadas sobre o Projeto Prometeu.\n\nO Prometeu é descrito como um dispositivo revolucionário de terraformação, capaz de transformar completamente o ecossistema de um planeta em questão de semanas, em vez dos séculos que os métodos convencionais levariam.\n\nNo entanto, há indicações inquietantes nos relatórios técnicos. Várias simulações foram encerradas prematuramente e classificadas como ultra-secretas. Um dos cientistas principais do projeto, Dra. Eliza Kwan, foi oficialmente registrada como \"transferida\" três dias após registrar suas preocupações éticas.\n\nUm relatório final, assinado pelo Alto Conselho da Aliança, autoriza o transporte do \"módulo de demonstração\" a bordo da Esperança, para testes controlados no sistema Kepler-62 \"longe de habitats sensíveis\".\n\nO que você faz?",
-                options: [
-                    { text: "Procurar imediatamente o compartimento 772B.", nextSection: "37" },
-                    { text: "Investigar o que aconteceu com a Dra. Kwan.", nextSection: "147" },
-                    { text: "Verificar a natureza exata dos testes planejados em Kepler-62.", nextSection: "148" }
-                ]
-            },
-            "62": {
-                text: "Decidindo que a prioridade são os colonos, você ignora a mensagem misteriosa e segue para o setor de criogenia. O caminho é difícil, com diversas seções da nave danificadas.\n\nAo se aproximar do setor de criogenia, você nota algo estranho. Dois homens com uniformes da segurança estão parados na entrada, mas seus distintivos parecem ligeiramente diferentes dos padrão.\n\nElaborando um plano, você se aproxima com confiança. \"Status do setor?\" você pergunta, usando seu tom de comando.\n\nUm dos homens responde: \"Tudo seguro, Capitão. Estamos mantendo posição conforme ordens.\" Você nota um leve sotaque, incomum na tripulação padrão.\n\n\"Ordens de quem, exatamente?\" você pergunta, observando suas reações.\n\nOs guardas trocam olhares rápidos. \"Do Comandante Barrett, senhor.\" Problema: não há nenhum Comandante Barrett em sua tripulação.\n\nO que você faz?",
-                options: [
-                    { text: "Confrontar os impostores diretamente.", nextSection: "149" },
-                    { text: "Fingir que está tudo normal e tentar passar por eles.", nextSection: "150" },
-                    { text: "Afastar-se e buscar outra entrada para o setor de criogenia.", nextSection: "151" }
-                ]
-            },
-            "69": {
-                text: "Você decide procurar o datapad do Dr. Yamamoto. Vasculhando o laboratório, não o encontra entre os escombros. Considerando o comportamento metódico de Yamamoto, ele provavelmente o escondeu em um local seguro.\n\nNo canto do laboratório, você nota um pequeno cofre pessoal parcialmente ocultado sob uma mesa derrubada. Está trancado com um scanner biométrico.\n\nApós algumas tentativas, você percebe que não conseguirá abri-lo sem a biometria de Yamamoto ou equipamento especializado.\n\nEnquanto pondera suas opções, encontra uma anotação manuscrita presa sob o teclado do terminal principal: \"Lembre-se: segurança no observatório estelar. Constelação de Lyra.\"\n\nO observatório estelar fica no mesmo nível, apenas alguns corredores de distância.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Tentar forçar o cofre usando ferramentas disponíveis no laboratório.", nextSection: "109" },
-                    { text: "Abandonar a busca pelo datapad e ir diretamente ao compartimento 772B.", nextSection: "110" }
-                ]
-            },
-            "70": {
-                text: "Com a localização do compartimento 772B em mãos, você se dirige diretamente para lá. O caminho é desafiador - áreas danificadas, portas de emergência fechadas, e ocasionalmente, sinais de luta recente.\n\nAo chegar ao local, você encontra uma parede aparentemente normal no corredor do nível 4. Seguindo as instruções do arquivo de Yamamoto, você pressiona uma sequência específica de painéis na parede, revelando um scanner oculto.\n\nApós uma verificação biométrica, uma porta camuflada desliza silenciosamente, revelando um corredor curto que termina em uma sala blindada. No centro, há uma estrutura cilíndrica de aproximadamente dois metros de altura - o Módulo Prometeu.\n\nAo entrar na sala, você ouve vozes se aproximando pelo corredor principal. Não há tempo para escapar.\n\nO que você faz?",
-                options: [
-                    { text: "Esconder-se dentro da sala secreta e fechar a porta.", nextSection: "111" },
-                    { text: "Preparar-se para confrontar quem estiver se aproximando.", nextSection: "112" },
-                    { text: "Tentar remover ou destruir o Módulo Prometeu.", nextSection: "113" }
-                ]
-            },
-            "71": {
-                text: "Você decide que a informação é importante demais para manter apenas para si. Ativando o comunicador, você tenta contatar os sobreviventes conhecidos.\n\n\"Atenção a todos os tripulantes. Aqui é o Capitão Reiner. A missão foi comprometida. A nave transporta tecnologia experimental classificada - o Módulo Prometeu. É o verdadeiro alvo dos sabotadores. Estamos lidando com uma operação hostil organizada.\"\n\nApós alguns segundos, Elena responde: \"Prometeu? Capitão, isso explica muita coisa. Petrov conhece o projeto.\"\n\nO Tenente Rodriguez também responde, sua voz tensa: \"Capitão, estamos sitiados no laboratório. Três hostis armados tentando entrar. Precisamos de--\" A transmissão é cortada por sons de explosão.\n\nOutro comunicador se ativa, uma voz que você não reconhece: \"Impressionante, Capitão. Economia de tempo para todos nós. Agora sabemos que você tem a informação que precisamos. Temos controle de várias seções da nave. Sugiro um acordo: sua vida e a dos colonos pela localização exata do módulo.\"\n\nO que você faz?",
-                options: [
-                    { text: "Rejeitar o acordo e organizar os sobreviventes para resistir.", nextSection: "114" },
-                    { text: "Fingir aceitar para ganhar tempo enquanto planeja um contra-ataque.", nextSection: "115" },
-                    { text: "Propor um encontro face a face para negociação.", nextSection: "116" }
-                ]
-            },
-            "94": {
-                text: "\"Interessante, Elena,\" você responde calmamente. \"Sempre suspeitei que havia mais nesta missão do que nos contaram. Continue.\"\n\nSentindo sua aparente receptividade, ela elabora: \"A Aliança não está terraformando planetas para colonização, Capitão. Estão criando armas planetárias. O Prometeu pode reconfigurar um ecossistema inteiro em questão de semanas - eliminando toda vida nativa no processo.\"\n\n\"Nova Terra descobriu a verdade e me enviou para impedir que essa tecnologia seja desenvolvida. Não somos terroristas - estamos tentando evitar um genocídio galático.\"\n\nSua voz muda para um tom mais urgente: \"Os agentes da Aliança estão tentando recuperar o módulo agora. Se o levarem, será usado como arma. Precisamos garantir que isso não aconteça. Você está conosco, Capitão? Ou com aqueles que mentiriam sobre exterminar mundos inteiros?\"\n\nO que você faz?",
-                options: [
-                    { text: "Continuar fingindo aliança para obter mais informações.", nextSection: "212" },
-                    { text: "Revelar que estava testando sua lealdade e confrontá-la.", nextSection: "213" },
-                    { text: "Propor uma terceira alternativa: destruir o Prometeu para que ninguém o tenha.", nextSection: "214" }
-                ]
-            },
-            "95": {
-                text: "\"Basta de meias verdades, Elena,\" você exige firmemente. \"Quem é você realmente? O que Nova Terra quer com o Prometeu? E por que devo acreditar que a Aliança é a vilã nesta história?\"\n\nHá um longo silêncio antes que ela responda, sua voz agora completamente diferente - fria e calculista: \"Impressionante intuição, Capitão. Muito bem, aqui está a verdade: sou Comandante Lyra Voss, Inteligência de Nova Terra.\"\n\n\"O Prometeu não é um dispositivo de terraformação - é uma arma de extinção planetária. A Aliança planeja usá-lo para 'limpar' mundos contestados antes da colonização. Estamos aqui para impedir isso.\"\n\n\"Quanto a Petrov - ele realmente não sabe quem sou. Um peão útil que trabalhou no projeto antes de desenvolver uma consciência. Assim como você, ele acreditou na mentira da terraformação benéfica.\"\n\n\"Agora você tem uma escolha, Capitão. Ajude-nos a recuperar o Prometeu para que possamos destruí-lo, ou fique no caminho e morra com esta nave.\"\n\nO que você faz?",
-                options: [
-                    { text: "Fingir cooperação enquanto planeja detê-la.", nextSection: "215" },
-                    { text: "Recusar diretamente e alertar outros sobreviventes sobre Elena/Lyra.", nextSection: "216" },
-                    { text: "Questionar criticamente as alegações sobre a Aliança e o Prometeu.", nextSection: "217" }
-                ]
-            },
-            "96": {
-                text: "Você decide que não pode confiar em Elena e precisa agir por conta própria. Sem responder, encerra abruptamente a comunicação e bloqueia o canal.\n\nO tempo é essencial - restam apenas 78 minutos até o colapso do núcleo. Usando os esquemas da nave e os dados de consumo energético, você identifica uma anomalia no nível 4 que deve ser o compartimento 772B.\n\nNavegando pelos corredores danificados e dutos de manutenção, você finalmente localiza o que parece ser uma parede comum, mas com sutis diferenças na textura do metal. Após uma busca cuidadosa, encontra um painel de acesso oculto.\n\nAo ativá-lo, uma interface de segurança sofisticada solicita identificação biométrica e um código de acesso de alto nível.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar usar suas credenciais de capitão para acessar o sistema.", nextSection: "97" },
-                    { text: "Tentar hackear o sistema de segurança usando seu conhecimento técnico.", nextSection: "98" },
-                    { text: "Procurar por entradas alternativas ou dutos de manutenção que levem ao compartimento.", nextSection: "218" }
-                ]
-            },
-            "97": {
-                text: "Você decide tentar suas credenciais de capitão. Posicionando sua mão no scanner biométrico, anuncia claramente: \"Capitão Alex Reiner, autorização Alfa-Zero-Nove-Seven.\"\n\nO scanner analisa sua mão, retina e padrão vocal. Após alguns segundos tensos, a interface responde: \"Verificação biométrica confirmada. Capitão Reiner identificado. No entanto, autorização insuficiente para acesso ao Projeto Prometeu. Requer autorização Ômega.\"\n\nUma mensagem adicional aparece: \"Notificação: Protocolo de emergência disponível. Em caso de comprometimento crítico da nave, o capitão pode iniciar Protocolo Crisálida com aprovação secundária de oficial de nível Ômega.\"\n\nVocê nunca ouviu falar deste protocolo antes.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar obter mais informações sobre o Protocolo Crisálida.", nextSection: "219" },
-                    { text: "Tentar hackear o sistema para contornar a necessidade de autorização Ômega.", nextSection: "98" },
-                    { text: "Procurar um oficial com autorização Ômega entre os sobreviventes.", nextSection: "220" }
-                ]
-            },
-            "98": {
-                text: "Você decide tentar hackear o sistema de segurança. Usando seu conhecimento dos protocolos da nave e técnicas de override de emergência, começa a trabalhar no painel de acesso.\n\nO sistema é extremamente sofisticado, com múltiplas camadas de proteção. Após alguns minutos frustrantes, você localiza uma potencial vulnerabilidade - um bypass de manutenção projetado para técnicos em caso de falha do sistema principal.\n\nVocê conecta seu comunicador ao painel e executa uma sequência de comandos de diagnóstico de emergência. O sistema hesita, analisa os comandos, então exibe:\n\n\"Modo de manutenção ativado. Acesso limitado concedido. Funções de segurança permanecem ativas.\"\n\nA porta desliza parcialmente, revelando a entrada do compartimento secreto, mas um segundo campo de força permanece ativo, bloqueando o acesso completo.\n\nAtravés do campo, você vê um espaço laboratorial e, no centro, uma estrutura cilíndrica que deve ser o Módulo Prometeu.\n\nO que você faz?",
-                options: [
-                    { text: "Tentar desativar o campo de força secundário.", nextSection: "221" },
-                    { text: "Examinar o módulo Prometeu através do campo de força.", nextSection: "222" },
-                    { text: "Verificar se há outros controles ou terminais acessíveis neste modo limitado.", nextSection: "223" }
-                ]
-            },
-            "99": {
-                text: "Você decide que precisa encontrar alguém com autorização adequada. O Dr. Yamamoto parecia conhecer o Prometeu, então ele ou seus arquivos podem ter a chave para acessar o compartimento.\n\nConsultando o mapa da nave, você se dirige ao laboratório do Dr. Yamamoto no nível 2. O caminho é perigoso, com seções danificadas e sistemas instáveis, mas você consegue chegar.\n\nAo entrar no laboratório, encontra sinais de busca violenta - equipamentos quebrados, dados espalhados, e evidências de luta. Não há sinal do Dr. Yamamoto, mas você nota uma mensagem discreta arranhada na parte inferior de sua mesa: \"Observatório - Lyra\".\n\nO observatório estelar fica próximo, apenas alguns corredores de distância.\n\nO que você faz?",
-                options: [
-                    { text: "Dirigir-se ao observatório estelar para investigar a pista.", nextSection: "108" },
-                    { text: "Procurar mais pistas no laboratório antes de sair.", nextSection: "224" },
-                    { text: "Tentar acessar os arquivos privados do Dr. Yamamoto no terminal do laboratório.", nextSection: "225" }
-                ]
-            },
-            "108": {
-                text: "Você segue a pista e dirige-se ao observatório estelar. O caminho é relativamente seguro, embora algumas seções estejam operando com energia de emergência.\n\nAo entrar no observatório, você encontra uma sala circular com enormes janelas dando para o espaço. A estação de trabalho principal está desligada, mas você nota que o projetor holográfico do mapa estelar está ativo, mostrando a constelação de Lyra.\n\nLembrando-se da pista, você examina a projeção. A constelação parece normal à primeira vista, mas então percebe que uma das estrelas está piscando sutilmente - não um comportamento natural da projeção.\n\nAo tocar nesta estrela específica, o projetor emite um bipe suave e um compartimento oculto se abre sob a estação de trabalho. Dentro, você encontra um datapad protegido e uma chave de acesso com o emblema do projeto Prometeu.\n\nO que você faz?",
-                options: [
-                    { text: "Examinar o conteúdo do datapad.", nextSection: "242" },
-                    { text: "Pegar a chave de acesso e ir diretamente ao compartimento 772B.", nextSection: "243" },
-                    { text: "Verificar se há mais pistas ocultas no observatório.", nextSection: "244" }
-                ]
-            },
-            "final": {
-                text: "À medida que você pilota a nave de fuga através dos destroços da Esperança, olha pela janela uma última vez. A enorme estrutura que foi seu lar por tanto tempo agora se desintegra em uma explosão silenciosa no vácuo do espaço.\n\nNa cabine atrás de você, os sobreviventes que conseguiu resgatar - uma mistura de tripulantes e colonos despertados - observam em silêncio. Alguns choram, outros simplesmente encaram o vazio, processando o trauma e a perda.\n\nO módulo Prometeu está seguro, seja para ser destruído ou entregue às autoridades adequadas, dependendo das escolhas que você fez. A verdade sobre a sabotagem e os impostores veio à tona, embora a um custo terrível.\n\nNo painel de navegação, as coordenadas da estação mais próxima piscam - está a três semanas de distância no espaço normal. Uma viagem longa com recursos limitados, mas há esperança.\n\nEnquanto a nave acelera para longe dos destroços, você reflete sobre as decisões que tomou, as vidas que conseguiu salvar e aquelas que teve que deixar para trás. Algumas escolhas o assombrarão para sempre, outras trarão um senso de dever cumprido.\n\nUma coisa é certa: nada será como antes. E enquanto as estrelas se estendem infinitas à sua frente, você se pergunta o que o futuro reserva para os sobreviventes da Esperança.\n\nFIM DA AVENTURA",
-                options: [
-                    { text: "Jogar novamente", nextSection: "intro" }
-                ]
-            }
-        };
-
-        // Adicionar seções de fallback para garantir que todas as opções levem a algum lugar
-        function addFallbackSections() {
-            for (let sectionId in storyData) {
-                if (storyData[sectionId].options) {
-                    storyData[sectionId].options.forEach(option => {
-                        if (!storyData[option.nextSection] && option.nextSection !== "final") {
-                            storyData[option.nextSection] = {
-                                text: `[Continuando a história...] Você tomou a decisão de ${option.text.toLowerCase()}. O caminho à frente apresenta novos desafios enquanto você navega pela nave danificada.\n\nAo avançar, você reflete sobre o que descobriu até agora sobre o Projeto Prometeu, os agentes infiltrados e o destino dos colonos.\n\nSua missão continua, com o tempo se esgotando rapidamente.`,
-                                options: [
-                                    { text: "Continuar explorando a nave", nextSection: "10" },
-                                    { text: "Verificar o setor de criogenia", nextSection: "20" },
-                                    { text: "Buscar o compartimento 772B", nextSection: "37" }
-                                ]
-                            };
-                            console.log(`Criada seção de fallback para ${option.nextSection}`);
-                        }
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
                     });
-                }
-            }
-        }
-
-        // -------------------- ITENS DO JOGO (ALEATÓRIOS) --------------------
-        const randomWeapons = [
-            "Pistola de Plasma", 
-            "Rifle de Pulso", 
-            "Lança-Dardos Tranquilizantes", 
-            "Bastão de Choque", 
-            "Canhão Sônico"
-        ];
-        
-        const randomItems = [
-            "Kit Médico Avançado", 
-            "Injetor de Adrenalina", 
-            "Escudo Pessoal", 
-            "Módulo de Camuflagem", 
-            "Granada de Choque", 
-            "Ferramenta Multiuso"
-        ];
-        
-        const randomEnemies = [
-            "Agente de Nova Terra", 
-            "Sabotador Infiltrado", 
-            "Segurança Corrompido", 
-            "Mercenário Contratado"
-        ];
-
-        // -------------------- VARIÁVEIS GLOBAIS --------------------
-        let currentSection = "intro";
-        let introAnimationPaused = false;
-        let textScrollTimeout;
-        let gameHistory = [];
-        let menuOpen = false;
-        let lastPlayedMapMusic = null;
-        
-        // -------------------- VARIÁVEIS DE ÁUDIO --------------------
-        <audio id="intro-music" loop>
-            <source src="musica/intro_theme.mp3" type="audio/mpeg">
-        </audio>
-        
-        <audio id="game-music" loop>
-            <source src="musica/music1.mp3" type="audio/mpeg">
-        </audio>
-
-        // -------------------- FUNÇÕES DE UTILITÁRIO --------------------
-        function getRandomItem(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
-        
-        function getRandomMapMusic() {
-            const mapMusicKeys = ['map_music1', 'map_music2', 'map_music3', 'map_music4'];
-            let selectedKey;
-            
-            // Evitar tocar a mesma música duas vezes seguidas
-            do {
-                selectedKey = mapMusicKeys[Math.floor(Math.random() * mapMusicKeys.length)];
-            } while (selectedKey === lastPlayedMapMusic && mapMusicKeys.length > 1);
-            
-            lastPlayedMapMusic = selectedKey;
-            return audioElements[selectedKey];
-        }
-
-        function playMusic(screenType) {
-            if (currentMusic) {
-                currentMusic.pause();
-                currentMusic.currentTime = 0;
-            }
-            
-            try {
-                // Selecionar música apropriada para cada tipo de tela
-                if (screenType === 'start') {
-                    currentMusic = audioElements.main_theme;
-                } else if (screenType === 'intro') {
-                    currentMusic = audioElements.intro_theme;
-                } else {
-                    // Para todas as outras telas, usar músicas de mapa randomizadas
-                    currentMusic = getRandomMapMusic();
-                }
-                
-                currentMusic.volume = 0.5;
-                currentMusic.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
-            } catch (error) {
-                console.log("Erro ao trocar música:", error);
-            }
-        }
-        
-        function showScreen(screenId) {
-            console.log(`Mostrando tela: ${screenId}`);
-            
-            // Esconder todas as telas
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            
-            // Mostrar a tela solicitada
-            document.getElementById(screenId).classList.remove('hidden');
-            
-            // Tocar música apropriada para cada tela
-            if (screenId === 'start-screen') {
-                playMusic('start');
-            } else if (screenId === 'intro-screen') {
-                playMusic('intro');
-            } else {
-                // Para telas de jogo (história, combate, quebra-cabeça)
-                playMusic('game');
-            }
-        }
-
-        function saveGame() {
-            const saveData = {
-                currentSection: currentSection,
-                gameHistory: gameHistory,
-                gameVersion: GAME_VERSION
-            };
-            
-            localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
-            alert("Jogo salvo com sucesso!");
-        }
-        
-        function loadGame() {
-            const saveData = localStorage.getItem(SAVE_KEY);
-            
-            if (!saveData) {
-                alert("Nenhum jogo salvo encontrado!");
-                return false;
-            }
-            
-            try {
-                const data = JSON.parse(saveData);
-                
-                if (data.gameVersion !== GAME_VERSION) {
-                    if (!confirm("O jogo salvo é de uma versão diferente. Carregar mesmo assim?")) {
-                        return false;
-                    }
-                }
-                
-                currentSection = data.currentSection;
-                gameHistory = data.gameHistory || [];
-                
-                loadSection(currentSection);
-                return true;
-            } catch (e) {
-                alert("Erro ao carregar o jogo: " + e.message);
-                return false;
-            }
-        }
-        
-        function addToHistory(sectionId, text) {
-            // Limitar o histórico a 20 entradas para evitar sobrecarga
-            if (gameHistory.length >= 20) {
-                gameHistory.shift();
-            }
-            
-            gameHistory.push({
-                sectionId: sectionId,
-                text: text.substring(0, 100) + (text.length > 100 ? "..." : "")
-            });
-        }
-        
-        function showHistory() {
-            const historyEntries = document.getElementById('history-entries');
-            historyEntries.innerHTML = '';
-            
-            if (gameHistory.length === 0) {
-                historyEntries.innerHTML = '<div class="history-entry">Nenhuma entrada no histórico ainda.</div>';
-                return;
-            }
-            
-            gameHistory.forEach((entry, index) => {
-                const entryElement = document.createElement('div');
-                entryElement.classList.add('history-entry');
-                entryElement.textContent = `${index + 1}. ${entry.text}`;
-                entryElement.addEventListener('click', () => {
-                    if (confirm(`Voltar para esta parte da história? (Seção ${entry.sectionId})`)) {
-                        loadSection(entry.sectionId);
-                    }
-                });
-                historyEntries.appendChild(entryElement);
-            });
-            
-            showScreen('history-screen');
-        }
-        
-        // -------------------- GERADORES DE ESTRLAS E NAVE --------------------
-        function generateStars() {
-            const starsContainer = document.querySelector('.stars');
-            const numberOfStars = 200;
-            
-            for (let i = 0; i < numberOfStars; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.width = `${Math.random() * 3}px`;
-                star.style.height = star.style.width;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 2}s`;
-                starsContainer.appendChild(star);
-            }
-        }
-        
-        // -------------------- HANDLERS DA TELA INICIAL --------------------
-        function setupStartScreen() {
-            document.getElementById('start-button').addEventListener('click', function() {
-                showScreen('intro-screen');
-                startIntroAnimation();
-            });
-
-            document.getElementById('continue-button').addEventListener('click', function() {
-                if (!loadGame()) {
-                    alert("Não foi possível carregar o jogo salvo.");
-                }
-            });
-
-            document.getElementById('skip-to-story').addEventListener('click', function() {
-                showScreen('story-screen');
-                loadSection('intro');
-            });
-            
-            generateStars();
-        }
-        
-        // -------------------- HANDLERS DA ANIMAÇÃO INTRODUTÓRIA --------------------
-        function startIntroAnimation() {
-            const introText = document.getElementById('intro-text');
-            
-            // Configurar a duração da animação baseada no SCROLL_SPEED
-            introText.style.animation = `scrollUp ${SCROLL_SPEED}s linear forwards`;
-            
-            // Configurar botões de controle do prólogo
-            document.getElementById('skip-intro-button').addEventListener('click', function() {
-                clearTimeout(textScrollTimeout);
-                showScreen('story-screen');
-                loadSection('intro');
-            });
-            
-            document.getElementById('pause-intro').addEventListener('click', pauseIntroText);
-            document.getElementById('resume-intro').addEventListener('click', resumeIntroText);
-            
-            // Tempo para transição para a história
-            textScrollTimeout = setTimeout(() => {
-                showScreen('story-screen');
-                loadSection('intro');
-            }, (SCROLL_SPEED * 1000));
-        }
-        
-        function pauseIntroText() {
-            if (!introAnimationPaused) {
-                document.getElementById('intro-text').style.animationPlayState = 'paused';
-                document.getElementById('pause-intro').style.display = 'none';
-                document.getElementById('resume-intro').style.display = 'inline-block';
-                introAnimationPaused = true;
-                
-                // Pausar também o timeout para a próxima tela
-                clearTimeout(textScrollTimeout);
-            }
-        }
-        
-        function resumeIntroText() {
-            if (introAnimationPaused) {
-                const introText = document.getElementById('intro-text');
-                introText.style.animationPlayState = 'running';
-                document.getElementById('resume-intro').style.display = 'none';
-                document.getElementById('pause-intro').style.display = 'inline-block';
-                introAnimationPaused = false;
-                
-                // Recalcular quanto tempo resta baseado na posição atual da animação
-                const animationTime = SCROLL_SPEED;
-                const keyframes = ['translateY(100vh)', 'translateY(-300vh)'];
-                
-                const computedStyle = window.getComputedStyle(introText);
-                const currentTransform = computedStyle.transform || computedStyle.webkitTransform;
-                
-                // Estimativa simplificada do tempo restante
-                const remainingTime = animationTime * 1000 * 0.7; // 70% do tempo total
-                
-                textScrollTimeout = setTimeout(() => {
-                    showScreen('story-screen');
-                    loadSection('intro');
-                }, remainingTime);
-            }
-        }
-        
-        // -------------------- HANDLERS DA HISTÓRIA --------------------
-        function loadSection(sectionId) {
-            console.log(`Carregando seção: ${sectionId}`);
-            
-            currentSection = sectionId;
-            const section = storyData[sectionId];
-            
-            if (!section) {
-                console.error(`Seção ${sectionId} não encontrada!`);
-                alert(`Erro: Seção ${sectionId} não encontrada. Usando seção de backup.`);
-                
-                // Criar uma seção de backup em tempo real
-                storyData[sectionId] = {
-                    text: `[Continuação da história] Você segue em frente, enfrentando os desafios da nave danificada. O tempo está se esgotando e as decisões se tornam cada vez mais cruciais.`,
-                    options: [
-                        { text: "Continuar explorando a nave", nextSection: "10" },
-                        { text: "Verificar o setor de criogenia", nextSection: "20" },
-                        { text: "Buscar o compartimento 772B", nextSection: "37" }
-                    ]
-                };
-                
-                currentSection = sectionId;
-                section = storyData[sectionId];
-            }
-            
-            // Adicionar ao histórico
-            if (section.text) {
-                addToHistory(sectionId, section.text);
-            }
-            
-            // Verificar se é uma seção especial (combate ou quebra-cabeça)
-            if (section.type === 'combat') {
-                setupCombat(section);
-                return;
-            } else if (section.type === 'puzzle') {
-                setupPuzzle(section);
-                return;
-            }
-            
-            // Seção normal de história
-            document.getElementById('section-id').textContent = `Seção ${sectionId}`;
-            document.getElementById('story-text').innerHTML = section.text.replace(/\n/g, '<br>');
-            
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            if (section.options && section.options.length > 0) {
-                section.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.classList.add('option-button');
-                    button.textContent = option.text;
-                    button.addEventListener('click', () => {
-                        console.log(`Clique em opção para seção: ${option.nextSection}`);
-                        loadSection(option.nextSection);
-                    });
-                    optionsContainer.appendChild(button);
-                });
-            } else {
-                console.warn(`A seção ${sectionId} não tem opções definidas.`);
-                // Adicionar opção padrão para avançar para a seção final
-                const button = document.createElement('button');
-                button.classList.add('option-button');
-                button.textContent = "Continuar para o final...";
-                button.addEventListener('click', () => {
-                    loadSection("final");
-                });
-                optionsContainer.appendChild(button);
-            }
-            
-            showScreen('story-screen');
-        }
-        
-        // -------------------- HANDLERS DE MENU --------------------
-        function setupMenu() {
-            document.getElementById('menu-button').addEventListener('click', toggleMenu);
-            
-            document.getElementById('save-game').addEventListener('click', function() {
-                saveGame();
-                toggleMenu();
-            });
-            
-            document.getElementById('load-game').addEventListener('click', function() {
-                loadGame();
-                toggleMenu();
-            });
-            
-            document.getElementById('view-history').addEventListener('click', function() {
-                showHistory();
-                toggleMenu();
-            });
-            
-            document.getElementById('main-menu').addEventListener('click', function() {
-                if (confirm("Voltar ao menu principal? O progresso não salvo será perdido.")) {
-                    showScreen('start-screen');
-                }
-                toggleMenu();
-            });
-
-            document.getElementById('back-from-history').addEventListener('click', function() {
-                showScreen('story-screen');
-            });
-            
-            // Fechar menu ao clicar fora dele
-            document.addEventListener('click', function(event) {
-                if (menuOpen && !event.target.closest('.game-menu')) {
-                    toggleMenu();
-                }
-            });
-        }
-        
-        function toggleMenu() {
-            menuOpen = !menuOpen;
-            
-            if (menuOpen) {
-                document.getElementById('menu-dropdown').classList.add('active');
-            } else {
-                document.getElementById('menu-dropdown').classList.remove('active');
-            }
-        }
-        
-        // -------------------- HANDLERS DE COMBATE --------------------
-        function setupCombat(section) {
-            const combat = section.combatData;
-            
-            // Configurar detalhes do combate
-            document.getElementById('combat-header').textContent = "COMBATE";
-            document.getElementById('enemy-name').textContent = combat.enemyName;
-            document.getElementById('enemy-info').textContent = combat.enemyInfo;
-            
-            // Restaurar saúde
-            document.getElementById('character-health').style.width = '100%';
-            document.getElementById('enemy-health').style.width = '100%';
-            
-            // Itens aleatórios do jogador
-            const randomPlayerItems = [];
-            for (let i = 0; i < 3; i++) {
-                randomPlayerItems.push(getRandomItem(randomItems));
-            }
-            
-            document.getElementById('character-items').innerHTML = `Arma: ${getRandomItem(randomWeapons)}<br>Itens: ${randomPlayerItems.join(', ')}`;
-            
-            // Configurar botões de ação
-            const actionsContainer = document.getElementById('combat-actions');
-            actionsContainer.innerHTML = '';
-            
-            const actions = [
-                { text: "Atacar", action: "attack" },
-                { text: "Defender", action: "defend" },
-                { text: `Usar ${randomPlayerItems[0]}`, action: "useItem1" },
-                { text: `Usar ${randomPlayerItems[1]}`, action: "useItem2" },
-                { text: `Usar ${randomPlayerItems[2]}`, action: "useItem3" }
-            ];
-            
-            actions.forEach(action => {
-                const button = document.createElement('button');
-                button.classList.add('combat-button');
-                button.textContent = action.text;
-                button.addEventListener('click', () => performCombatAction(action.action, combat));
-                actionsContainer.appendChild(button);
-            });
-            
-            // Mostrar tela de combate
-            showScreen('combat-screen');
-            
-            // Texto inicial do combate
-            document.getElementById('combat-log').innerHTML = section.text + '<br>Prepare-se para o combate!';
-        }
-        
-        function performCombatAction(action, combat) {
-            const log = document.getElementById('combat-log');
-            const characterHealth = document.getElementById('character-health');
-            const enemyHealth = document.getElementById('enemy-health');
-            
-            // Valores atuais de saúde
-            let playerHealthValue = parseInt(characterHealth.style.width) || 100;
-            let enemyHealthValue = parseInt(enemyHealth.style.width) || 100;
-            
-            let actionResult = '';
-            let playerDamage = 0;
-            let enemyDamage = 0;
-            
-            // Processar a ação do jogador
-            switch(action) {
-                case 'attack':
-                    playerDamage = Math.floor(Math.random() * 30) + 10;
-                    actionResult = `Você ataca o ${combat.enemyName}, causando ${playerDamage} de dano!`;
-                    break;
-                case 'defend':
-                    actionResult = 'Você assume uma postura defensiva, reduzindo o dano recebido.';
-                    break;
-                case 'useItem1':
-                case 'useItem2':
-                case 'useItem3':
-                    // Efeitos aleatórios para os itens
-                    const effectType = Math.floor(Math.random() * 3);
-                    if (effectType === 0) {
-                        playerDamage = Math.floor(Math.random() * 40) + 20;
-                        actionResult = `Você usa o item e causa ${playerDamage} de dano!`;
-                    } else if (effectType === 1) {
-                        playerHealthValue = Math.min(100, playerHealthValue + Math.floor(Math.random() * 30) + 10);
-                        actionResult = 'Você usa o item para recuperar sua saúde!';
-                    } else {
-                        playerDamage = Math.floor(Math.random() * 20) + 5;
-                        enemyDamage = Math.floor(Math.random() * 15) + 5;
-                        actionResult = `Você usa o item causando ${playerDamage} de dano, mas sofre ${enemyDamage} de dano como efeito colateral!`;
-                    }
-                    break;
-            }
-            
-            // Aplicar dano ao inimigo
-            enemyHealthValue = Math.max(0, enemyHealthValue - playerDamage);
-            enemyHealth.style.width = `${enemyHealthValue}%`;
-            
-            // Ação do inimigo (se ainda estiver vivo)
-            if (enemyHealthValue > 0 && action !== 'defend') {
-                const enemyAttackDamage = Math.floor(Math.random() * 25) + 5;
-                playerHealthValue = Math.max(0, playerHealthValue - enemyAttackDamage);
-                actionResult += `<br>${combat.enemyName} contra-ataca, causando ${enemyAttackDamage} de dano!`;
-            } else if (enemyHealthValue > 0 && action === 'defend') {
-                const reducedDamage = Math.floor(Math.random() * 15) + 1;
-                playerHealthValue = Math.max(0, playerHealthValue - reducedDamage);
-                actionResult += `<br>${combat.enemyName} ataca, mas sua defesa reduz o dano para ${reducedDamage}!`;
-            }
-            
-            // Aplicar dano adicional ao jogador (de efeitos colaterais)
-            playerHealthValue = Math.max(0, playerHealthValue - enemyDamage);
-            characterHealth.style.width = `${playerHealthValue}%`;
-            
-            // Atualizar log de combate
-            log.innerHTML += '<br>' + actionResult;
-            log.scrollTop = log.scrollHeight;
-            
-            // Verificar fim do combate
-            if (enemyHealthValue <= 0 || playerHealthValue <= 0) {
-                const result = enemyHealthValue <= 0 ? 'victory' : 'defeat';
-                let nextSection = 'final';
-                
-                if (combat.outcomes) {
-                    const outcome = combat.outcomes.find(o => o.result === result);
-                    if (outcome) nextSection = outcome.nextSection;
-                }
-                
-                setTimeout(() => {
-                    log.innerHTML += '<br><br>' + (result === 'victory' ? 'Você derrotou o inimigo!' : 'Você foi derrotado!');
                     
-                    setTimeout(() => {
-                        loadSection(nextSection);
-                    }, 2000);
-                }, 1000);
-                
-                // Desabilitar botões
-                document.querySelectorAll('.combat-button').forEach(button => {
-                    button.disabled = true;
-                });
-            }
-        }
-        
-        // -------------------- HANDLERS DE QUEBRA-CABEÇA --------------------
-        function setupPuzzle(section) {
-            const puzzle = section.puzzleData;
-            
-            document.getElementById('puzzle-header').textContent = puzzle.title;
-            document.getElementById('puzzle-description').innerHTML = puzzle.description.replace(/\n/g, '<br>');
-            
-            const puzzleContent = document.getElementById('puzzle-content');
-            puzzleContent.innerHTML = '';
-            
-            // Adicionar visualização específica para diferentes tipos de quebra-cabeças
-            if (puzzle.title.includes("ROTEAMENTO DE ENERGIA")) {
-                // Criar uma visualização de diagrama para o quebra-cabeça de energia
-                const diagramSvg = document.createElement('div');
-                diagramSvg.innerHTML = `
-                    <svg width="300" height="200" viewBox="0 0 300 200">
-                        <circle cx="50" cy="100" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
-                        <text x="50" y="105" text-anchor="middle" fill="#00ff00" font-size="16">A</text>
-                        
-                        <circle cx="150" cy="50" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
-                        <text x="150" y="55" text-anchor="middle" fill="#00ff00" font-size="16">B</text>
-                        
-                        <circle cx="150" cy="150" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
-                        <text x="150" y="155" text-anchor="middle" fill="#00ff00" font-size="16">C</text>
-                        
-                        <circle cx="250" cy="100" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
-                        <text x="250" y="105" text-anchor="middle" fill="#00ff00" font-size="16">D</text>
-                        
-                        <circle cx="200" cy="175" r="20" fill="#333" stroke="#00ff00" stroke-width="2"/>
-                        <text x="200" y="180" text-anchor="middle" fill="#00ff00" font-size="16">E</text>
-                        
-                        <line x1="70" y1="100" x2="130" y2="50" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                        <line x1="70" y1="100" x2="130" y2="150" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                        <line x1="170" y1="50" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                        <line x1="170" y1="150" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                        <line x1="170" y1="150" x2="180" y2="175" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                        <line x1="220" y1="175" x2="230" y2="100" stroke="#00ff00" stroke-width="2" stroke-dasharray="5,5"/>
-                    </svg>
-                `;
-                puzzleContent.appendChild(diagramSvg);
-            } else if (puzzle.title.includes("SEQUÊNCIA")) {
-                // Criar um destaque visual para a sequência
-                const sequenceHighlight = document.createElement('div');
-                sequenceHighlight.style.fontSize = "1.5rem";
-                sequenceHighlight.style.margin = "20px auto";
-                sequenceHighlight.style.padding = "10px";
-                sequenceHighlight.style.backgroundColor = "rgba(0, 0, 80, 0.5)";
-                sequenceHighlight.style.borderRadius = "5px";
-                sequenceHighlight.style.textAlign = "center";
-                
-                if (puzzle.description.includes("8, 27, ?, 125, 216")) {
-                    sequenceHighlight.innerHTML = "8, 27, <strong style='color:#33ccff; font-size:2rem;'>?</strong>, 125, 216";
-                } else {
-                    sequenceHighlight.textContent = "Sequência desafiadora";
+                    // Close mobile menu if open
+                    document.querySelector('nav ul').classList.remove('active');
                 }
-                
-                puzzleContent.appendChild(sequenceHighlight);
-            } else if (puzzle.title.includes("CÓDIGO DE SEGURANÇA")) {
-                // Criar um painel de entrada de código
-                const codePanel = document.createElement('div');
-                codePanel.style.width = "200px";
-                codePanel.style.height = "50px";
-                codePanel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                codePanel.style.border = "1px solid #33ccff";
-                codePanel.style.borderRadius = "5px";
-                codePanel.style.margin = "20px auto";
-                codePanel.style.display = "flex";
-                codePanel.style.justifyContent = "center";
-                codePanel.style.alignItems = "center";
-                codePanel.style.fontSize = "2rem";
-                codePanel.style.color = "#33ccff";
-                codePanel.style.letterSpacing = "10px";
-                codePanel.innerHTML = "____";
-                
-                puzzleContent.appendChild(codePanel);
-            }
-            
-            const puzzleOptions = document.getElementById('puzzle-options');
-            puzzleOptions.innerHTML = '';
-            
-            puzzle.options.forEach(option => {
-                const button = document.createElement('button');
-                button.classList.add('puzzle-button');
-                button.textContent = option.text;
-                button.addEventListener('click', () => {
-                    // Efeito visual para feedback da escolha
-                    if (option.correct) {
-                        button.style.backgroundColor = "rgba(0, 100, 0, 0.9)";
-                        button.style.boxShadow = "0 0 15px #00ff00";
-                    } else {
-                        button.style.backgroundColor = "rgba(100, 0, 0, 0.9)";
-                        button.style.boxShadow = "0 0 15px #ff0000";
-                    }
-                    
-                    setTimeout(() => {
-                        loadSection(option.nextSection);
-                    }, 800);
-                });
-                puzzleOptions.appendChild(button);
             });
-            
-            showScreen('puzzle-screen');
-        }
+        });
         
-        // -------------------- INICIALIZAÇÃO --------------------
-        window.onload = function() {
-            // Adicionar as seções de fallback antes de iniciar
-            addFallbackSections();
-            
-            setupStartScreen();
-            setupMenu();
-            playMusic('start');
-            
-            if (localStorage.getItem(SAVE_KEY)) {
-                document.getElementById('continue-button').disabled = false;
-            }
-            
-            console.log("Jogo inicializado com sucesso!");
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1
         };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .featured-item, .testimonial').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(element);
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.animated').forEach(element => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>
