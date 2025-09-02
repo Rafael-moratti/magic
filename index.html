@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Místico Esotérico | Portal de Conhecimento Ancestral</title>
+    <title>Floresta Mística | Portal de Conhecimento Ancestral</title>
     <style>
         :root {
             --primary: #2e0d4a;
@@ -592,6 +592,41 @@
             font-size: 0.9rem;
         }
         
+        /* Estilos para o player de música */
+        #music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        #music-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
+            color: white;
+            font-size: 20px;
+            opacity: 0.8;
+        }
+        
+        #music-toggle:hover {
+            transform: scale(1.1);
+            opacity: 1;
+            box-shadow: 0 6px 20px rgba(138, 79, 255, 0.6);
+        }
+        
+        #music-toggle.muted #music-icon {
+            content: '🔇';
+        }
+        
         /* Responsive styles */
         @media (max-width: 992px) {
             .featured-item {
@@ -657,6 +692,12 @@
             .testimonial-grid {
                 grid-template-columns: 1fr;
             }
+            
+            #music-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
         }
         
         @media (max-width: 576px) {
@@ -680,12 +721,23 @@
     </style>
 </head>
 <body>
+    <!-- Player de música - adicionado no início do body -->
+    <div id="music-player">
+        <audio id="background-music" loop>
+            <source src="musica/ambient.mp3" type="audio/mp3">
+            Seu navegador não suporta áudio HTML5.
+        </audio>
+        <button id="music-toggle" aria-label="Controlar música">
+            <span id="music-icon">🔊</span>
+        </button>
+    </div>
+
     <header>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
                     <span class="logo-icon">✧</span>
-                    <h1>Místico Esotérico</h1>
+                    <h1>Floresta Mística</h1>
                 </div>
                 <div class="mobile-menu">☰</div>
                 <nav>
@@ -813,7 +865,7 @@
                 
                 <div class="testimonial">
                     <div class="testimonial-content">
-                        <p>Encontrei no Místico Esotérico todos os materiais que precisava para meus rituais. A qualidade é excepcional e a entrega foi super rápida!</p>
+                        <p>Encontrei na Floresta Mística todos os materiais que precisava para meus rituais. A qualidade é excepcional e a entrega foi super rápida!</p>
                         <div class="testimonial-author">
                             <div class="author-avatar">RF</div>
                             <div class="author-info">
@@ -858,7 +910,7 @@
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Sobre Nós</h3>
-                    <p>O Místico Esotérico é um portal dedicado ao conhecimento ancestral e produtos selecionados para sua jornada espiritual. Trabalhamos apenas com fornecedores éticos e sustentáveis.</p>
+                    <p>A Floresta Mística é um portal dedicado ao conhecimento ancestral e produtos selecionados para sua jornada espiritual. Trabalhamos apenas com fornecedores éticos e sustentáveis.</p>
                     <div class="social-links">
                         <a href="#" aria-label="Facebook">f</a>
                         <a href="#" aria-label="Instagram">I</a>
@@ -891,14 +943,14 @@
                 
                 <div class="footer-column">
                     <h3>Contato</h3>
-                    <p>Email: contato@misticoesoterico.com</p>
+                    <p>Email: contato@florestamistica.com</p>
                     <p>WhatsApp: (11) 99999-9999</p>
                     <p>Horário: Segunda a Sexta, 9h às 18h</p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Místico Esotérico - Todos os direitos reservados</p>
+                <p>&copy; 2025 Floresta Mística - Todos os direitos reservados</p>
             </div>
         </div>
     </footer>
@@ -955,6 +1007,72 @@
                 element.style.opacity = '1';
                 element.style.transform = 'translateY(0)';
             });
+        });
+        
+        // Controle de música de fundo
+        document.addEventListener('DOMContentLoaded', function() {
+            const musicPlayer = document.getElementById('background-music');
+            const musicToggle = document.getElementById('music-toggle');
+            const musicIcon = document.getElementById('music-icon');
+            let musicPlaying = false;
+            
+            // Função para tocar música quando houver interação do usuário
+            function playMusicOnInteraction() {
+                if (!musicPlaying) {
+                    musicPlayer.play()
+                    .then(() => {
+                        musicPlaying = true;
+                        musicIcon.textContent = '🔊';
+                    })
+                    .catch(error => {
+                        console.log('Reprodução automática bloqueada pelo navegador:', error);
+                    });
+                }
+                // Remove o evento após a primeira interação
+                document.removeEventListener('click', playMusicOnInteraction);
+            }
+            
+            // Adiciona evento para primeira interação do usuário
+            document.addEventListener('click', playMusicOnInteraction);
+            
+            // Botão de controle de música
+            musicToggle.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evita que o clique afete outros elementos
+                
+                if (musicPlayer.paused) {
+                    musicPlayer.play();
+                    musicIcon.textContent = '🔊';
+                    musicPlaying = true;
+                } else {
+                    musicPlayer.pause();
+                    musicIcon.textContent = '🔇';
+                    musicPlaying = false;
+                }
+            });
+            
+            // Função para carregar músicas aleatórias
+            function loadRandomMusic() {
+                // Lista de músicas disponíveis (adicione seus arquivos aqui)
+                const musicList = [
+                    'musica/ambient.mp3',
+                    'musica/mystical.mp3',
+                    'musica/meditation.mp3'
+                    // Adicione mais músicas conforme necessário
+                ];
+                
+                // Seleciona uma música aleatória
+                const randomIndex = Math.floor(Math.random() * musicList.length);
+                musicPlayer.src = musicList[randomIndex];
+                
+                // Quando uma música terminar, carrega outra aleatória
+                musicPlayer.onended = function() {
+                    loadRandomMusic();
+                    musicPlayer.play();
+                };
+            }
+            
+            // Carrega a primeira música
+            loadRandomMusic();
         });
     </script>
 </body>
